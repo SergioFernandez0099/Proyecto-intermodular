@@ -1,4 +1,3 @@
-*.pdf
 Server/vendor
 /.idea/
 /Server/.idea/
