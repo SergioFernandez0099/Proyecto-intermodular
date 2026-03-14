@@ -1,0 +1,25 @@
+<header class="main-header">
+    <div class="header-container">
+
+        <div class="header-logo">
+            <div class="app-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                </svg>
+            </div>
+            <span class="app-name">LibreShare</span>
+        </div>
+
+        <div class="header-actions">
+            <button (click)="changeLanguage('en')" class="btn-lang" [class.active]="currentLang === 'en'">
+                <img src="assets/img/ukLogo.png" alt="Español" class="flag-img">
+                <span class="flag">EN</span>
+            </button>
+            <button (click)="changeLanguage('es')" class="btn-lang" [class.active]="currentLang === 'es'">
+                <img src="assets/img/spainLogo.png" alt="Español" class="flag-img">
+                <span class="flag">ES</span>
+            </button>
+        </div>
+
+    </div>
+</header>

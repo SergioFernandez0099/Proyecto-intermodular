@@ -1,0 +1,216 @@
+.page-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+}
+.login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: var(--color-bg); 
+    padding: 1rem;
+}
+
+
+.login--container {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 420px; 
+    box-sizing: border-box;
+   
+}
+
+/* 3. Header login */
+.login--container--header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.login--img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 42px;
+    height: 42px;
+    background-color: #eef6ff; 
+    border: 1px solid #4B91E2;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(75, 145, 226, 0.2);
+}
+
+.texto-sesion {
+    font-size: 14px;
+    color: #6B7280;
+    margin-top: 8px;
+    font-family: var(--font-primary);
+}
+
+/* 4. EL FORMULARIO */
+.login--form {
+    width: 100%;
+}
+
+.login__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-family: var(--font-primary);
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    background-color: #F9FAFB; 
+    font-family: var(--font-primary);
+    font-size: 14px;
+    color: #111827;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+input:focus {
+    outline: none;
+    border-color: #4B91E2;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(75, 145, 226, 0.1);
+}
+
+
+.login__button {
+    width: 100%;
+    padding: 0.9rem;
+    background-color: #5191e4; 
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 0.5rem;
+    transition: transform 0.1s active, background-color 0.2s;
+}
+
+.login__button:hover {
+    background-color: #3b7cd1;
+}
+
+.login__button:active {
+    transform: scale(0.98);
+}
+
+/* boton google*/
+.separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+.separator::before,
+.separator::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.separator__text {
+  padding: 0 12px;
+  font-size: 11px;
+  color: #9CA3AF;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+
+.btn-google {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 0.8rem;
+  background-color: white;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-google:hover {
+  background-color: #F9FAFB;
+  border-color: #D1D5DB;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.btn-google svg {
+  flex-shrink: 0;
+}
+
+
+
+.login--container-footer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+    padding-top: 2rem;
+   
+}
+
+.texto-crear {
+    font-size: 14px; 
+    color: #6B7280; 
+    font-family: var(--font-primary);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px; 
+}
+
+
+.link-create {
+    color: #5191e4; 
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.link-create:hover {
+    color: #3b7cd1;
+    text-decoration: underline;
+}

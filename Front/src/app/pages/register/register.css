@@ -1,0 +1,147 @@
+.page-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+    background-color: var(--color-bg);
+}
+
+.register-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+}
+
+.register--container {
+    background-color: #ffffff;
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 460px;
+    box-sizing: border-box;
+}
+
+.register--header h3 {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 2rem 0;
+}
+
+.register--form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.form-row-flex {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    background-color: #F9FAFB;
+    font-size: 14px;
+    color: #111827;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+}
+
+input:focus {
+    outline: none;
+    border-color: #5191e4;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(81, 145, 228, 0.1);
+}
+
+.eye-icon {
+    position: absolute;
+    right: 12px;
+    display: flex;
+    cursor: pointer;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 0.9rem;
+    background-color: #5191e4;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #3b7cd1;
+}
+
+.register--footer {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #F3F4F6;
+    display: flex;
+    justify-content: center;
+}
+
+.texto-crear {
+    font-size: 14px;
+    color: #6B7280;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.link-create {
+    color: #5191e4;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.link-create:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+    .form-row-flex {
+        flex-direction: column;
+    }
+    .register--container {
+        padding: 1.5rem;
+    }
+}

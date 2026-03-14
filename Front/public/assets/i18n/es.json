@@ -1,0 +1,29 @@
+{
+  "Login": {
+    "bienvenido": "Bienvenidos de nuevo",
+    "inicio-sesion": "Inicie sesión en su cuenta LibreShare",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "boton-sesion": "Iniciar sesion",
+    "otro-logeo":"O CONTINUAR CON",
+    "crear-cuenta": "Crear Cuenta",
+    "nuevo-usuario": "¿Nuevo usuario?"
+  },
+  "Footer":{
+    "privacidad":"Política de privacidad",
+    "servicios": "Términos de servicio",
+    "contacto":"Contacto",
+    "derechos": "Reservados todos los derechos"
+  },
+  "Register": {
+    "nombre": "Nombre",
+    "apellidos":"Apellidos",
+    "email":"Correo electrónico",
+    "password":"Contraseña",
+    "confirmar-password":"Confirmar contraseña",
+    "boton-crear-cuenta":"Crear Cuenta",
+    "login":"Crear Cuenta",
+    "tienes-cuenta":"¿Ya tienes una cuenta?"
+    
+  }
+}

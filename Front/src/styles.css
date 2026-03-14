@@ -1,0 +1,31 @@
+/* You can add global styles to this file, and also import other style files */
+:root {
+  /* Tipografía */
+  --font-primary: 'Inter', sans-serif;
+
+  /* Tamaños */
+  --text-base: 16px;
+  --text-lg: 20px;
+  --text-xl: 24px;
+
+  /* Pesos */
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-bold: 700;
+
+  --color-regular:#E5E7EB;
+  /* Colores */
+  --color-text: #1F2937;
+  --color-bg: #F3F4F6;
+  --color-primary: #3B82F6;
+}
+
+body {
+  font-family: var(--font-primary);
+  font-weight: var(--font-regular);
+  font-size: var(--text-base);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  margin: 0;
+  padding: 0;
+}
