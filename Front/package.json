@@ -23,6 +23,7 @@
   "private": true,
   "packageManager": "npm@8.19.4",
   "dependencies": {
+    "@abacritt/angularx-social-login": "^2.5.1",
     "@angular/common": "^21.1.0",
     "@angular/compiler": "^21.1.0",
     "@angular/core": "^21.1.0",
@@ -32,6 +33,7 @@
     "@ngx-translate/core": "^17.0.0",
     "@ngx-translate/http-loader": "^17.0.0",
     "rxjs": "~7.8.0",
+    "sweetalert2": "^11.26.23",
     "tslib": "^2.3.0"
   },
   "devDependencies": {

@@ -1,56 +1,82 @@
 <div class="page-layout">
-    <app-header></app-header>
-        <main class="register-main">
+  <app-header></app-header>
+
+  @if (modalConfig.show) {
+  <div class="toast-container" [ngClass]="'toast-' + modalConfig.type">
+
+    <div class="toast-icon">
+      @if (modalConfig.type === 'success') { <img src="assets/img/correcto.png" alt="success" /> }
+      @else if (modalConfig.type === 'error') { <img src="assets/img/error.png" alt="error" /> }
+      @else { <img src="assets/img/warning.png" alt="warning" /> }
+
+    </div>  
+
+    <div class="toast-content">
+      <h4>{{ modalConfig.title }}</h4>
+      <p>{{ modalConfig.message }}</p>
+    </div>
+
+    <span class="toast-close" (click)="modalConfig.show = false">✖</span>
+  </div>
+  }
+
+  <main class="register-main">
     <div class="register--container">
-      
       <div class="register--header">
-        <h3>Create Account</h3>
+        <h3>{{'Register.login' | translate}}</h3>
       </div>
 
-      <form class="register--form">
+      <form class="register--form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <div class="form-row-flex">
           <div class="form-group flex-1">
             <label>{{'Register.nombre' | translate}}</label>
-            <input type="text" placeholder="Jane">
+            <input type="text" formControlName="name" placeholder="Nombre">
           </div>
           <div class="form-group flex-1">
             <label>{{'Register.apellidos' | translate}}</label>
-            <input type="text" placeholder="Doe">
+            <input type="text" formControlName="lastname" placeholder="Apellidos">
           </div>
         </div>
 
         <div class="form-group">
           <label>{{'Register.email' | translate}}</label>
-          <input type="email" placeholder="jane@example.com">
+          <input type="email" formControlName="email" placeholder="email@ejemplo.com">
         </div>
 
         <div class="form-group">
           <label>{{'Register.password' | translate}}</label>
           <div class="input-wrapper">
-            <input type="password" placeholder="••••••••">
-            <span class="eye-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="••••••••">
+            <span class="eye-icon" (click)="togglePassword()">
+
+              @if (!showPassword) {
+              <img src="assets/img/ojoAbierto.png" alt="Mostrar contraseña" />
+              }
+
+              @else {
+              <img src="assets/img/ojoCerrado.png" alt="Ocultar contraseña" />
+              }
+
             </span>
           </div>
         </div>
 
         <div class="form-group">
           <label>{{'Register.confirmar-password' | translate}}</label>
-          <input type="password" placeholder="••••••••">
+          <input type="password" formControlName="confirmPassword" placeholder="••••••••">
         </div>
 
-        <button type="submit" class="btn-primary">{{'Register.boton-crear-cuenta' | translate}}</button>
+        <button type="submit" class="btn-primary">
+          {{'Register.boton-crear-cuenta' | translate}}
+        </button>
       </form>
 
       <div class="register--footer">
         <p class="texto-crear">
-          {{'Register.tienes-cuenta' | translate}}
-          <a routerLink="/" class="link-create">{{'Register.login' | translate}}</a>
+          <a routerLink="" class="link-create">{{'Register.tienes-cuenta' | translate}}</a>
         </p>
       </div>
-
     </div>
   </main>
-
-    <app-footer></app-footer>
+  <app-footer></app-footer>
 </div>

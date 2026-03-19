@@ -214,3 +214,62 @@ input:focus {
     color: #3b7cd1;
     text-decoration: underline;
 }
+
+
+/* Contenedor general del toast */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  min-width: 320px;
+  max-width: 400px;
+  padding: 16px 24px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  animation: slideDown 0.4s ease-out;
+}
+
+/* Colores según tipo de mensaje */
+.toast-success { background-color: #27ae60; }
+.toast-error   { background-color: #e74c3c; }
+.toast-warning { background-color: #f39c12; }
+
+/* Icono */
+.toast-icon img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Contenido */
+.toast-content h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.toast-content p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* Animación de entrada */
+@keyframes slideDown {
+  from { top: -100px; opacity: 0; }
+  to   { top: 20px; opacity: 1; }
+}
+
+/* Animación de salida (fade) */
+.toast-container.hide {
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
