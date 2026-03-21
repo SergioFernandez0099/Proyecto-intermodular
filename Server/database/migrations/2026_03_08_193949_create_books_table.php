@@ -9,13 +9,12 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
+    public function up(): void {
         Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->string('cover_image');
-            $table->foreignId('genre_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('genre_id')->references('id')->on('genres')->constrained()->cascadeOnDelete();
             $table->integer('publication_year');
 
             $table->timestamps();

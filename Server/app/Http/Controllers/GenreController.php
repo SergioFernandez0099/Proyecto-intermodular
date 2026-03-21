@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Genre;
+use App\Http\Resources\GenreResource;
 
 class GenreController extends Controller {
     public function index() {
         $genres = Genre::all();
-        return response()->json($genres);
+        return GenreResource::collection($genres);
     }
 
     public function show($id) {
@@ -16,7 +17,7 @@ class GenreController extends Controller {
         if (!$genre) {
             return response()->json(['error' => 'Genre not found'], 404);
         }
-        return response()->json($genre);
+        return new GenreResource($genre);
     }
 
     public function store(Request $request) {

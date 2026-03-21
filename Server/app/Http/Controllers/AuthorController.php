@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Author;
+use App\Http\Resources\AuthorResource;
 
 class AuthorController extends Controller {
     public function index() {
         $authors = Author::all();
-        return response()->json($authors);
+        return AuthorResource::collection($authors);
     }
 
     public function show($id) {
@@ -16,7 +17,7 @@ class AuthorController extends Controller {
         if (!$author) {
             return response()->json(['error' => 'Author not found'], 404);
         }
-        return response()->json($author);
+        return new AuthorResource($author);
     }
 
     public function store(Request $request) {

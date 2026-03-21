@@ -15,6 +15,7 @@ class Genre extends Model {
      *
      * @var list<string>
      */
+    //protected $table = 'genres';
     protected $fillable = [
         'name'
     ];
@@ -24,6 +25,6 @@ class Genre extends Model {
     ];
 
     public function books() {
-        return $this->belongsToMany(Book::class);
+        return $this->hasMany(Book::class, 'genre_id', 'id');
     }
 }

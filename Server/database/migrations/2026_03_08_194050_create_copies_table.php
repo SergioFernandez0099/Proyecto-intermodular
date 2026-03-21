@@ -9,10 +9,12 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
+    public function up(): void {
         Schema::create('copies', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->references('id')->on('users')->constrained()->cascadeOnDelete();
+            $table->foreignId('book_id')->references('id')->on('books')->constrained()->cascadeOnDelete();
+
             $table->timestamps();
         });
     }

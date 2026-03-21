@@ -48,4 +48,13 @@ class User extends Authenticatable {
             'password' => 'hashed',
         ];
     }
+
+    public function copies() {
+        return $this->belongsToMany(Book::class, "copies", "user_id", "book_id")->using(Copy::class);
+    }
+
+    public function getCopiesListAttribute() {
+        return $this->copies->pluck(['title'])->toArray();
+    }
+
 }

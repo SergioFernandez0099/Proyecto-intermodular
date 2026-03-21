@@ -4,20 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Book;
+use App\Http\Resources\BookResource;
 
 class BookController extends Controller {
     public function index() {
-        // $books = Book::all();
-        $books = Book::all();
-        return response()->json($books);
+        //$books = Book::all();
+
+        $books = Book::with('genre')->get();
+        return BookResource::collection($books);
     }
 
     public function show($id) {
-        $book = Book::findOrFail($id);
+        $book = Book::with('genre')->findOrFail($id);
         if (!$book) {
             return response()->json(['error' => 'Book not found'], 404);
         }
-        return response()->json($book);
+        return new BookResource($book);
     }
 
     public function store(Request $request) {

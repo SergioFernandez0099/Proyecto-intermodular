@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Resources\UserResource;
 
 class UserController extends Controller {
     public function index() {
         $users = User::all();
-        return response()->json($users);
+        return UserResource::collection($users);
     }
 
     public function show($id) {
@@ -17,7 +18,7 @@ class UserController extends Controller {
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);
         }
-        return response()->json($user);
+        return new UserResource($user);
     }
 
     public function store(Request $request) {
