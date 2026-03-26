@@ -9,7 +9,7 @@ use App\Http\Controllers\GoogleController;
 
 Route::get('/', function () {return response()->json(['message' => 'API works!', 'test' => 'Another entry'], 200);});
 
-Route::post('/login', [UserController::class, 'login']);
+Route::post('api/login', [UserController::class, 'login']);
 Route::post('api/users', [UserController::class, 'store']);
 
 Route::get('api/users', [UserController::class, 'index']);
@@ -34,6 +34,3 @@ Route::get('api/genres/{id}', [GenreController::class, 'show']);
 Route::post('api/genres', [GenreController::class, 'store']);
 Route::put('api/genres/{id}', [GenreController::class, 'update']);
 Route::delete('api/genres/{id}', [GenreController::class, 'destroy']);
-
-
-

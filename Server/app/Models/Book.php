@@ -18,6 +18,9 @@ class Book extends Model {
      */
     protected $fillable = [
         'title',
+        'genre_id',
+        'owner_id',
+        'author_id',
         'cover_image',
         'publication_year'
     ];
@@ -30,7 +33,6 @@ class Book extends Model {
         'updated_at',
     ];
 
-
     public function authors() {
         return $this->belongsToMany(Author::class);
     }
@@ -40,10 +42,14 @@ class Book extends Model {
     }
 
     public function copies() {
-        return $this->belongsToMany(User::class, "copies", "book_id", "user_id")->using(Copy::class);
+        return $this->hasMany(Copy::class);
+      //  return $this->belongsToMany(User::class, "copies", "book_id", "user_id")->using(Copy::class);
     }
 
-    
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
 
     public function getAuthorsListAttribute() {
         return $this->authors->pluck(['name'])->toArray();

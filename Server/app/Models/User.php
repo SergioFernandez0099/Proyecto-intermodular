@@ -20,8 +20,11 @@ class User extends Authenticatable {
         'name',
         'email',
         'password',
-        'role'
+        'role',
+        "active"
     ];
+
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -49,8 +52,23 @@ class User extends Authenticatable {
         ];
     }
 
-    public function copies() {
-        return $this->belongsToMany(Book::class, "copies", "user_id", "book_id")->using(Copy::class);
+//    public function copies() {
+//        return $this->belongsToMany(Book::class, "copies", "user_id", "book_id")->using(Copy::class);
+//    }
+
+    public function books()
+    {
+        return $this->hasMany(Book::class, 'owner_id');
+    }
+
+    public function loans()
+    {
+        return $this->hasMany(Loan::class);
+    }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
     }
 
     public function getCopiesListAttribute() {

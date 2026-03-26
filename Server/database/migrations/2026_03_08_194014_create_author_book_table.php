@@ -11,11 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('author_book', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('author_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('book_id')->constrained()->cascadeOnDelete();
-            $table->timestamps();
+        Schema::create('book_author', function (Blueprint $table) {
+            $table->foreignId('author_id')
+                ->constrained()
+                ->cascadeOnDelete();
+
+            $table->foreignId('book_id')
+                ->constrained()
+                ->cascadeOnDelete();
+
+            $table->primary(['book_id', 'author_id']);
         });
     }
 
