@@ -1,0 +1,64 @@
+<aside class="dashboard-aside">
+  <div class="aside-container">
+    
+    <div class="aside-header">
+      <div class="app-logo-icon">
+        <img src="assets/img/logo.svg" alt="Logo" class="nav-icon-img">
+      </div>
+      <div class="app-info hide-mobile">
+        <h1 class="app-name">LibreShare</h1>
+        <p class="app-subtitle">{{ 'Menu.biblioteca' | translate }}</p>
+      </div>
+    </div>
+
+    <nav class="aside-nav">
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+        <span class="icon">
+          <img src="assets/img/dashboard.png" alt="Dash" class="nav-icon-img">
+        </span>
+        <span class="text hide-mobile">{{ 'Menu.dashboard' | translate }}</span>
+      </a>
+
+      <a routerLink="/explorar" routerLinkActive="active" class="nav-item">
+        <span class="icon">
+          <img src="assets/img/explore.png" alt="Exp" class="nav-icon-img">
+        </span>
+        <span class="text hide-mobile">{{ 'Menu.explorar' | translate }}</span>
+      </a>
+
+      <a routerLink="/mis-libros" routerLinkActive="active" class="nav-item">
+        <span class="icon">
+          <img src="assets/img/books.png" alt="Books" class="nav-icon-img">
+        </span>
+        <span class="text hide-mobile">{{ 'Menu.libros' | translate }}</span>
+      </a>
+
+      <a routerLink="/prestamos" routerLinkActive="active" class="nav-item">
+        <span class="icon">
+          <img src="assets/img/loan.png" alt="Loans" class="nav-icon-img">
+        </span>
+        <span class="text hide-mobile">{{ 'Menu.prestamo' | translate }}</span>
+      </a>
+
+      <a routerLink="/añadir-libro" routerLinkActive="active" class="nav-item">
+        <span class="icon">
+          <img src="assets/img/add_book.png" alt="Add" class="nav-icon-img">
+        </span>
+        <span class="text hide-mobile">{{ 'Menu.anyadir-libro' | translate }}</span>
+      </a>
+    </nav>
+
+    <div class="aside-footer">
+      <div class="user-profile">
+        <div class="user-avatar-initial">
+          {{ userInitial }}
+        </div>
+        <div class="user-info hide-mobile">
+          <p class="user-name">{{ userName }}</p>
+          <p class="user-plan">{{ userRole }}</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</aside>

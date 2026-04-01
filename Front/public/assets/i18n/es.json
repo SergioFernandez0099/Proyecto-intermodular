@@ -25,5 +25,15 @@
     "login":"Crear Cuenta",
     "tienes-cuenta":"¿Ya tienes una cuenta?"
     
+  },
+  "Menu": {
+    "biblioteca":"Mi biblioteca",
+    "dashboard": "Panel",
+    "explorar": "Explorar",
+    "libros": "Mis libros",
+    "prestamo": "Préstamos",
+    "anyadir-libro": "Añadir libro"
+
   }
+
 }

@@ -1,0 +1,32 @@
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--color-bg);
+}
+
+.dashboard-content {
+    flex: 1;
+    margin-left: 260px; 
+    padding: 2rem;
+    box-sizing: border-box;
+    transition: margin-left 0.3s ease; 
+}
+
+.content-header {
+    margin-bottom: 2rem;
+}
+
+.content-header h2 {
+    font-size: var(--text-xl);
+    font-weight: var(--font-bold);
+    color: var(--color-text);
+    margin: 0;
+}
+
+
+@media (max-width: 768px) {
+    .dashboard-content {
+        margin-left: 80px; 
+        padding: 1.5rem;
+    }
+}

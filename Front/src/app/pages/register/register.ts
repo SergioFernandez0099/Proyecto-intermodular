@@ -53,7 +53,7 @@ export class Register {
       if (type === 'success') {
         this.router.navigate(['']);
       }
-    }, 3000);
+    });
   }
 
   onSubmit() {

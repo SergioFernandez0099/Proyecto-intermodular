@@ -36,7 +36,7 @@ export class Login {
     this.toastTimeout = setTimeout(() => {
       this.modalConfig.show = false;
       if (callback) callback();
-    }, 3000);
+    });
   }
 
   onLogin() { 
@@ -51,7 +51,7 @@ export class Login {
     next: (res: any) => {
       this.showToast('¡Bienvenido!', 'Sesión iniciada correctamente', 'success', () => {
         localStorage.setItem('user_session', JSON.stringify(res.user));
-        this.router.navigate(['/register']); 
+        this.router.navigate(['/dashboard']); 
       });
     },
     error: (err) => {
