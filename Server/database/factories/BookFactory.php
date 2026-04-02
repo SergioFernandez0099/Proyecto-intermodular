@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Genre;
 
@@ -15,12 +16,14 @@ class BookFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition(): array {
+    public function definition(): array
+    {
         return [
-            'title' => $this->faker->sentence(3),
-            'cover_image' => $this->faker->sentence(5),
-            'publication_year' => $this->faker->numberBetween(1950, 2024),
-            'genre_id' => fn () => Genre::inRandomOrder()->first()->id
+            'title'            => fake()->sentence(3),
+            'genre_id'         => Genre::inRandomOrder()->first()->id,
+            'owner_id'         => User::inRandomOrder()->first()->id,
+            'publication_year' => fake()->year(),
+            'cover_image'      => null,
         ];
     }
 

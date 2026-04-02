@@ -11,11 +11,7 @@ return new class extends Migration
      */
     public function up(): void {
         Schema::create('copies', function (Blueprint $table) {
-            $table->increments('id');
-
-            $table->foreignId('user_id')
-                ->constrained()
-                ->cascadeOnDelete();
+            $table->id();
 
             $table->foreignId('book_id')
                 ->constrained()

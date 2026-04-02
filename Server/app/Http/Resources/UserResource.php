@@ -14,11 +14,18 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array {
         return [
-            'id' => $this->id,
-            'name' => $this->name,
-            "email" => $this->email,
-            "role" => $this->role,
-            "copies_list" => $this->copies->pluck('title'),
+            'id'       => $this->id,
+            'name'     => $this->name,
+            'lastname' => $this->lastname,
+            'email'    => $this->email,
+            'role'     => $this->role,
+            'active'   => $this->active,
+
+            // Solo visible para admins
+            'loans' => $this->when(
+                $request->user()?->isAdmin(),
+                fn() => $this->whenLoaded('loans')
+            ),
         ];
     }
 }

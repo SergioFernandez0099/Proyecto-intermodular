@@ -6,10 +6,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable {
+class User extends Authenticatable
+{
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -18,13 +20,12 @@ class User extends Authenticatable {
      */
     protected $fillable = [
         'name',
+        'lastname',
         'email',
         'password',
         'role',
         "active"
     ];
-
-
 
     /**
      * The attributes that should be hidden for serialization.
@@ -49,12 +50,9 @@ class User extends Authenticatable {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'active' => 'boolean'
         ];
     }
-
-//    public function copies() {
-//        return $this->belongsToMany(Book::class, "copies", "user_id", "book_id")->using(Copy::class);
-//    }
 
     public function books()
     {
@@ -71,8 +69,8 @@ class User extends Authenticatable {
         return $this->hasMany(Rating::class);
     }
 
-    public function getCopiesListAttribute() {
-        return $this->copies->pluck(['title'])->toArray();
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
     }
-
 }

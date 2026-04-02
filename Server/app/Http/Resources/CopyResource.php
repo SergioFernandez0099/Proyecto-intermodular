@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AuthorResource extends JsonResource
+class CopyResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,13 +15,12 @@ class AuthorResource extends JsonResource
     public function toArray(Request $request): array {
         return [
             'id'    => $this->id,
-            'name'  => $this->name,
-            'books' => $this->whenLoaded('books', fn() =>
-            $this->books->map(fn($b) => [
-                'id'    => $b->id,
-                'title' => $b->title,
-            ])
-            ),
+            'code'  => $this->code,
+            'state' => $this->state,
+            'book'  => $this->whenLoaded('book', fn() => [
+                'id'    => $this->book->id,
+                'title' => $this->book->title,
+            ]),
         ];
     }
 }

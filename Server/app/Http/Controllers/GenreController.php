@@ -2,40 +2,48 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Genre;
 use App\Http\Resources\GenreResource;
+use App\Models\Genre;
+use Illuminate\Http\Request;
 
-class GenreController extends Controller {
-    public function index() {
-        $genres = Genre::all();
-        return GenreResource::collection($genres);
+class GenreController extends Controller
+{
+    public function index()
+    {
+        return GenreResource::collection(Genre::paginate(15));
     }
 
-    public function show($id) {
-        $genre = Genre::findOrFail($id);
-        if (!$genre) {
-            return response()->json(['error' => 'Genre not found'], 404);
-        }
+    public function show(Genre $genre)
+    {
         return new GenreResource($genre);
     }
 
-    public function store(Request $request) {
-        $genre = Genre::create($request->all());
-        return response()->json($genre, 201);
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255|unique:genres',
+        ]);
+
+        $genre = Genre::create($data);
+
+        return new GenreResource($genre);
     }
 
-    public function update(Request $request, $id) {
-        $genre = Genre::find($id);
-        if (!$genre) {
-            return response()->json(['error' => 'Genre not found'], 404);
-        }
-        $genre->update($request->all());
-        return response()->json($genre, 200);
+    public function update(Request $request, Genre $genre)
+    {
+        $data = $request->validate([
+            'name' => 'sometimes|string|max:255|unique:genres,name,' . $genre->id,
+        ]);
+
+        $genre->update($data);
+
+        return new GenreResource($genre);
     }
 
-    public function destroy($id) {
-        Genre::destroy($id);
+    public function destroy(Genre $genre)
+    {
+        $genre->delete();
+
         return response()->json(null, 204);
     }
 }

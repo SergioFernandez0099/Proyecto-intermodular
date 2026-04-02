@@ -2,56 +2,54 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\UserResource;
+use App\Models\User;
+use Illuminate\Http\Request;
 
-class UserController extends Controller {
-    public function index() {
-        $users = User::all();
-        return UserResource::collection($users);
+class UserController extends Controller
+{
+    public function index()
+    {
+        return UserResource::collection(User::paginate(15));
     }
 
-    public function show($id) {
-        $user = User::findOrFail($id);
-        if (!$user) {
-            return response()->json(['error' => 'User not found'], 404);
-        }
+    public function show(User $user)
+    {
         return new UserResource($user);
     }
 
-    public function store(Request $request) {
-        $data = $request->all();
-        $data['password'] = Hash::make($request->password);
-        $user = User::create($data);
-        return response()->json($user, 201);
-    }
-    
-    public function login(Request $request) {
-        $user = User::where('email', $request->email)->first();
+    public function update(Request $request, User $user)
+    {
+        $data = $request->validate([
+            'name'     => 'sometimes|string|max:255',
+            'lastname' => 'sometimes|string|max:255',
+            'email'    => 'sometimes|email|unique:users,email,' . $user->id,
+            'role'     => 'sometimes|in:user,admin',
+        ]);
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Credenciales incorrectas'], 401);
-        }
+        $user->update($data);
 
-        return response()->json([
-            'message' => 'Login correcto',
-            'user' => $user
-        ], 200);
+        return new UserResource($user);
     }
 
-    public function update(Request $request, $id) {
-        $user = User::find($id);
-        if (!$user) {
-            return response()->json(['error' => 'User not found'], 404);
-        }
-        $user->update($request->all());
-        return response()->json($user, 200);
+    public function activate(User $user)
+    {
+        $user->update(['active' => true]);
+
+        return new UserResource($user);
     }
 
-    public function destroy($id) {
-        User::destroy($id);
+    public function deactivate(User $user)
+    {
+        $user->update(['active' => false]);
+
+        return new UserResource($user);
+    }
+
+    public function destroy(User $user)
+    {
+        $user->delete();
+
         return response()->json(null, 204);
     }
 }

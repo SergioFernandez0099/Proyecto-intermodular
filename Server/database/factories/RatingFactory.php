@@ -17,7 +17,10 @@ class RatingFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => \App\Models\User::inRandomOrder()->first()->id,
+            'book_id' => \App\Models\Book::inRandomOrder()->first()->id,
+            'rating'  => fake()->numberBetween(1, 5),
+            'comment' => fake()->optional()->sentence(),
         ];
     }
 }

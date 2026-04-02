@@ -2,40 +2,48 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Author;
 use App\Http\Resources\AuthorResource;
+use App\Models\Author;
+use Illuminate\Http\Request;
 
-class AuthorController extends Controller {
-    public function index() {
-        $authors = Author::all();
-        return AuthorResource::collection($authors);
+class AuthorController extends Controller
+{
+    public function index()
+    {
+        return AuthorResource::collection(Author::paginate(15));
     }
 
-    public function show($id) {
-        $author = Author::findOrFail($id);
-        if (!$author) {
-            return response()->json(['error' => 'Author not found'], 404);
-        }
+    public function show(Author $author)
+    {
         return new AuthorResource($author);
     }
 
-    public function store(Request $request) {
-        $author = Author::create($request->all());
-        return response()->json($author, 201);
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255|unique:authors',
+        ]);
+
+        $author = Author::create($data);
+
+        return new AuthorResource($author);
     }
 
-    public function update(Request $request, $id) {
-        $author = Author::find($id);
-        if (!$author) {
-            return response()->json(['error' => 'Author not found'], 404);
-        }
-        $author->update($request->all());
-        return response()->json($author, 200);
+    public function update(Request $request, Author $author)
+    {
+        $data = $request->validate([
+            'name' => 'sometimes|string|max:255|unique:authors,name,' . $author->id,
+        ]);
+
+        $author->update($data);
+
+        return new AuthorResource($author);
     }
 
-    public function destroy($id) {
-        Author::destroy($id);
+    public function destroy(Author $author)
+    {
+        $author->delete();
+
         return response()->json(null, 204);
     }
 }

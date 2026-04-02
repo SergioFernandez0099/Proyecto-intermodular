@@ -20,43 +20,33 @@ class Book extends Model {
         'title',
         'genre_id',
         'owner_id',
-        'author_id',
         'cover_image',
         'publication_year'
     ];
-    protected $appends = [
-        'authors_list',
-    ];
+
     protected $hidden = [
-        'authors',
         'created_at',
         'updated_at',
     ];
 
+    protected $casts = [
+        'publication_year' => 'integer',
+    ];
+
     public function authors() {
-        return $this->belongsToMany(Author::class);
+        return $this->belongsToMany(Author::class,'book_author');
     }
 
     public function genre() {
-        return $this->belongsTo(Genre::class, 'genre_id', 'id');
+        return $this->belongsTo(Genre::class);
     }
 
     public function copies() {
         return $this->hasMany(Copy::class);
-      //  return $this->belongsToMany(User::class, "copies", "book_id", "user_id")->using(Copy::class);
     }
 
     public function ratings()
     {
         return $this->hasMany(Rating::class);
     }
-
-    public function getAuthorsListAttribute() {
-        return $this->authors->pluck(['name'])->toArray();
-    }
-
-    public function getCopiesListAttribute() {
-        return $this->copies->pluck(['name'])->toArray();
-    }
-
 }

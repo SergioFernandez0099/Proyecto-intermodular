@@ -11,27 +11,22 @@ return new class extends Migration
      */
     public function up(): void {
         Schema::create('books', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('title');
+                $table->id();
+                $table->string('title');
 
-            $table->foreignId('genre_id')
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->restrictOnDelete();
+                $table->foreignId('genre_id')
+                    ->constrained()
+                    ->cascadeOnUpdate()
+                    ->restrictOnDelete();
 
-            $table->foreignId('owner_id')
-                ->constrained('users')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                $table->foreignId('owner_id')
+                    ->constrained('users')
+                    ->cascadeOnUpdate()
+                    ->cascadeOnDelete();
 
-            $table->foreignId('author_id')
-                ->constrained('authors')
-                ->cascadeOnUpdate()
-                ->restrictOnDelete();
-
-            $table->string('cover_image')->nullable();;
-            $table->year('publication_year')->nullable();
-            $table->timestamps();
+                $table->string('cover_image')->nullable();
+                $table->year('publication_year')->nullable();
+                $table->timestamps();
         });
     }
 
