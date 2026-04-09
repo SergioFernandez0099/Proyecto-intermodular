@@ -22,7 +22,7 @@ class RatingSeeder extends Seeder
                 Rating::create([
                     'user_id' => $user->id,
                     'book_id' => $book->id,
-                    'rating'  => rand(1, 5),
+                    'rating' => rand(1, 5),
                     'comment' => fake()->optional(0.7)->sentence(), // 70% tienen comentario
                 ]);
             }

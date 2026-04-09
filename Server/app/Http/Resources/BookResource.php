@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class BookResource extends JsonResource
 {
@@ -17,7 +18,9 @@ class BookResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            "cover_image" => $this->cover_image,
+            'cover_image' => $this->cover_image
+                ? Storage::disk('public')->url($this->cover_image)
+                : null,
             "publication_year" => $this->publication_year,
 
             // whenLoaded evita error si la relación no fue cargada con with()
@@ -35,6 +38,8 @@ class BookResource extends JsonResource
             'available' => $this->whenLoaded('copies', fn() => $this->copies->contains('state', 'available')
             ),
 
+            'ratings_count' => $this->whenLoaded('ratings', fn() => $this->ratings->count()),
+
             'average_rating' => $this->whenLoaded('ratings', fn() => round($this->ratings->avg('rating'), 1)
             ),
 
@@ -42,6 +47,9 @@ class BookResource extends JsonResource
                 'id' => $r->id,
                 'rating' => $r->rating,
                 'comment' => $r->comment,
+                'created_at' => $r->created_at->toDateTimeString(),
+                // Campo calculado — true si la fecha de update es diferente de la de created
+                'edited' => $r->created_at->ne($r->updated_at),
                 'user' => [
                     'id' => $r->user->id,
                     'name' => $r->user->name,

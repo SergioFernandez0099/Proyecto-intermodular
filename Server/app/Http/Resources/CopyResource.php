@@ -12,13 +12,14 @@ class CopyResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request): array {
+    public function toArray(Request $request): array
+    {
         return [
-            'id'    => $this->id,
-            'code'  => $this->code,
+            'id' => $this->id,
+            'code' => $this->code,
             'state' => $this->state,
-            'book'  => $this->whenLoaded('book', fn() => [
-                'id'    => $this->book->id,
+            'book' => $this->whenLoaded('book', fn() => [
+                'id' => $this->book->id,
                 'title' => $this->book->title,
             ]),
         ];

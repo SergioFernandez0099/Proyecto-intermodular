@@ -13,14 +13,14 @@ class RatingController extends Controller
     public function byBook(Book $book)
     {
         return RatingResource::collection(
-            $book->ratings()->with('user')->paginate(15)
+            $book->ratings->load('user')
         );
     }
 
     public function store(Request $request, Book $book)
     {
         $data = $request->validate([
-            'rating'  => 'required|integer|min:1|max:5',
+            'rating' => 'required|integer|min:1|max:5',
             'comment' => 'nullable|string|max:1000',
         ]);
 
@@ -35,12 +35,10 @@ class RatingController extends Controller
 
     public function update(Request $request, Book $book, Rating $rating)
     {
-        if ($rating->user_id !== Auth::id()) {
-            abort(403);
-        }
+        $this->authorize('update', $rating);
 
         $data = $request->validate([
-            'rating'  => 'sometimes|integer|min:1|max:5',
+            'rating' => 'sometimes|integer|min:1|max:5',
             'comment' => 'nullable|string|max:1000',
         ]);
 
@@ -51,9 +49,7 @@ class RatingController extends Controller
 
     public function destroy(Book $book, Rating $rating)
     {
-        if (! Auth::user()->isAdmin() && $rating->user_id !== Auth::id()) {
-            abort(403);
-        }
+        $this->authorize('delete', $rating);
 
         $rating->delete();
 

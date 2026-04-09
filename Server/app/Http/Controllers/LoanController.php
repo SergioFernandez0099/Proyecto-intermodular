@@ -7,6 +7,7 @@ use App\Models\Copy;
 use App\Models\Loan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class LoanController extends Controller
 {
@@ -16,19 +17,16 @@ class LoanController extends Controller
         $user = Auth::user();
 
         $loans = Loan::with(['copy.book', 'user'])
-            ->when(! $user->isAdmin(), fn($q) => $q->where('user_id', $user->id))
+            ->when(!$user->isAdmin(), fn($q) => $q->where('user_id', $user->id))
             ->latest()
-            ->paginate(15);
+            ->get();
 
         return LoanResource::collection($loans);
     }
 
     public function show(Loan $loan)
     {
-        // User solo puede ver sus propios préstamos
-        if (! Auth::user()->isAdmin() && $loan->user_id !== Auth::id()) {
-            abort(403);
-        }
+        $this->authorize('view', $loan);
 
         return new LoanResource($loan->load(['copy.book', 'user']));
     }
@@ -36,20 +34,21 @@ class LoanController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'copy_id'   => 'required|exists:copies,id',
-            'loan_date' => 'required|date',
+            'copy_id' => 'required|exists:copies,id',
         ]);
 
         $copy = Copy::findOrFail($data['copy_id']);
 
         if ($copy->state !== 'available') {
-            return response()->json(['message' => 'La copia no está disponible.'], 422);
+            throw ValidationException::withMessages([
+                'loan' => ['La copia no está disponible.'],
+            ]);
         }
 
         $loan = Loan::create([
-            'user_id'   => Auth::id(),
-            'copy_id'   => $copy->id,
-            'loan_date' => $data['loan_date'],
+            'user_id' => Auth::id(),
+            'copy_id' => $copy->id,
+            'loan_date' => now(),
         ]);
 
         $copy->update(['state' => 'borrowed']);
@@ -57,15 +56,14 @@ class LoanController extends Controller
         return new LoanResource($loan->load('copy.book'));
     }
 
-    // PATCH /api/loans/{loan}/return
     public function return(Loan $loan)
     {
-        if (! Auth::user()->isAdmin() && $loan->user_id !== Auth::id()) {
-            abort(403);
-        }
+        $this->authorize('return', $loan);
 
         if ($loan->return_date) {
-            return response()->json(['message' => 'Este préstamo ya fue devuelto.'], 422);
+            throw ValidationException::withMessages([
+                'loan' => ['Este préstamo ya fue devuelto.'],
+            ]);
         }
 
         $loan->update(['return_date' => now()->toDateString()]);

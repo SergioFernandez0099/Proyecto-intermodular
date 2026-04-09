@@ -54,6 +54,11 @@ class User extends Authenticatable
         ];
     }
 
+    protected $attributes = [
+        'role' => 'user',
+        'active' => true,
+    ];
+
     public function books()
     {
         return $this->hasMany(Book::class, 'owner_id');
@@ -72,5 +77,27 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
+    }
+
+    // ← Métodos de autorización
+    public function ownsBook(Book $book): bool
+    {
+        return $this->id === $book->owner_id;
+    }
+
+    public function ownsLoan(Loan $loan): bool
+    {
+        return $this->id === $loan->user_id;
+    }
+
+    public function ownsRating(Rating $rating): bool
+    {
+        return $this->id === $rating->user_id;
+    }
+
+    // Owns copy a través del libro
+    public function ownsCopy(Copy $copy): bool
+    {
+        return $this->ownsBook($copy->book);
     }
 }

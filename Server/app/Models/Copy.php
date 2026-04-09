@@ -3,9 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\Model;
 
-class Copy extends Pivot {
+class Copy extends Model
+{
     /** @use HasFactory<\Database\Factories\CopyFactory> */
     use HasFactory;
 
@@ -17,9 +18,14 @@ class Copy extends Pivot {
     protected $table = 'copies';
 
     protected $fillable = [
-        'id',
-        'user_id',
-        'book_id'
+        'book_id',
+        'code',
+        'state'
+    ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at'
     ];
 
     public function book()

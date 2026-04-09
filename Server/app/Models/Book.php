@@ -4,10 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Author;
-use App\Models\Genre;
 
-class Book extends Model {
+class Book extends Model
+{
     /** @use HasFactory<\Database\Factories\BookFactory> */
     use HasFactory;
 
@@ -33,15 +32,18 @@ class Book extends Model {
         'publication_year' => 'integer',
     ];
 
-    public function authors() {
-        return $this->belongsToMany(Author::class,'book_author');
+    public function authors()
+    {
+        return $this->belongsToMany(Author::class, 'book_author');
     }
 
-    public function genre() {
+    public function genre()
+    {
         return $this->belongsTo(Genre::class);
     }
 
-    public function copies() {
+    public function copies()
+    {
         return $this->hasMany(Copy::class);
     }
 

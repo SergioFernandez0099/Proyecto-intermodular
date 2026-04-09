@@ -10,7 +10,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        return UserResource::collection(User::paginate(15));
+        return UserResource::collection(User::all());
     }
 
     public function show(User $user)
@@ -21,10 +21,10 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $data = $request->validate([
-            'name'     => 'sometimes|string|max:255',
+            'name' => 'sometimes|string|max:255',
             'lastname' => 'sometimes|string|max:255',
-            'email'    => 'sometimes|email|unique:users,email,' . $user->id,
-            'role'     => 'sometimes|in:user,admin',
+            'email' => 'sometimes|email|unique:users,email,' . $user->id,
+            'role' => 'sometimes|in:user,admin',
         ]);
 
         $user->update($data);

@@ -5,70 +5,50 @@ namespace App\Http\Controllers;
 use App\Http\Resources\CopyResource;
 use App\Models\Book;
 use App\Models\Copy;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class CopyController extends Controller
 {
-    public function index()
-    {
-        return CopyResource::collection(
-            Copy::with('book')->paginate(15)
-        );
-    }
 
     public function byBook(Book $book)
     {
-        return CopyResource::collection(
-            $book->copies()->paginate(15)
-        );
+        return CopyResource::collection($book->copies);
     }
 
-    public function show(Copy $copy)
-    {
-        return new CopyResource($copy->load('book'));
-    }
-
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'book_id' => 'required|exists:books,id',
-            'state'   => 'sometimes|in:available,borrowed',
-        ]);
-
-        $data['code'] = self::generateCode($data['book_id']);
-
-        $copy = Copy::create($data);
-
-        return new CopyResource($copy->load('book'));
-    }
-
-    // Cualquier usuario autenticado puede añadir copias a sus propios libros
     public function storeByBook(Request $request, Book $book)
     {
-        // Verifica que el libro pertenece al usuario autenticado
-        // Los admins pueden añadir copias a cualquier libro
-        if (! $request->user()->isAdmin() && $book->owner_id !== $request->user()->id) {
-            throw new AuthorizationException();
-        }
+        $this->authorize('create', [Copy::class, $book]);
 
-        $data = $request->validate([
-            'state' => 'sometimes|in:available,borrowed',
+        // Máximo 50
+        $request->validate([
+            'quantity' => 'sometimes|integer|min:1|max:50',
         ]);
 
-        $data['code'] = self::generateCode($data['book_id']);
+        $quantity = $request->input('quantity', 1);
 
-        $copy = $book->copies()->create($data);
+        $copies = [];
 
-        return new CopyResource($copy->load('book'));
+        for ($i = 0; $i < $quantity; $i++) {
+            $copy = Copy::create([
+                'book_id' => $book->id,
+                'code'    => self::generateCode($book->id),
+                'state'   => 'available',
+            ]);
+
+            $copies[] = $copy->load('book');
+        }
+
+        return CopyResource::collection(collect($copies));
     }
 
-    // revisar que el code no se pueda modificar
-    public function update(Request $request, Copy $copy)
+    public function update(Request $request, Book $book, Copy $copy)
     {
+        $this->authorize('update', $copy);
+
         $data = $request->validate([
-            'state' => 'sometimes|in:available,borrowed',
+            'state' => 'required|in:available,borrowed',
         ]);
 
         $copy->update($data);
@@ -76,8 +56,16 @@ class CopyController extends Controller
         return new CopyResource($copy->load('book'));
     }
 
-    public function destroy(Copy $copy)
+    public function destroy(Book $book, Copy $copy)
     {
+        $this->authorize('delete', $copy);
+
+        if ($copy->state === 'borrowed') {
+            throw ValidationException::withMessages([
+                'copy' => ['No se puede eliminar una copia que está prestada.'],
+            ]);
+        }
+
         $copy->delete();
 
         return response()->json(null, 204);

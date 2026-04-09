@@ -11,12 +11,12 @@ class UserSeeder extends Seeder
     {
         // Admin fijo siempre disponible para pruebas
         User::create([
-            'name'     => 'Admin',
+            'name' => 'Admin',
             'lastname' => 'Principal',
-            'email'    => 'admin@admin.com',
+            'email' => 'admin@admin.com',
             'password' => 'password123',
-            'role'     => 'admin',
-            'active'   => true,
+            'role' => 'admin',
+            'active' => true,
         ]);
 
         User::factory()->count(8)->create();           // usuarios normales

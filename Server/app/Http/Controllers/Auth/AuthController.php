@@ -7,10 +7,19 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+
+    /// {
+    //  "name": "Juan",
+    //  "lastname": "Pérez",
+    //  "email": "juan@mail.com",
+    //  "password": "12345678",
+    //  "password_confirmation": "12345678"
+    // }
     public function register(Request $request)
     {
         $data = $request->validate([
@@ -24,9 +33,9 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return response()->json([
-            'user' => new UserResource($user),
-        ], 201);
+        return (new UserResource($user))
+            ->response()
+            ->setStatusCode(201);
     }
 
     public function login(Request $request)
@@ -38,7 +47,7 @@ class AuthController extends Controller
 
         if (! Auth::attempt($request->only('email', 'password'))) {
             throw ValidationException::withMessages([
-                'email' => ['Credenciales incorrectas.'],
+                'email or password' => ['Credenciales incorrectas.'],
             ]);
         }
 
@@ -49,9 +58,7 @@ class AuthController extends Controller
             return response()->json(['message' => 'Cuenta desactivada.'], 403);
         }
 
-        return response()->json([
-            'user' => new UserResource($user),
-        ]);
+        return (new UserResource($user))->response();
     }
 
     public function logout(Request $request)
@@ -64,5 +71,31 @@ class AuthController extends Controller
     public function me(Request $request)
     {
         return new UserResource($request->user());
+    }
+
+    public function updateMe(Request $request)
+    {
+        $user = $request->user();
+
+        $data = $request->validate([
+            'name'         => 'sometimes|string|max:255',
+            'lastname'     => 'sometimes|string|max:255',
+            'email'        => 'sometimes|email|unique:users,email,' . $user->id,
+            'password'     => 'sometimes|string|min:8|confirmed',
+        ]);
+
+        $user->update($data);
+
+        return new UserResource($user);
+    }
+
+    public function deleteMe(Request $request)
+    {
+        $user = $request->user();
+
+        Auth::logout();
+        $user->delete();
+
+        return response()->json(null, 204);
     }
 }

@@ -12,13 +12,14 @@ class RatingResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request): array {
+    public function toArray(Request $request): array
+    {
         return [
-            'id'      => $this->id,
-            'rating'  => $this->rating,
+            'id' => $this->id,
+            'rating' => $this->rating,
             'comment' => $this->comment,
-            'user'    => $this->whenLoaded('user', fn() => [
-                'id'   => $this->user->id,
+            'user' => $this->whenLoaded('user', fn() => [
+                'id' => $this->user->id,
                 'name' => $this->user->name,
             ]),
         ];

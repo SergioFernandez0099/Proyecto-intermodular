@@ -12,13 +12,13 @@ class AuthorResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request): array {
+    public function toArray(Request $request): array
+    {
         return [
-            'id'    => $this->id,
-            'name'  => $this->name,
-            'books' => $this->whenLoaded('books', fn() =>
-            $this->books->map(fn($b) => [
-                'id'    => $b->id,
+            'id' => $this->id,
+            'name' => $this->name,
+            'books' => $this->whenLoaded('books', fn() => $this->books->map(fn($b) => [
+                'id' => $b->id,
                 'title' => $b->title,
             ])
             ),

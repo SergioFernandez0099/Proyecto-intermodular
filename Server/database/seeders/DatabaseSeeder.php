@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
             AuthorSeeder::class,
             BookSeeder::class,
             CopySeeder::class,
+            LoanSeeder::class,
             RatingSeeder::class,
         ]);
     }

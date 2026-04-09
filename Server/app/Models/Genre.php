@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Book;
 
-class Genre extends Model {
+class Genre extends Model
+{
     /** @use HasFactory<\Database\Factories\GenreFactory> */
     use HasFactory;
 
@@ -19,12 +19,14 @@ class Genre extends Model {
     protected $fillable = [
         'name'
     ];
+
     protected $hidden = [
         'created_at',
         'updated_at'
     ];
 
-    public function books() {
+    public function books()
+    {
         return $this->hasMany(Book::class, 'genre_id', 'id');
     }
 }

@@ -2,7 +2,6 @@
 
 use App\Http\Middleware\CheckRole;
 use App\Http\Middleware\ForceJsonResponse;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
@@ -42,7 +41,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Proxies
         $middleware->trustProxies(at: '*');
 
-        // ← Middleware de verificación de role
+        // Middleware de verificación de role
         $middleware->alias([
             'role' => CheckRole::class,
         ]);
@@ -53,12 +52,6 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json([
                 'message' => 'No autenticado.',
             ], 401);
-        });
-
-        $exceptions->render(function (AuthorizationException $e, Request $request) {
-            return response()->json([
-                'message' => 'No tienes permiso para realizar esta acción.',
-            ], 403);
         });
 
         $exceptions->render(function (ModelNotFoundException $e, Request $request) {
@@ -74,10 +67,10 @@ return Application::configure(basePath: dirname(__DIR__))
             ], 422);
         });
 
-        // Resto de errores HTTP (abort(404), abort(500), etc.)
         $exceptions->render(function (HttpException $e, Request $request) {
             return response()->json([
                 'message' => match ($e->getStatusCode()) {
+                    403 => 'No tienes permiso para realizar esta acción.',
                     404 => 'Recurso no encontrado.',
                     405 => 'Método no permitido.',
                     429 => 'Demasiadas peticiones.',
