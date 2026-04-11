@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-menu',
@@ -9,6 +10,7 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class Menu {
 
+  constructor(private router: Router) {}
   userName: string = 'Usuario';
   userEmail: string = '';
   userRole: string = 'Lector';
@@ -37,5 +39,29 @@ export class Menu {
         console.error('Error al parsear user_session desde localStorage:', error);
       }
     }
+  }
+
+  isActive(route: string): boolean {
+    return this.router.url === route;
+  }
+
+  goDashboard() {
+    this.router.navigate(['/dashboard']);
+  }
+
+  goExplorar() {
+    this.router.navigate(['/explorar']);
+  }
+
+  goMisLibros() {
+    this.router.navigate(['/mis-libros']);
+  }
+
+  goPrestamos() {
+    this.router.navigate(['/prestamos']);
+  }
+
+  goAnyadirLibro() {
+    this.router.navigate(['/añadir-libro']);
   }
 }

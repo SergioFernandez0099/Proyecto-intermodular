@@ -5,24 +5,25 @@
     "email": "Email Address",
     "password": "Password",
     "boton-sesion": "Sing in",
-    "otro-logeo":"OR CONTINUE WITH",
+    "otro-logeo": "OR CONTINUE WITH",
     "crear-cuenta": "Create Account",
     "nuevo-usuario": "New User?"
   },
-  "Footer":{
-    "privacidad":"Privacy Policy",
+  "Footer": {
+    "privacidad": "Privacy Policy",
     "servicios": "Terms of Service",
-    "contacto":"Contact",
+    "contacto": "Contact",
     "derechos": "All rights reserved"
   },
   "Register": {
     "nombre": "First Name",
-    "apellidos":"Last Name",
-    "email":"Email Address",
-    "password":"Password",
-    "confirmar-password":"Confirm Password",
-    "boton-crear-cuenta":"Create Account",
-    "login":"Login",
-    "tienes-cuenta":"Already have an account?"
+    "apellidos": "Last Name",
+    "email": "Email Address",
+    "password": "Password",
+    "confirmar-password": "Confirm Password",
+    "boton-crear-cuenta": "Create Account",
+    "login": "Login",
+    "tienes-cuenta": "Already have an account?",
+    "titulo": "Explorar Biblioteca"
   }
 }

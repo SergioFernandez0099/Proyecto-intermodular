@@ -3,7 +3,7 @@
     
     <div class="aside-header">
       <div class="app-logo-icon">
-        <img src="assets/img/logo.svg" alt="Logo" class="nav-icon-img">
+        <img src="" alt="Logo" class="nav-icon-img">
       </div>
       <div class="app-info hide-mobile">
         <h1 class="app-name">LibreShare</h1>
@@ -12,41 +12,41 @@
     </div>
 
     <nav class="aside-nav">
-      <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
-        <span class="icon">
-          <img src="assets/img/dashboard.png" alt="Dash" class="nav-icon-img">
-        </span>
-        <span class="text hide-mobile">{{ 'Menu.dashboard' | translate }}</span>
-      </a>
+  <button (click)="goDashboard()" [class.active]="isActive('/dashboard')" class="nav-item">
+    <span class="icon">
+      <img src="assets/img/dashboard.png" alt="Dash" class="nav-icon-img">
+    </span>
+    <span class="text">{{ 'Menu.dashboard' | translate }}</span>
+  </button>
 
-      <a routerLink="/explorar" routerLinkActive="active" class="nav-item">
-        <span class="icon">
-          <img src="assets/img/explore.png" alt="Exp" class="nav-icon-img">
-        </span>
-        <span class="text hide-mobile">{{ 'Menu.explorar' | translate }}</span>
-      </a>
+  <button (click)="goExplorar()" [class.active]="isActive('/explorar')" class="nav-item">
+    <span class="icon">
+      <img src="assets/img/explore.png" alt="Exp" class="nav-icon-img">
+    </span>
+    <span class="text">{{ 'Menu.explorar' | translate }}</span>
+  </button>
 
-      <a routerLink="/mis-libros" routerLinkActive="active" class="nav-item">
-        <span class="icon">
-          <img src="assets/img/books.png" alt="Books" class="nav-icon-img">
-        </span>
-        <span class="text hide-mobile">{{ 'Menu.libros' | translate }}</span>
-      </a>
+  <button (click)="goMisLibros()" [class.active]="isActive('/mis-libros')" class="nav-item">
+    <span class="icon">
+      <img src="assets/img/books.png" alt="Books" class="nav-icon-img">
+    </span>
+    <span class="text">{{ 'Menu.libros' | translate }}</span>
+  </button>
 
-      <a routerLink="/prestamos" routerLinkActive="active" class="nav-item">
-        <span class="icon">
-          <img src="assets/img/loan.png" alt="Loans" class="nav-icon-img">
-        </span>
-        <span class="text hide-mobile">{{ 'Menu.prestamo' | translate }}</span>
-      </a>
+  <button (click)="goPrestamos()" [class.active]="isActive('/prestamos')" class="nav-item">
+    <span class="icon">
+      <img src="assets/img/loan.png" alt="Loans" class="nav-icon-img">
+    </span>
+    <span class="text">{{ 'Menu.prestamo' | translate }}</span>
+  </button>
 
-      <a routerLink="/añadir-libro" routerLinkActive="active" class="nav-item">
-        <span class="icon">
-          <img src="assets/img/add_book.png" alt="Add" class="nav-icon-img">
-        </span>
-        <span class="text hide-mobile">{{ 'Menu.anyadir-libro' | translate }}</span>
-      </a>
-    </nav>
+  <button (click)="goAnyadirLibro()" [class.active]="isActive('/añadir-libro')" class="nav-item">
+    <span class="icon">
+      <img src="assets/img/add_book.png" alt="Add" class="nav-icon-img">
+    </span>
+    <span class="text">{{ 'Menu.anyadir-libro' | translate }}</span>
+  </button>
+</nav>
 
     <div class="aside-footer">
       <div class="user-profile">
