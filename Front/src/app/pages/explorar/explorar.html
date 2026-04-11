@@ -44,7 +44,7 @@
             <div class="card-info">
               <div class="text-content">
                 <h4>{{ book.title }}</h4>
-                <p class="author">{{ (book.authors_list ?? []).join(', ') }}</p>
+                <p class="author">{{ (book.authors ?? []).join(', ') }}</p>
               </div>
 
               <button class="btn-request">

@@ -1,7 +1,8 @@
 import { Component, computed, OnInit, signal } from '@angular/core';
 import { Menu } from '../../components/menu/menu';
-import { Book, BookService } from '../../services/book';
+import { BookService } from '../../services/book';
 import { TranslateModule } from '@ngx-translate/core';
+import { IBook } from '../../models/book';
 
 @Component({
   selector: 'app-explorar',
@@ -11,7 +12,7 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrl: './explorar.css',
 })
 export class Explorar implements OnInit{
-  books = signal<Book[]>([]);
+  books = signal<IBook[]>([]);
   isLoading = signal<boolean>(true);
   filterText = signal('');
   currentPage = signal(0);
@@ -30,7 +31,7 @@ export class Explorar implements OnInit{
 
     return this.books().filter(book => 
       book.title.toLowerCase().includes(term) || 
-      book.authors_list.some(author => author.toLowerCase().includes(term))
+      book.authors?.some(author => author.name.toLowerCase().includes(term))
     );
   });
 
