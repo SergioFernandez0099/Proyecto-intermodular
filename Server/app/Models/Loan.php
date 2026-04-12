@@ -13,12 +13,10 @@ class Loan extends Model
     protected $fillable = [
         'user_id',
         'copy_id',
-        'loan_date',
         'return_date'
     ];
 
     protected $hidden = [
-        'created_at',
         'updated_at'
     ];
 

@@ -51,4 +51,9 @@ class Book extends Model
     {
         return $this->hasMany(Rating::class);
     }
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
 }

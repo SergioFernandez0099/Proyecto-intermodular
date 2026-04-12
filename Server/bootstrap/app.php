@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\CheckRole;
+use App\Http\Middleware\EnsureUserIsActive;
 use App\Http\Middleware\ForceJsonResponse;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -28,22 +29,20 @@ return Application::configure(basePath: dirname(__DIR__))
             ForceJsonResponse::class,
         ]);
 
-
         // CORS / Sanctum
         $middleware->statefulApi();
 
         // CSRF
         $middleware->validateCsrfTokens(except: [
-            'login',
             'api/*',
         ]);
 
         // Proxies
         $middleware->trustProxies(at: '*');
 
-        // Middleware de verificación de role
         $middleware->alias([
             'role' => CheckRole::class,
+            'active' => EnsureUserIsActive::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

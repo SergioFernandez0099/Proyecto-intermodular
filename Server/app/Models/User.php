@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -34,7 +33,6 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
         'created_at',
         'updated_at',
         'email_verified_at'
@@ -79,7 +77,7 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
-    // ← Métodos de autorización
+    // Métodos de autorización
     public function ownsBook(Book $book): bool
     {
         return $this->id === $book->owner_id;
@@ -95,9 +93,13 @@ class User extends Authenticatable
         return $this->id === $rating->user_id;
     }
 
-    // Owns copy a través del libro
     public function ownsCopy(Copy $copy): bool
     {
         return $this->ownsBook($copy->book);
+    }
+
+    public function setRememberToken($value): void
+    {
+        // API stateful con cookies, no necesitamos remember me
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Copy;
 use App\Models\Loan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class LoanController extends Controller
@@ -16,7 +17,11 @@ class LoanController extends Controller
     {
         $user = Auth::user();
 
-        $loans = Loan::with(['copy.book', 'user'])
+        $relations = $user->isAdmin()
+            ? ['copy.book.genre', 'copy.book.authors', 'user']
+            : ['copy.book.genre', 'copy.book.authors'];
+
+        $loans = Loan::with($relations)
             ->when(!$user->isAdmin(), fn($q) => $q->where('user_id', $user->id))
             ->latest()
             ->get();
@@ -28,47 +33,67 @@ class LoanController extends Controller
     {
         $this->authorize('view', $loan);
 
-        return new LoanResource($loan->load(['copy.book', 'user']));
+        $relations = auth()->user()->isAdmin()
+            ? ['copy.book.genre', 'copy.book.authors', 'user']
+            : ['copy.book.genre', 'copy.book.authors'];
+
+        return new LoanResource($loan->load($relations));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            'copy_id' => 'required|exists:copies,id',
+            'book_id' => 'required|exists:books,id',
         ]);
 
-        $copy = Copy::findOrFail($data['copy_id']);
+        return DB::transaction(function () use ($data) {
+            // lockForUpdate() evita que otra petición simultánea agarre la misma copia
+            $copy = Copy::with('book')
+                ->where('book_id', $data['book_id'])
+                ->where('state', 'available')
+                ->lockForUpdate()
+                ->first();
 
-        if ($copy->state !== 'available') {
-            throw ValidationException::withMessages([
-                'loan' => ['La copia no está disponible.'],
+            if (!$copy) {
+                throw ValidationException::withMessages([
+                    'loan' => ['No hay copias disponibles para este libro.'],
+                ]);
+            }
+
+            if ($copy->book->owner_id === Auth::id()) {
+                throw ValidationException::withMessages([
+                    'loan' => ['No puedes tomar prestado un libro tuyo.'],
+                ]);
+            }
+
+            $copy->update(['state' => 'borrowed']);
+
+            $loan = Loan::create([
+                'user_id' => Auth::id(),
+                'copy_id' => $copy->id,
             ]);
-        }
 
-        $loan = Loan::create([
-            'user_id' => Auth::id(),
-            'copy_id' => $copy->id,
-            'loan_date' => now(),
-        ]);
-
-        $copy->update(['state' => 'borrowed']);
-
-        return new LoanResource($loan->load('copy.book'));
+            return new LoanResource($loan->load(['copy.book.genre', 'copy.book.authors']));
+        });
     }
 
     public function return(Loan $loan)
     {
         $this->authorize('return', $loan);
 
-        if ($loan->return_date) {
-            throw ValidationException::withMessages([
-                'loan' => ['Este préstamo ya fue devuelto.'],
-            ]);
-        }
+        return DB::transaction(function () use ($loan) {
+            $loan = Loan::where('id', $loan->id)->lockForUpdate()->first();
 
-        $loan->update(['return_date' => now()->toDateString()]);
-        $loan->copy->update(['state' => 'available']);
+            if ($loan->return_date) {
+                throw ValidationException::withMessages([
+                    'loan' => ['Este préstamo ya fue devuelto.'],
+                ]);
+            }
 
-        return new LoanResource($loan->load('copy.book'));
+            $loan->update(['return_date' => now()]);
+            $loan->copy()->update(['state' => 'available']);
+
+            return new LoanResource($loan->load(['copy.book.genre', 'copy.book.authors']));
+        });
     }
 }

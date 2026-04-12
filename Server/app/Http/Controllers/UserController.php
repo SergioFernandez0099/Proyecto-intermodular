@@ -42,6 +42,7 @@ class UserController extends Controller
     public function deactivate(User $user)
     {
         $user->update(['active' => false]);
+        $user->tokens()->delete(); // revoca todos los tokens de Sanctum
 
         return new UserResource($user);
     }
@@ -52,4 +53,5 @@ class UserController extends Controller
 
         return response()->json(null, 204);
     }
+
 }

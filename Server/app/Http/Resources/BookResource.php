@@ -47,7 +47,7 @@ class BookResource extends JsonResource
                 'id' => $r->id,
                 'rating' => $r->rating,
                 'comment' => $r->comment,
-                'created_at' => $r->created_at->toDateTimeString(),
+                'created_at' => $r->created_at,
                 // Campo calculado — true si la fecha de update es diferente de la de created
                 'edited' => $r->created_at->ne($r->updated_at),
                 'user' => [

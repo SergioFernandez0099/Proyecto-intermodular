@@ -15,6 +15,11 @@ class BookPolicy
         return null; // null = continua
     }
 
+    public function view(User $user, Book $book): bool
+    {
+        return $user->ownsBook($book) || $book->owner->active;
+    }
+
     public function update(User $user, Book $book): bool
     {
         return $user->ownsBook($book);

@@ -6,6 +6,7 @@ use App\Http\Resources\CopyResource;
 use App\Models\Book;
 use App\Models\Copy;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
@@ -14,6 +15,8 @@ class CopyController extends Controller
 
     public function byBook(Book $book)
     {
+        $this->authorize('view', [Copy::class, $book]);
+
         return CopyResource::collection($book->copies);
     }
 
@@ -28,17 +31,18 @@ class CopyController extends Controller
 
         $quantity = $request->input('quantity', 1);
 
-        $copies = [];
-
-        for ($i = 0; $i < $quantity; $i++) {
-            $copy = Copy::create([
-                'book_id' => $book->id,
-                'code'    => self::generateCode($book->id),
-                'state'   => 'available',
-            ]);
-
-            $copies[] = $copy->load('book');
-        }
+        $copies = DB::transaction(function () use ($book, $quantity) {
+            $copies = [];
+            for ($i = 0; $i < $quantity; $i++) {
+                $copy = Copy::create([
+                    'book_id' => $book->id,
+                    'code' => self::generateCode($book->id),
+                    'state' => 'available',
+                ]);
+                $copies[] = $copy->load('book');
+            }
+            return $copies;
+        });
 
         return CopyResource::collection(collect($copies));
     }

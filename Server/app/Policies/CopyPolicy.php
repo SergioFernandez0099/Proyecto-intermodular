@@ -16,6 +16,11 @@ class CopyPolicy
         return null; // null = continua
     }
 
+    public function view(User $user, Book $book): bool
+    {
+        return $user->ownsBook($book);
+    }
+
     public function create(User $user, Book $book): bool
     {
         return $user->ownsBook($book);

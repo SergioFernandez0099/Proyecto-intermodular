@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\BookResource;
 use App\Models\Book;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class BookController extends Controller
 {
@@ -15,6 +18,7 @@ class BookController extends Controller
     {
         $books = Book::with(['genre', 'authors', 'copies'])
             ->where('owner_id', '!=', $request->user()->id)
+            ->whereHas('owner', fn($q) => $q->where('active', true))
             ->when($request->genre_id, fn($q) => $q->where('genre_id', $request->genre_id))
             ->when($request->search, fn($q) => $q->where('title', 'like', "%{$request->search}%"))
             ->get();
@@ -36,7 +40,15 @@ class BookController extends Controller
     // Route Model Binding: Laravel busca el libro y devuelve 404 automáticamente
     public function show(Book $book)
     {
-        $book->load(['genre', 'authors', 'copies', 'ratings.user']);
+        $this->authorize('view', $book);
+
+        $book->load([
+            'genre',
+            'authors',
+            'copies',
+            'ratings' => fn($q) => $q->whereHas('user', fn($q) => $q->where('active', true))
+                ->with('user'),
+        ]);
 
         return new BookResource($book);
     }
@@ -52,26 +64,39 @@ class BookController extends Controller
             'author_ids.*' => 'exists:authors,id',
         ]);
 
-        // Validación duplicado título + autor
-        $existe = Book::where('title', $data['title'])
-            ->whereHas('authors', fn($q) => $q->whereIn('author_id', $data['author_ids']))
-            ->exists();
+        // Subimos la imagen ANTES de la transacción: si la BD falla, se borra.
+        $coverPath = $request->hasFile('cover_image')
+            ? $request->file('cover_image')->store('covers', 'public')
+            : null;
 
-        if ($existe) {
-            throw ValidationException::withMessages([
-                'book' => ['Ya existe un libro con este título y autor.'],
-            ]);
+        try {
+            $book = DB::transaction(function () use ($data, $coverPath, $request) {
+                $existe = Book::where('title', $data['title'])
+                    ->whereHas('authors', fn($q) => $q->whereIn('author_id', $data['author_ids']))
+                    ->exists();
+
+                if ($existe) {
+                    throw ValidationException::withMessages([
+                        'book' => ['Ya existe un libro con este título y autor.'],
+                    ]);
+                }
+
+                $book = Book::create([
+                    ...$data,
+                    'cover_image' => $coverPath,
+                    'owner_id' => $request->user()->id,
+                ]);
+
+                $book->authors()->sync($data['author_ids']);
+
+                return $book;
+            });
+        } catch (\Throwable $e) {
+            if ($coverPath) {
+                Storage::disk('public')->delete($coverPath);
+            }
+            throw $e;
         }
-
-        $book = Book::create([
-            ...$data,
-            'cover_image' => $request->hasFile('cover_image')
-                ? $request->file('cover_image')->store('covers', 'public')
-                : null,
-            'owner_id' => $request->user()->id,
-        ]);
-
-        $book->authors()->sync($data['author_ids']);
 
         return (new BookResource($book->load(['genre', 'authors'])))
             ->response()
@@ -90,28 +115,31 @@ class BookController extends Controller
             'author_ids.*' => 'exists:authors,id',
         ]);
 
-        // Solo se valida si viene el título o algún autor
-        if (isset($data['title']) || isset($data['author_ids'])) {
-            $titulo = $data['title'] ?? $book->title;
-            $autoresIds = $data['author_ids'] ?? $book->authors->pluck('id')->toArray();
+        $book = DB::transaction(function () use ($data, $book) {
+            if (isset($data['title']) || isset($data['author_ids'])) {
+                $titulo = $data['title'] ?? $book->title;
+                $autoresIds = $data['author_ids'] ?? $book->authors->pluck('id')->toArray();
 
-            $existe = Book::where('title', $titulo)
-                ->where('id', '!=', $book->id)
-                ->whereHas('authors', fn($q) => $q->whereIn('author_id', $autoresIds))
-                ->exists();
+                $existe = Book::where('title', $titulo)
+                    ->where('id', '!=', $book->id)
+                    ->whereHas('authors', fn($q) => $q->whereIn('author_id', $autoresIds))
+                    ->exists();
 
-            if ($existe) {
-                throw ValidationException::withMessages([
-                    'book' => ['Ya existe un libro con este título y autor.'],
-                ]);
+                if ($existe) {
+                    throw ValidationException::withMessages([
+                        'book' => ['Ya existe un libro con este título y autor.'],
+                    ]);
+                }
             }
-        }
 
-        $book->update($data);
+            $book->update($data);
 
-        if (isset($data['author_ids'])) {
-            $book->authors()->sync($data['author_ids']);
-        }
+            if (isset($data['author_ids'])) {
+                $book->authors()->sync($data['author_ids']);
+            }
+
+            return $book;
+        });
 
         return new BookResource($book->load(['genre', 'authors']));
     }
@@ -120,9 +148,24 @@ class BookController extends Controller
     {
         $this->authorize('delete', $book);
 
-        $this->deleteOldCover($book); // Borra la imagen del disco
+        $coverPath = $book->cover_image;
 
-        $book->delete();
+        try {
+            $book->delete();
+        } catch (QueryException $e) {
+            if ($e->getCode() === '23000') {
+                //409
+                throw ValidationException::withMessages([
+                    'book' => ['No se puede eliminar el libro porque tiene copias vinculadas a préstamos.'],
+                ]);
+            }
+
+            throw new HttpException(500, 'Error al eliminar el libro.');
+        }
+
+        if ($coverPath) {
+            Storage::disk('public')->delete($coverPath);
+        }
 
         return response()->json(null, 204);
     }
@@ -135,11 +178,19 @@ class BookController extends Controller
             'cover_image' => 'required|image|mimes:jpeg,png,webp|max:2048',
         ]);
 
-        $this->deleteOldCover($book);
+        $newPath = $request->file('cover_image')->store('covers', 'public');
+        $oldPath = $book->cover_image;
 
-        $path = $request->file('cover_image')->store('covers', 'public');
+        try {
+            $book->update(['cover_image' => $newPath]);
+        } catch (\Throwable $e) {
+            Storage::disk('public')->delete($newPath);
+            throw $e;
+        }
 
-        $book->update(['cover_image' => $path]);
+        if ($oldPath) {
+            Storage::disk('public')->delete($oldPath);
+        }
 
         return new BookResource($book->load(['genre', 'authors']));
     }
@@ -148,18 +199,15 @@ class BookController extends Controller
     {
         $this->authorize('update', $book);
 
-        $this->deleteOldCover($book);
+        $coverPath = $book->cover_image;
 
         $book->update(['cover_image' => null]);
 
-        return response()->json(null, 204);
-    }
-
-    private function deleteOldCover(Book $book): void
-    {
-        if ($book->cover_image) {
-            Storage::disk('public')->delete($book->cover_image);
+        if ($coverPath) {
+            Storage::disk('public')->delete($coverPath);
         }
+
+        return response()->json(null, 204);
     }
 
     public function import(Request $request)
@@ -214,31 +262,40 @@ class BookController extends Controller
 
             $validated = $validator->validated();
 
-            // Validación duplicado título + autor
-            $existe = Book::where('title', $validated['title'])
-                ->whereHas('authors', fn($q) => $q->whereIn('author_id', $validated['author_ids']))
-                ->exists();
+            try {
+                $bookId = DB::transaction(function () use ($validated, $request) {
+                    $existe = Book::where('title', $validated['title'])
+                        ->whereHas('authors', fn($q) => $q->whereIn('author_id', $validated['author_ids']))
+                        ->exists();
 
-            if ($existe) {
+                    if ($existe) {
+                        throw ValidationException::withMessages([
+                            'title' => ['Ya existe un libro con este título y autor.'],
+                        ]);
+                    }
+
+                    $book = Book::create([
+                        'title' => $validated['title'],
+                        'genre_id' => $validated['genre_id'],
+                        'publication_year' => $validated['publication_year'] ?? null,
+                        'cover_image' => null,
+                        'owner_id' => $request->user()->id,
+                    ]);
+
+                    $book->authors()->sync($validated['author_ids']);
+
+                    return $book->id;
+                });
+
+                $imported[] = $bookId;
+
+            } catch (ValidationException $e) {
                 $failed[] = [
                     'row' => $row,
                     'data' => $data,
-                    'errors' => ['title' => ['Ya existe un libro con este título y autor.']],
+                    'errors' => $e->errors(),
                 ];
-                continue;
             }
-
-            $book = Book::create([
-                'title' => $validated['title'],
-                'genre_id' => $validated['genre_id'],
-                'publication_year' => $validated['publication_year'] ?? null,
-                'cover_image' => null,
-                'owner_id' => $request->user()->id,
-            ]);
-
-            $book->authors()->sync($validated['author_ids']);
-
-            $imported[] = $book->id;
         }
 
         fclose($handle);

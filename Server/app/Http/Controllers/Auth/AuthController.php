@@ -7,7 +7,6 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -23,15 +22,17 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $data = $request->validate([
-            'name'     => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
-            'email'    => 'required|email|unique:users',
+            'email' => 'required|email|unique:users',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
         $user = User::create($data);
 
-        Auth::login($user);
+        Auth::login($user, false);
+
+        $request->session()->regenerate();
 
         return (new UserResource($user))
             ->response()
@@ -41,11 +42,11 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email'    => 'required|email',
+            'email' => 'required|email',
             'password' => 'required|string',
         ]);
 
-        if (! Auth::attempt($request->only('email', 'password'))) {
+        if (!Auth::attempt($request->only('email', 'password'), false)) {
             throw ValidationException::withMessages([
                 'email or password' => ['Credenciales incorrectas.'],
             ]);
@@ -53,10 +54,12 @@ class AuthController extends Controller
 
         $user = Auth::user();
 
-        if (! $user->active) {
+        if (!$user->active) {
             Auth::logout();
             return response()->json(['message' => 'Cuenta desactivada.'], 403);
         }
+
+        $request->session()->regenerate(); // previene session fixation
 
         return (new UserResource($user))->response();
     }
@@ -64,6 +67,9 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         Auth::guard('web')->logout();
+
+        $request->session()->invalidate();     // destruye la sesión
+        $request->session()->regenerateToken(); // regenera el CSRF
 
         return response()->json(['message' => 'Sesión cerrada correctamente.']);
     }
@@ -78,10 +84,10 @@ class AuthController extends Controller
         $user = $request->user();
 
         $data = $request->validate([
-            'name'         => 'sometimes|string|max:255',
-            'lastname'     => 'sometimes|string|max:255',
-            'email'        => 'sometimes|email|unique:users,email,' . $user->id,
-            'password'     => 'sometimes|string|min:8|confirmed',
+            'name' => 'sometimes|string|max:255',
+            'lastname' => 'sometimes|string|max:255',
+            'email' => 'sometimes|email|unique:users,email,' . $user->id,
+            'password' => 'sometimes|string|min:8|confirmed',
         ]);
 
         $user->update($data);
@@ -93,8 +99,9 @@ class AuthController extends Controller
     {
         $user = $request->user();
 
+        $user->update(['active' => false]);
+        // $user->delete();
         Auth::logout();
-        $user->delete();
 
         return response()->json(null, 204);
     }
