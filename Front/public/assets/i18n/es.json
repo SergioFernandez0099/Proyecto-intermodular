@@ -25,5 +25,37 @@
     "login":"Crear Cuenta",
     "tienes-cuenta":"¿Ya tienes una cuenta?"
     
+  },
+  "Menu": {
+    "biblioteca":"Mi biblioteca",
+    "dashboard": "Panel",
+    "explorar": "Explorar",
+    "libros": "Mis libros",
+    "prestamo": "Préstamos",
+    "anyadir-libro": "Añadir libro"
+
+  },
+  "Explorar": {
+    "titulo": "Explorar Biblioteca",
+    "subtitulo": "Encuentra tu próxima lectura entre miles de libros compartidos.",
+    "search_placeholder": "Buscar por título, autor",
+    "libros_disponibles": "Libros Disponibles",
+    "ordenar_por": "Ordenar por",
+    "recientes": "Recientes",
+    "pedir_prestado": "Pedir Prestado",
+    "no_disponible": "No Disponible",
+    "disponible": "DISPONIBLE",
+    "en_prestamo": "EN PRÉSTAMO",
+    "categorias": {
+      "todos": "Todos",
+      "ficcion": "Ficción",
+      "ciencia": "Ciencia",
+      "historia": "Historia",
+      "biografias": "Biografías",
+      "arte": "Arte",
+      "tecnologia": "Tecnología"
+    },
+    "buscar":"Buscar"
   }
+
 }

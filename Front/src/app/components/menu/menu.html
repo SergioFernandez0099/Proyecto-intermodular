@@ -1,0 +1,64 @@
+<aside class="dashboard-aside">
+  <div class="aside-container">
+    
+    <div class="aside-header">
+      <div class="app-logo-icon">
+        <img src="" alt="Logo" class="nav-icon-img">
+      </div>
+      <div class="app-info hide-mobile">
+        <h1 class="app-name">LibreShare</h1>
+        <p class="app-subtitle">{{ 'Menu.biblioteca' | translate }}</p>
+      </div>
+    </div>
+
+    <nav class="aside-nav">
+  <button (click)="goDashboard()" [class.active]="isActive('/dashboard')" class="nav-item">
+    <span class="icon">
+      <img src="assets/img/dashboard.png" alt="Dash" class="nav-icon-img">
+    </span>
+    <span class="text">{{ 'Menu.dashboard' | translate }}</span>
+  </button>
+
+  <button (click)="goExplorar()" [class.active]="isActive('/explorar')" class="nav-item">
+    <span class="icon">
+      <img src="assets/img/explore.png" alt="Exp" class="nav-icon-img">
+    </span>
+    <span class="text">{{ 'Menu.explorar' | translate }}</span>
+  </button>
+
+  <button (click)="goMisLibros()" [class.active]="isActive('/mis-libros')" class="nav-item">
+    <span class="icon">
+      <img src="assets/img/books.png" alt="Books" class="nav-icon-img">
+    </span>
+    <span class="text">{{ 'Menu.libros' | translate }}</span>
+  </button>
+
+  <button (click)="goPrestamos()" [class.active]="isActive('/prestamos')" class="nav-item">
+    <span class="icon">
+      <img src="assets/img/loan.png" alt="Loans" class="nav-icon-img">
+    </span>
+    <span class="text">{{ 'Menu.prestamo' | translate }}</span>
+  </button>
+
+  <button (click)="goAnyadirLibro()" [class.active]="isActive('/añadir-libro')" class="nav-item">
+    <span class="icon">
+      <img src="assets/img/add_book.png" alt="Add" class="nav-icon-img">
+    </span>
+    <span class="text">{{ 'Menu.anyadir-libro' | translate }}</span>
+  </button>
+</nav>
+
+    <div class="aside-footer">
+      <div class="user-profile">
+        <div class="user-avatar-initial">
+          {{ userInitial }}
+        </div>
+        <div class="user-info hide-mobile">
+          <p class="user-name">{{ userName }}</p>
+          <p class="user-plan">{{ userRole }}</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</aside>

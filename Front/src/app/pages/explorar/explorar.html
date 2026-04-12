@@ -1,0 +1,76 @@
+<div class="explorar-container">
+  <app-menu></app-menu>
+
+  <main class="explorar-content">
+    @if (!isLoading()) {
+    <header class="content-header">
+      <div class="header-titles">
+        <h2>{{ 'Explorar.titulo' | translate }}</h2>
+        <p class="subtitle">{{ 'Explorar.subtitulo' | translate }}</p>
+      </div>
+    </header>
+
+    <section class="content-body">
+      <div class="search-section">
+        <div class="search-bar">
+          <span>{{ 'Explorar.buscar' | translate }}</span>
+          <input type="text" [placeholder]="'Explorar.search_placeholder' | translate" (input)="onSearch($event)">
+        </div>
+
+        <div class="categories-wrapper">
+          <button class="chip active">{{ 'Explorar.categorias.todos' | translate }}</button>
+          <button class="chip">{{ 'Explorar.categorias.ficcion' | translate }}</button>
+          <button class="chip">{{ 'Explorar.categorias.ciencia' | translate }}</button>
+          <button class="chip">{{ 'Explorar.categorias.historia' | translate }}</button>
+          <button class="chip">{{ 'Explorar.categorias.biografias' | translate }}</button>
+        </div>
+      </div>
+
+      <div class="books-container">
+        <div class="list-header">
+          <h3>{{ 'Explorar.libros_disponibles' | translate }}</h3>
+          <p class="sort-text">
+            {{ 'Explorar.ordenar_por' | translate }}: <span>{{ 'Explorar.recientes' | translate }} ▾</span>
+          </p>
+        </div>
+
+        <div class="books-grid">
+          @for (book of paginatedBooks(); track book.id) {
+          <div class="book-card">
+            <div class="card-media">
+              <img [src]="book.cover_image" [alt]="book.title" onerror="this.src='https://placehold.co/200x300?text=Sin+portada'">
+            </div>
+
+            <div class="card-info">
+              <div class="text-content">
+                <h4>{{ book.title }}</h4>
+                <p class="author">{{ (book.authors ?? []).join(', ') }}</p>
+              </div>
+
+              <button class="btn-request">
+                {{ (book.id % 4 === 0 ? 'Explorar.no_disponible' : 'Explorar.pedir_prestado') | translate }}
+              </button>
+            </div>
+          </div>
+          }
+        </div>
+
+        <div class="pagination-wrapper">
+          <button class="pag-btn" (click)="prevPage()" [disabled]="currentPage() === 0">
+            <span class="material-icons"><<</span>
+          </button>
+          <span class="page-indicator">{{ currentPage() + 1 }} / {{ totalPages() }}</span>
+          <button class="pag-btn" (click)="nextPage()" [disabled]="currentPage() + 1 >= totalPages()">
+            <span class="material-icons">>></span>
+          </button>
+        </div>
+      </div>
+    </section>
+    } @else {
+    <div class="loading-screen">
+      <div class="spinner"></div>
+      <p>Cargando biblioteca...</p>
+    </div>
+    }
+  </main>
+</div>
