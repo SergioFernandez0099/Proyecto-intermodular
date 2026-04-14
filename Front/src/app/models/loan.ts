@@ -3,8 +3,8 @@ import { IUser } from "./user";
 
 export interface ILoan {
     id: number,
-    loan_date: Date,
-    return_date: Date,
-    copy?: ICopy,
-    user: IUser
+    loan_date: string,
+    return_date: string | null,
+    copy?: Partial<ICopy>,
+    user?: Partial<IUser>
 }

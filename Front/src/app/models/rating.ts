@@ -4,5 +4,7 @@ export interface IRating {
     id: number,
     rating: number,
     comment: string,
-    user: IUser
+    edited?: boolean,
+    created_at?: string,
+    user?: Partial<IUser>
 }

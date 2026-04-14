@@ -23,6 +23,7 @@ return new class extends Migration {
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
 
+            $table->dateTime('loan_date');
             $table->dateTime('return_date')->nullable();
             $table->timestamps();
         });
