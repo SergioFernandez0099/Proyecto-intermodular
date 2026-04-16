@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { AuthService } from '../../core/services/auth.service';
 @Component({
   selector: 'app-menu',
   standalone: true,
@@ -11,6 +12,7 @@ import { TranslateModule } from '@ngx-translate/core';
 export class Menu {
 
   constructor(private router: Router) {}
+  private authService = inject(AuthService);
   userName: string = 'Usuario';
   userEmail: string = '';
   userRole: string = 'Lector';
@@ -20,48 +22,39 @@ export class Menu {
     this.loadUserData();
   }
 
-  loadUserData(): void {
-    const sessionData = localStorage.getItem('user_session');
-    
-    if (sessionData) {
-      try {
-        const user = JSON.parse(sessionData);
-        
-        this.userName = user.name || '';
-        this.userEmail = user.email || '';
-        this.userRole = user.role || '';
-
-        if (this.userEmail && this.userEmail.length > 0) {
-          this.userInitial = this.userEmail.charAt(0).toUpperCase();
-        }
-
-      } catch (error) {
-        console.error('Error al parsear user_session desde localStorage:', error);
-      }
-    }
+  private loadUserData(): void {
+    this.authService.me().subscribe({
+      next: (user) => {
+        this.userName = user.data.name;
+        this.userEmail = user.data.email;
+        this.userRole = user.data.role;
+        this.userInitial = user.data.name.charAt(0).toUpperCase();
+      },
+      error: (err) => console.error(err)
+    });
   }
 
-  isActive(route: string): boolean {
+  public isActive(route: string): boolean {
     return this.router.url === route;
   }
 
-  goDashboard() {
+  public goDashboard() {
     this.router.navigate(['/dashboard']);
   }
 
-  goExplorar() {
+  public goExplorar() {
     this.router.navigate(['/explorar']);
   }
 
-  goMisLibros() {
+  public goMisLibros() {
     this.router.navigate(['/mis-libros']);
   }
 
-  goPrestamos() {
+  public goPrestamos() {
     this.router.navigate(['/prestamos']);
   }
 
-  goAnyadirLibro() {
+  public goAnyadirLibro() {
     this.router.navigate(['/añadir-libro']);
   }
 }

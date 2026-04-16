@@ -31,7 +31,7 @@ export class Explorar implements OnInit{
 
     return this.books().filter(book => 
       book.title.toLowerCase().includes(term) || 
-      book.authors?.some(author => author.name.toLowerCase().includes(term))
+      book.authors?.some(author => author.name?.toLowerCase().includes(term))
     );
   });
 
@@ -52,7 +52,7 @@ export class Explorar implements OnInit{
   }
 
 
-getLibros(): void {
+  getLibros(): void {
     this.isLoading.set(true);
 
     this.bookService.getBooks().subscribe({
@@ -65,6 +65,11 @@ getLibros(): void {
         this.isLoading.set(false);
       }
     });
+  }
+
+  getBookAuthors(book: IBook): string | undefined {
+    const result = book.authors?.map(auth => auth.name).join(', ');
+    return result;
   }
 
   nextPage() {

@@ -5,7 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { Footer } from '../../components/footer/footer';
 import { Router, RouterLink } from '@angular/router';
 import { Header } from '../../components/header/header';
-import { UserService } from '../../services/user';
+import { AuthService } from '../../core/services/auth.service';
+//import { UserService } from '../../services/user';
 
 @Component({
   selector: 'app-login',
@@ -25,7 +26,7 @@ export class Login {
 
   toastTimeout: any;
 
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
   
 
   showToast(title: string, message: string, type: 'success' | 'error' | 'warning', callback?: () => void) {
@@ -40,24 +41,24 @@ export class Login {
   }
 
   onLogin() { 
-  const { email, password } = this.loginData;
+    const { email, password } = this.loginData;
 
-  if (!email || !password) {
-    this.showToast('Atención', 'Rellena todos los campos', 'warning');
-    return;
-  }
-
-  this.userService.loginUser({ email, password }).subscribe({
-    next: (res: any) => {
-      this.showToast('¡Bienvenido!', 'Sesión iniciada correctamente', 'success', () => {
-        localStorage.setItem('user_session', JSON.stringify(res.user));
-        this.router.navigate(['/dashboard']); 
-      });
-    },
-    error: (err) => {
-      const errorMsg = err.error?.message || 'Error de conexión';
-      this.showToast('Error de Login', errorMsg, 'error');
+    if (!email || !password) {
+      this.showToast('Atención', 'Rellena todos los campos', 'warning');
+      return;
     }
-  });
-}
+
+    this.authService.login(email, password).subscribe({
+      next: (res: any) => {
+        this.showToast('¡Bienvenido!', 'Sesión iniciada correctamente', 'success', () => {
+          localStorage.setItem('user_session', JSON.stringify(res.user));
+          this.router.navigate(['/dashboard']); 
+        });
+      },
+      error: (err) => {
+        const errorMsg = err.error?.message || 'Error de conexión';
+        this.showToast('Error de Login', errorMsg, 'error');
+      }
+    });
+  }
 }

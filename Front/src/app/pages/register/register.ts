@@ -5,7 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Footer } from '../../components/footer/footer';
 import { Router, RouterLink } from '@angular/router';
 import { Header } from '../../components/header/header';
-import { UserService } from '../../services/user';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -28,7 +28,7 @@ export class Register {
 
   constructor(
     private fb: FormBuilder,
-    private userService: UserService,
+    private authService: AuthService,
     private router: Router,
   ) {
     this.registerForm = this.fb.group({
@@ -36,7 +36,7 @@ export class Register {
       lastname: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required],
+      password_confirmation: ['', Validators.required],
     });
   }
 
@@ -71,13 +71,14 @@ export class Register {
 
     if (this.registerForm.valid) {
       const newUser = {
-        name: `${this.registerForm.value.name} ${this.registerForm.value.lastname}`,
+        name: this.registerForm.value.name,
+        lastname: this.registerForm.value.lastname,
         email: this.registerForm.value.email,
         password: password,
         role: 'user',
       };
 
-      this.userService.createUser(newUser).subscribe({
+      this.authService.register(newUser.name, newUser.lastname, newUser.email, newUser.password, newUser.password).subscribe({
         next: () => {
           this.showToast('Éxito', 'Usuario registrado correctamente.', 'success');
         },
