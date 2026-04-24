@@ -6,6 +6,7 @@ import { Footer } from '../../components/footer/footer';
 import { Router, RouterLink } from '@angular/router';
 import { Header } from '../../components/header/header';
 import { AuthService } from '../../core/services/auth.service';
+import { finalize } from 'rxjs';
 //import { UserService } from '../../services/user';
 
 @Component({
@@ -24,6 +25,7 @@ export class Login {
     type: 'success' as 'success' | 'error' | 'warning'
   };
 
+  isLoading = false;
   toastTimeout: any;
 
   constructor(private authService: AuthService, private router: Router) {}
@@ -37,28 +39,34 @@ export class Login {
     this.toastTimeout = setTimeout(() => {
       this.modalConfig.show = false;
       if (callback) callback();
-    });
+    },3000);
   }
 
   onLogin() { 
-    const { email, password } = this.loginData;
+  const { email, password } = this.loginData;
 
-    if (!email || !password) {
-      this.showToast('Atención', 'Rellena todos los campos', 'warning');
-      return;
-    }
-
-    this.authService.login(email, password).subscribe({
-      next: (res: any) => {
-        this.showToast('¡Bienvenido!', 'Sesión iniciada correctamente', 'success', () => {
-          localStorage.setItem('user_session', JSON.stringify(res.user));
-          this.router.navigate(['/dashboard']); 
-        });
-      },
-      error: (err) => {
-        const errorMsg = err.error?.message || 'Error de conexión';
-        this.showToast('Error de Login', errorMsg, 'error');
-      }
-    });
+  if (!email || !password) {
+    this.showToast('Atención', 'Rellena todos los campos', 'warning');
+    return;
   }
+
+  this.isLoading = true;
+
+  this.authService.login(email, password).subscribe({
+    next: (res: any) => {
+      this.isLoading = false;
+      this.showToast('¡Bienvenido!', 'Sesión iniciada correctamente', 'success', () => {
+        this.router.navigate(['/dashboard']); 
+      });
+    },
+    error: (err) => {
+      this.isLoading = false; // IMPORTANTE: Primero desbloqueamos la UI
+      
+      // Intentamos capturar el mensaje exacto que enviaste antes
+      const errorMsg = err.error?.errors?.['email or password']?.[0] || 'Credenciales incorrectas';
+      
+      this.showToast('Error de Login', errorMsg, 'error');
+    }
+  });
+}
 }

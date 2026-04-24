@@ -25,5 +25,14 @@
     "login": "Login",
     "tienes-cuenta": "Already have an account?",
     "titulo": "Explorar Biblioteca"
+  },
+  "Menu": {
+    "biblioteca": "My Library",
+    "dashboard": "Dashboard",
+    "explorar": "Explore",
+    "libros": "My Books",
+    "prestamo": "Loans",
+    "anyadir-libro": "Add Book",
+    "logout": "Logout"
   }
 }

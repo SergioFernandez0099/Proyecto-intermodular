@@ -32,7 +32,8 @@
     "explorar": "Explorar",
     "libros": "Mis libros",
     "prestamo": "Préstamos",
-    "anyadir-libro": "Añadir libro"
+    "anyadir-libro": "Añadir libro",
+    "logout": "Cerrar Sesión"
 
   },
   "Explorar": {

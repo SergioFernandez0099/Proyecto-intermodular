@@ -22,8 +22,9 @@
                         <input type="password" name="password" placeholder="🔒︎ ••••••••" [(ngModel)]="loginData.password" required>
                     </div>
 
-                    <button (click)="onLogin()" type="button" class="login__button">
-                        {{ 'Login.boton-sesion' | translate }}
+                    <button (click)="onLogin()" type="button" class="login__button" [disabled]="isLoading">
+                        <span *ngIf="!isLoading">{{ 'Login.boton-sesion' | translate }}</span>
+                        <span *ngIf="isLoading">Cargando...</span>
                     </button>
 
                 </form>

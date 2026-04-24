@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AuthService } from '../../core/services/auth.service';
+
 @Component({
   selector: 'app-menu',
   standalone: true,
@@ -9,7 +10,7 @@ import { AuthService } from '../../core/services/auth.service';
   templateUrl: './menu.html',
   styleUrl: './menu.css',
 })
-export class Menu {
+export class Menu implements OnInit {
 
   constructor(private router: Router) {}
   private authService = inject(AuthService);
@@ -23,15 +24,33 @@ export class Menu {
   }
 
   private loadUserData(): void {
-    this.authService.me().subscribe({
-      next: (user) => {
-        this.userName = user.data.name;
-        this.userEmail = user.data.email;
-        this.userRole = user.data.role;
-        this.userInitial = user.data.name.charAt(0).toUpperCase();
-      },
-      error: (err) => console.error(err)
-    });
+    const user = this.authService.currentUser();
+    if (user) {
+      this.userName = user.name;
+      this.userEmail = user.email;
+      this.userRole = user.role === 'admin' ? 'Administrador' : 'Lector';
+      this.userInitial = user.name.charAt(0).toUpperCase();
+    } else {
+      // Si no hay, intentar cargar de localStorage
+      const encrypted = localStorage.getItem('user_session');
+      if (encrypted) {
+        const user = this.decrypt(encrypted);
+        if (user) {
+          this.userName = user.name;
+          this.userEmail = user.email;
+          this.userRole = user.role === 'admin' ? 'Administrador' : 'Lector';
+          this.userInitial = user.name.charAt(0).toUpperCase();
+        }
+      }
+    }
+  }
+
+  private decrypt(encrypted: string): any {
+    try {
+      return JSON.parse(atob(encrypted));
+    } catch {
+      return null;
+    }
   }
 
   public isActive(route: string): boolean {
@@ -56,5 +75,11 @@ export class Menu {
 
   public goAnyadirLibro() {
     this.router.navigate(['/añadir-libro']);
+  }
+
+  public logout() {
+    this.authService.logout().subscribe(() => {
+      this.router.navigate(['/']);
+    });
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap, switchMap } from 'rxjs/operators';
-import { from } from 'rxjs';
+import { tap, switchMap, catchError } from 'rxjs/operators';
+import { from, throwError } from 'rxjs';
 import { API_BASE, SERVER_BASE } from '../constants/api';
 import { IUser } from '../../models/user';
 
@@ -17,12 +17,17 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
-    // Primero obtenemos el CSRF cookie, luego hacemos login
     return this.getCsrfCookie().pipe(
       switchMap(() =>
         this.http.post<{ data: IUser }>(`${API_BASE}/auth/login`, { email, password })
       ),
-      tap(res => this.currentUser.set(res.data))
+      tap(res => {
+        this.currentUser.set(res.data);
+        localStorage.setItem('user_session', this.encrypt(res.data));
+      }),
+      catchError(err => {
+        return throwError(() => err);
+      })
     );
   }
 
@@ -33,13 +38,19 @@ export class AuthService {
           name, lastname, email, password, password_confirmation
         })
       ),
-      tap(res => this.currentUser.set(res.data))
+      tap(res => {
+        this.currentUser.set(res.data);
+        localStorage.setItem('user_session', this.encrypt(res.data));
+      })
     );
   }
 
   logout() {
     return this.http.post(`${API_BASE}/auth/logout`, {}).pipe(
-      tap(() => this.currentUser.set(null))
+      tap(() => {
+        this.currentUser.set(null);
+        localStorage.removeItem('user_session');
+      })
     );
   }
 
@@ -47,5 +58,17 @@ export class AuthService {
     return this.http.get<{ data: IUser }>(`${API_BASE}/auth/me`).pipe(
       tap(res => this.currentUser.set(res.data))
     );
+  }
+
+  private encrypt(data: any): string {
+    return btoa(JSON.stringify(data));
+  }
+
+  private decrypt(encrypted: string): any {
+    try {
+      return JSON.parse(atob(encrypted));
+    } catch {
+      return null;
+    }
   }
 }

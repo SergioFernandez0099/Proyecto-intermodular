@@ -58,6 +58,12 @@
           <p class="user-plan">{{ userRole }}</p>
         </div>
       </div>
+      <button (click)="logout()" class="btn-logout">
+        <span class="icon">
+          <img src="assets/img/logout.png" alt="Logout" class="nav-icon-img">
+        </span>
+        <span class="text">{{ 'Menu.logout' | translate }}</span>
+      </button>
     </div>
 
   </div>

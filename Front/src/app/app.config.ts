@@ -1,8 +1,8 @@
 import { ApplicationConfig, APP_INITIALIZER, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
-//import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClient, withInterceptors, withXsrfConfiguration } from '@angular/common/http';
 import { csrfInterceptor } from './core/interceptors/csrf.interceptor';
+import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { routes } from './app.routes';
@@ -24,7 +24,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideHttpClient(
-      withInterceptors([csrfInterceptor]),
+      withInterceptors([csrfInterceptor, errorInterceptor]),
       withXsrfConfiguration({
         cookieName: 'XSRF-TOKEN',      // nombre de la cookie que Laravel emite
         headerName: 'X-XSRF-TOKEN',    // header que Laravel espera recibir
