@@ -96,7 +96,10 @@
     "error_crear_autor": "Error al crear el autor. Por favor intenta de nuevo.",
     "error_cargar_generos": "Error al cargar géneros",
     "error_cargar_autores": "Error al cargar autores",
-    "requerido": "Requerido"
+    "requerido": "Requerido",
+    "new_book": "Nuevo libro",
+    "new_copy": "Nueva copia",
+    "existente_titulo": "Añadir Nueva Copia"
   }
 
 }

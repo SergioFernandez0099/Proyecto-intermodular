@@ -95,6 +95,9 @@
     "error_crear_autor": "Error creating the author. Please try again.",
     "error_cargar_generos": "Error loading genres",
     "error_cargar_autores": "Error loading authors",
-    "requerido": "Required"
+    "requerido": "Required",
+    "new_book": "New book",
+    "new_copy": "New copy",
+    "existente_titulo": "Add New Copy"
   }
 }

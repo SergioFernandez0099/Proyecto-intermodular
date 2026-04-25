@@ -10,6 +10,8 @@ import { IAuthor } from '../../models/author';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
+import { CopyService } from '../../services/copy';
+import { IBook } from '../../models/book';
 
 @Component({
   selector: 'app-anyadir-libro',
@@ -24,6 +26,7 @@ export class AnyadirLibro implements OnInit {
   // Estados reactivos con Signals
   genres = signal<IGenre[]>([]);
   authors = signal<IAuthor[]>([]);
+  books = signal<IBook[]>([]);
   isLoading = signal(false);
   previewImage = signal<string | null>(null);
   selectedFile = signal<File | null>(null);
@@ -40,10 +43,17 @@ export class AnyadirLibro implements OnInit {
   constructor(
     private _fb: FormBuilder,
     private _bookService: BookService,
+    private _copyService: CopyService,
     private _authorService: AuthorService,
     private _genreService: GenreService,
     private _router: Router
   ) {}
+
+  activeTab: string = 'newBook';
+
+  setTab(tabName: string) {
+    this.activeTab = tabName;
+  }
 
   ngOnInit(): void {
     this.initializeForm();
@@ -62,12 +72,14 @@ export class AnyadirLibro implements OnInit {
 
   private async loadInitialData(): Promise<void> {
     try {
-      const [genres, authors] = await Promise.all([
+      const [genres, authors, books] = await Promise.all([
         firstValueFrom(this._genreService.getGenres()),
-        firstValueFrom(this._authorService.getAuthors())
+        firstValueFrom(this._authorService.getAuthors()),
+        firstValueFrom(this._bookService.getBooks())
       ]);
       this.genres.set(genres);
       this.authors.set(authors);
+      this.books.set(books);
     } catch (error) {
       this.submitError.set('AnyadirLibro.error_cargar_datos');
     }
@@ -140,7 +152,41 @@ export class AnyadirLibro implements OnInit {
         formData.append('cover_image', this.selectedFile()!);
       }
 
-      await firstValueFrom(this._bookService.createBook(formData));
+      let book = await firstValueFrom(this._bookService.createBook(formData));
+      await firstValueFrom(this._copyService.createCopy(book.id));
+
+      this._router.navigate(['/explorar']);
+
+    } catch (error: any) {
+      this.submitError.set(error.error?.message || 'AnyadirLibro.error_crear_libro');
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  
+  async onSubmitCopy(): Promise<void> {
+    if (this.form.invalid || this.isLoading()) return;
+
+    this.isLoading.set(true);
+    this.submitError.set(null);
+
+    try {
+      const titleInput = this.form.get('title')?.value.trim();
+      let bookId: number;
+
+      const existingBook = this.books().find(
+        a => a.title.toLowerCase() === titleInput.toLowerCase()
+      );
+
+      if (existingBook) {
+        bookId = existingBook.id;
+      } else {
+        throw new Error('Data is missing!');
+      }
+
+      await firstValueFrom(this._copyService.createCopy(bookId));
+
       this._router.navigate(['/explorar']);
 
     } catch (error: any) {

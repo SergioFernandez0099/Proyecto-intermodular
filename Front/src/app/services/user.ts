@@ -27,13 +27,13 @@ export class UserService {
   }
 
   getUserById(id: number): Observable<IUser> {
-    return this.http.get<UserResponse>(`${this.apiUrl}/${id}`).pipe(
+    return this.http.get<SingleUserResponse>(`${this.apiUrl}/${id}`).pipe(
       map(response => response.data)
     );
   }
 
   updateUser(user: IUser, id: number): Observable<IUser> {
-    return this.http.put<UserResponse>(`${this.apiUrl}/${id}`, user).pipe(
+    return this.http.put<SingleUserResponse>(`${this.apiUrl}/${id}`, user).pipe(
       map(response => response.data)
     );
   }

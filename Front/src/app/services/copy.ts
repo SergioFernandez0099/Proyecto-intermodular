@@ -26,8 +26,8 @@ export class CopyService {
     );
   }
 
-  createCopy(copy: ICopy): Observable<ICopy> {
-    return this.http.post<SingleCopyResponse>(`${this.apiUrl}/${copy.book?.id}/copies`, copy).pipe(
+  createCopy(bookId: number): Observable<ICopy> {
+    return this.http.post<SingleCopyResponse>(`${this.apiUrl}/${bookId}/copies`, {}).pipe(
       map(response => response.data)
     );
   }
