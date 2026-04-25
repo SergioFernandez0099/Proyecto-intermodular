@@ -7,6 +7,6 @@ export interface IUser {
     lastname: string,
     email: string,
     role: ERole,
-    active: boolean,
+    active?: boolean,
     loans?: ILoan[]
 }
