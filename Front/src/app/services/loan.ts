@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ILoan } from '../models/loan';
 
-
 export interface LoansResponse {
   data: ILoan[];
 }
@@ -16,8 +15,10 @@ export interface LoanResponse {
 @Injectable({
   providedIn: 'root'
 })
-export class BookService {
+
+export class LoanService {
   private apiUrl = 'http://localhost:8000/api/loans'; 
+
   constructor(private http: HttpClient) {}
 
   getLoans(): Observable<ILoan[]> {
@@ -32,8 +33,9 @@ export class BookService {
     );
   }
 
-  createLoan(bookId: number): Observable<any> {
-    return this.http.post<any>(this.apiUrl, {book_id: bookId}).pipe(
+
+  createLoan(bookId: number): Observable<ILoan> {
+    return this.http.post<LoanResponse>(this.apiUrl, { book_id: bookId }).pipe(
       map(response => response.data)
     );
   }

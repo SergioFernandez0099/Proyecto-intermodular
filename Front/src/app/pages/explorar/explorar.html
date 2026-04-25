@@ -18,40 +18,59 @@
         </div>
 
         <div class="categories-wrapper">
-          <button class="chip active">{{ 'Explorar.categorias.todos' | translate }}</button>
-          <button class="chip">{{ 'Explorar.categorias.ficcion' | translate }}</button>
-          <button class="chip">{{ 'Explorar.categorias.ciencia' | translate }}</button>
-          <button class="chip">{{ 'Explorar.categorias.historia' | translate }}</button>
-          <button class="chip">{{ 'Explorar.categorias.biografias' | translate }}</button>
+          <button 
+            class="chip" 
+            [class.active]="selectedGenreId() === null" 
+            (click)="setGenre(null)">
+            {{ 'Explorar.categorias.todos' | translate }}
+          </button>
+
+          @for (genre of genres(); track genre.id) {
+            <button 
+              class="chip" 
+              [class.active]="selectedGenreId() === genre.id" 
+              (click)="setGenre(genre.id)">
+              {{ genre.name }}
+            </button>
+          }
         </div>
       </div>
 
       <div class="books-container">
         <div class="list-header">
           <h3>{{ 'Explorar.libros_disponibles' | translate }}</h3>
-          <p class="sort-text">
-            {{ 'Explorar.ordenar_por' | translate }}: <span>{{ 'Explorar.recientes' | translate }} ▾</span>
-          </p>
         </div>
 
         <div class="books-grid">
           @for (book of paginatedBooks(); track book.id) {
           <div class="book-card">
-            <div class="card-media">
-              <img [src]="book.cover_image" [alt]="book.title" onerror="this.src='https://placehold.co/200x300?text=Sin+portada'">
-            </div>
+  <div class="card-media">
+    <img [src]="book.cover_image" [alt]="book.title" onerror="this.src='https://placehold.co/200x300?text=Sin+portada'">
+    
+    <div class="stock-badge" [class.out-of-stock]="book.available_copies_count === 0">
+      {{ book.available_copies_count > 0 ? book.available_copies_count + ' disp.' : 'Agotado' }}
+    </div>
+  </div>
 
-            <div class="card-info">
-              <div class="text-content">
-                <h4>{{ book.title }}</h4>
-                <p class="author">{{ getBookAuthors(book) }}</p>
-              </div>
+  <div class="card-info">
+    <div class="text-content">
+      <h4>{{ book.title }}</h4>
+      <p class="author">{{ getBookAuthors(book) }}</p>
+    </div>
 
-              <button class="btn-request">
-                {{ (book.id % 4 === 0 ? 'Explorar.no_disponible' : 'Explorar.pedir_prestado') | translate }}
-              </button>
-            </div>
-          </div>
+    <button 
+      class="btn-request" 
+      [disabled]="book.available_copies_count === 0 || isProcessingLoan() === book.id"
+      (click)="pedirPrestamo(book.id)">
+      
+      @if (isProcessingLoan() === book.id) {
+        <span>Cargando...</span>
+      } @else {
+        {{ book.available_copies_count > 0 ? 'Pedir prestado' : 'No disponible' }}
+      }
+    </button>
+  </div>
+</div>
           }
         </div>
 
