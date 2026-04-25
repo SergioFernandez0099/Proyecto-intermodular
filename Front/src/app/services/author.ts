@@ -44,8 +44,8 @@ export class AuthorService {
     );
   }
 
-  deleteAuthor(id: number): Observable<IAuthor> {
-    return this.http.delete<AuthorResponse>(`${this.apiUrl}/${id}`).pipe(
+  deleteAuthor(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`).pipe(
       map(response => response.data)
     );
   }

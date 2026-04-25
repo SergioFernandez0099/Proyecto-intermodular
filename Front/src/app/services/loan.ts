@@ -16,7 +16,7 @@ export interface LoanResponse {
 @Injectable({
   providedIn: 'root'
 })
-export class BookService {
+export class LoanService {
   private apiUrl = 'http://localhost:8000/api/loans'; 
   constructor(private http: HttpClient) {}
 

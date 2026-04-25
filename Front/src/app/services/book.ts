@@ -51,8 +51,8 @@ export class BookService {
     );
   }
 
-  deleteBook(id: number): Observable<IBook> {
-    return this.http.delete<BookResponse>(`${this.apiUrl}/${id}`).pipe(
+  deleteBook(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`).pipe(
       map(response => response.data)
     );
   }

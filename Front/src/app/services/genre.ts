@@ -44,8 +44,8 @@ export class GenreService {
     );
   }
 
-  deleteGenre(id: number): Observable<IGenre> {
-    return this.http.delete<GenreResponse>(`${this.apiUrl}/${id}`).pipe(
+  deleteGenre(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`).pipe(
       map(response => response.data)
     );
   }
