@@ -74,7 +74,7 @@ export class Menu implements OnInit {
   }
 
   public goAnyadirLibro() {
-    this.router.navigate(['/añadir-libro']);
+    this.router.navigate(['/añadirLibro']);
   }
 
   public logout() {

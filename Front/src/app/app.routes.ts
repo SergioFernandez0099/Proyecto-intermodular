@@ -5,6 +5,7 @@ import { Dashboard } from './pages/dashboard/dashboard';
 import { Explorar } from './pages/explorar/explorar';
 import { AuthGuard } from './core/guards/auth.guard';
 import { NoAuthGuard } from './core/guards/no-auth.guard';
+import { AnyadirLibro } from './pages/anyadir-libro/anyadir-libro';
 
 export const routes: Routes = [
 
@@ -12,5 +13,6 @@ export const routes: Routes = [
     { path: 'register', component: Register, canActivate: [NoAuthGuard] },
     { path: 'dashboard', component: Dashboard, canActivate: [AuthGuard] },
     { path: 'explorar', component: Explorar, canActivate: [AuthGuard] },
+    { path: 'añadirLibro', component: AnyadirLibro, canActivate: [AuthGuard] },
     { path: '**', redirectTo: '' }
 ];

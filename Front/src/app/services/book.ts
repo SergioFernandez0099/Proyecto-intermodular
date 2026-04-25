@@ -39,8 +39,8 @@ export class BookService {
     );
   }
 
-  createBook(book: IBook): Observable<IBook> {
-    return this.http.post<BookResponse>(this.apiUrl, book).pipe(
+  createBook(data: IBook | FormData): Observable<IBook> {
+    return this.http.post<BookResponse>(this.apiUrl, data).pipe(
       map(response => response.data)
     );
   }
