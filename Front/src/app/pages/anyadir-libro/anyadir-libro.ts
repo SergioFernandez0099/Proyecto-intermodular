@@ -73,7 +73,6 @@ export class AnyadirLibro implements OnInit {
     }
   }
 
-  // Lógica de archivos (File Handling)
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files?.[0]) this.processFile(input.files[0]);
@@ -117,7 +116,6 @@ export class AnyadirLibro implements OnInit {
       const nameInput = this.form.get('author_name')?.value.trim();
       let authorId: number;
 
-      // Buscar autor existente para obtener su ID
       const existingAuthor = this.authors().find(
         a => a.name.toLowerCase() === nameInput.toLowerCase()
       );
@@ -125,7 +123,6 @@ export class AnyadirLibro implements OnInit {
       if (existingAuthor) {
         authorId = existingAuthor.id;
       } else {
-        // Crear nuevo autor si no existe (usamos 'as any' para omitir el ID requerido en la interfaz al enviar)
         const newAuthor = await firstValueFrom(
           this._authorService.createAuthor({ name: nameInput } as any)
         );

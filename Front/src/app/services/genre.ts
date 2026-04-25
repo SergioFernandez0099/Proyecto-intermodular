@@ -9,7 +9,7 @@ export interface GenresResponse {
   data: IGenre[];
 }
 
-export interface GenreResponse {
+export interface SingleGenreResponse {
   data: IGenre;
 }
 
@@ -27,19 +27,19 @@ export class GenreService {
   }
 
   getGenre(id: number): Observable<IGenre> {
-    return this.http.get<GenreResponse>(`${this.apiUrl}/${id}`).pipe(
+    return this.http.get<SingleGenreResponse>(`${this.apiUrl}/${id}`).pipe(
       map(response => response.data)
     );
   }
 
   createGenre(genre: IGenre): Observable<IGenre> {
-    return this.http.post<GenreResponse>(this.apiUrl, genre).pipe(
+    return this.http.post<SingleGenreResponse>(this.apiUrl, genre).pipe(
       map(response => response.data)
     );
   }
 
   updateGenre(genre: IGenre, id: number): Observable<IGenre> {
-    return this.http.put<GenreResponse>(`${this.apiUrl}/${id}`, genre).pipe(
+    return this.http.put<SingleGenreResponse>(`${this.apiUrl}/${id}`, genre).pipe(
       map(response => response.data)
     );
   }

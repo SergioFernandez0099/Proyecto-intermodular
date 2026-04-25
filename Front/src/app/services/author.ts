@@ -9,7 +9,7 @@ export interface AuthorsResponse {
   data: IAuthor[];
 }
 
-export interface AuthorResponse {
+export interface SingleAuthorResponse {
   data: IAuthor;
 }
 
@@ -27,19 +27,19 @@ export class AuthorService {
   }
 
   getAuthor(id: number): Observable<IAuthor> {
-    return this.http.get<AuthorResponse>(`${this.apiUrl}/${id}`).pipe(
+    return this.http.get<SingleAuthorResponse>(`${this.apiUrl}/${id}`).pipe(
       map(response => response.data)
     );
   }
 
   createAuthor(author: IAuthor): Observable<IAuthor> {
-    return this.http.post<AuthorResponse>(this.apiUrl, author).pipe(
+    return this.http.post<SingleAuthorResponse>(this.apiUrl, author).pipe(
       map(response => response.data)
     );
   }
 
   updateAuthor(author: IAuthor, id: number): Observable<IAuthor> {
-    return this.http.put<AuthorResponse>(`${this.apiUrl}/${id}`, author).pipe(
+    return this.http.put<SingleAuthorResponse>(`${this.apiUrl}/${id}`, author).pipe(
       map(response => response.data)
     );
   }

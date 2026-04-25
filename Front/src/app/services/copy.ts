@@ -9,7 +9,7 @@ export interface CopiesResponse {
   data: ICopy[];
 }
 
-export interface CopyResponse {
+export interface SingleCopyResponse {
   data: ICopy;
 }
 
@@ -27,13 +27,13 @@ export class CopyService {
   }
 
   createCopy(copy: ICopy): Observable<ICopy> {
-    return this.http.post<CopyResponse>(`${this.apiUrl}/${copy.book?.id}/copies`, copy).pipe(
+    return this.http.post<SingleCopyResponse>(`${this.apiUrl}/${copy.book?.id}/copies`, copy).pipe(
       map(response => response.data)
     );
   }
 
   updateCopy(copy: ICopy, state: 'available' | 'borrowed'): Observable<ICopy> {
-    return this.http.patch<CopyResponse>(`${this.apiUrl}/${copy.book?.id}/copies/${copy.id}`, {state: state}).pipe(
+    return this.http.patch<SingleCopyResponse>(`${this.apiUrl}/${copy.book?.id}/copies/${copy.id}`, {state: state}).pipe(
       map(response => response.data)
     );
   }

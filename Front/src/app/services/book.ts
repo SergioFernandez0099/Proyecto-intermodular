@@ -4,12 +4,13 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { IBook } from '../models/book';
 
-
+// Para listas de libros (index, mine)
 export interface BooksResponse {
   data: IBook[];
 }
 
-export interface BookResponse {
+// Para un solo libro 
+export interface SingleBookResponse {
   data: IBook;
 }
 
@@ -19,11 +20,14 @@ export interface BookResponse {
 export class BookService {
   private apiUrl = 'http://localhost:8000/api/books'; 
   private apiUrlMy = 'http://localhost:8000/api/books/mine'; 
+
   constructor(private http: HttpClient) {}
+
+  // MÉTODOS QUE DEVUELVEN ARRAYS (IBook[]) 
 
   getBooks(): Observable<IBook[]> {
     return this.http.get<BooksResponse>(this.apiUrl).pipe(
-      map(response => response.data)
+      map(response => response.data) 
     );
   }
 
@@ -33,20 +37,22 @@ export class BookService {
     );
   }
 
+  // --- MÉTODOS QUE DEVUELVEN UN SOLO OBJETO (IBook) ---
+
   getBook(id: number): Observable<IBook> {
-    return this.http.get<BookResponse>(`${this.apiUrl}/${id}`).pipe(
+    return this.http.get<SingleBookResponse>(`${this.apiUrl}/${id}`).pipe(
       map(response => response.data)
     );
   }
 
   createBook(data: IBook | FormData): Observable<IBook> {
-    return this.http.post<BookResponse>(this.apiUrl, data).pipe(
+    return this.http.post<SingleBookResponse>(this.apiUrl, data).pipe(
       map(response => response.data)
     );
   }
 
   updateBook(book: IBook, id: number): Observable<IBook> {
-    return this.http.put<BookResponse>(`${this.apiUrl}/${id}`, book).pipe(
+    return this.http.put<SingleBookResponse>(`${this.apiUrl}/${id}`, book).pipe(
       map(response => response.data)
     );
   }
@@ -58,21 +64,16 @@ export class BookService {
   }
 
   updateCover(file: File, id: number): Observable<IBook> {
-    const input = {cover_image: file};
-    return this.http.post<BookResponse>(`${this.apiUrl}/${id}/cover`, input).pipe(
+    const formData = new FormData();
+    formData.append('cover_image', file);
+    
+    return this.http.post<SingleBookResponse>(`${this.apiUrl}/${id}/cover`, formData).pipe(
       map(response => response.data)
     );
   }
 
   deleteCover(id: number): Observable<IBook> {
-    return this.http.delete<BookResponse>(`${this.apiUrl}/${id}/cover`).pipe(
-      map(response => response.data)
-    );
-  }
-
-  importBooks(file: File): Observable<any> {
-    const input = {cover_image: file};
-    return this.http.post<any>(`${this.apiUrl}`, input).pipe(
+    return this.http.delete<SingleBookResponse>(`${this.apiUrl}/${id}/cover`).pipe(
       map(response => response.data)
     );
   }

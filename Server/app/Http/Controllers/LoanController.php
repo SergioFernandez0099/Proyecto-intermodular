@@ -71,6 +71,7 @@ class LoanController extends Controller
             $loan = Loan::create([
                 'user_id' => Auth::id(),
                 'copy_id' => $copy->id,
+                'loan_date' => now(),
             ]);
 
             return new LoanResource($loan->load(['copy.book.genre', 'copy.book.authors']));

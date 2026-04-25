@@ -9,7 +9,7 @@ interface UsersResponse {
   data: IUser[];
 }
 
-interface UserResponse {
+interface SingleUserResponse {
   data: IUser;
 }
 
@@ -39,13 +39,13 @@ export class UserService {
   }
 
   activateUser(id: number): Observable<IUser> {
-    return this.http.patch<UserResponse>(`${this.apiUrl}/${id}/activate`, {}).pipe(
+    return this.http.patch<SingleUserResponse>(`${this.apiUrl}/${id}/activate`, {}).pipe(
       map(response => response.data)
     );
   }
 
   deactivateUser(id: number): Observable<IUser> {
-    return this.http.patch<UserResponse>(`${this.apiUrl}/${id}/deactivate`, {}).pipe(
+    return this.http.patch<SingleUserResponse>(`${this.apiUrl}/${id}/deactivate`, {}).pipe(
       map(response => response.data)
     );
   }
