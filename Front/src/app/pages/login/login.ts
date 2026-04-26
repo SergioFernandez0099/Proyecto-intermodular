@@ -7,7 +7,6 @@ import { Router, RouterLink } from '@angular/router';
 import { Header } from '../../components/header/header';
 import { AuthService } from '../../core/services/auth.service';
 import { finalize } from 'rxjs';
-//import { UserService } from '../../services/user';
 
 @Component({
   selector: 'app-login',
@@ -55,9 +54,7 @@ export class Login {
   this.authService.login(email, password).subscribe({
     next: (res: any) => {
       this.isLoading = false;
-      this.showToast('¡Bienvenido!', 'Sesión iniciada correctamente', 'success', () => {
-        this.router.navigate(['/dashboard']); 
-      });
+      this.router.navigate(['/dashboard']);
     },
     error: (err) => {
       this.isLoading = false; // IMPORTANTE: Primero desbloqueamos la UI
