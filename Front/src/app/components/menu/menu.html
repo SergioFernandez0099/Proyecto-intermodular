@@ -1,9 +1,18 @@
-<aside class="dashboard-aside">
+<aside class="dashboard-aside" [class.collapsed]="isCollapsed">
+  <!-- Contenedor del toggle, encima del header -->
+  <div class="aside-toggle-container">
+    <button class="menu-toggle" (click)="toggleMenu()" [class.open]="!isCollapsed" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+
   <div class="aside-container">
-    
+
     <div class="aside-header">
       <div class="app-logo-icon">
-        <img src="" alt="Logo" class="nav-icon-img">
+        <img src="assets/img/bookSwap.png" alt="Logo" class="nav-icon-img">
       </div>
       <div class="app-info hide-mobile">
         <h1 class="app-name">LibreShare</h1>
@@ -12,54 +21,53 @@
     </div>
 
     <nav class="aside-nav">
-  <button (click)="goDashboard()" [class.active]="isActive('/dashboard')" class="nav-item">
-    <span class="icon">
-      <img src="assets/img/dashboard.png" alt="Dash" class="nav-icon-img">
-    </span>
-    <span class="text">{{ 'Menu.dashboard' | translate }}</span>
-  </button>
+      <button (click)="goDashboard()" [class.active]="isActive('/dashboard')" class="nav-item">
+        <span class="icon">
+          <img src="assets/img/dashboard.png" alt="Dash" class="nav-icon-img">
+        </span>
+        <span class="text">{{ 'Menu.dashboard' | translate }}</span>
+      </button>
 
-  <button (click)="goExplorar()" [class.active]="isActive('/explorar')" class="nav-item">
-    <span class="icon">
-      <img src="assets/img/explore.png" alt="Exp" class="nav-icon-img">
-    </span>
-    <span class="text">{{ 'Menu.explorar' | translate }}</span>
-  </button>
+      <button (click)="goExplorar()" [class.active]="isActive('/explorar')" class="nav-item">
+        <span class="icon">
+          <img src="assets/img/explore.png" alt="Exp" class="nav-icon-img">
+        </span>
+        <span class="text">{{ 'Menu.explorar' | translate }}</span>
+      </button>
 
-  <button (click)="goMisLibros()" [class.active]="isActive('/mis-libros')" class="nav-item">
-    <span class="icon">
-      <img src="assets/img/books.png" alt="Books" class="nav-icon-img">
-    </span>
-    <span class="text">{{ 'Menu.libros' | translate }}</span>
-  </button>
+      <button (click)="goMisLibros()" [class.active]="isActive('/mis-libros')" class="nav-item">
+        <span class="icon">
+          <img src="assets/img/books.png" alt="Books" class="nav-icon-img">
+        </span>
+        <span class="text">{{ 'Menu.libros' | translate }}</span>
+      </button>
 
-  <button (click)="goPrestamos()" [class.active]="isActive('/prestamos')" class="nav-item">
-    <span class="icon">
-      <img src="assets/img/loan.png" alt="Loans" class="nav-icon-img">
-    </span>
-    <span class="text">{{ 'Menu.prestamo' | translate }}</span>
-  </button>
+      <button (click)="goPrestamos()" [class.active]="isActive('/prestamos')" class="nav-item">
+        <span class="icon">
+          <img src="assets/img/loan.png" alt="Loans" class="nav-icon-img">
+        </span>
+        <span class="text">{{ 'Menu.prestamo' | translate }}</span>
+      </button>
 
-  <button (click)="goAnyadirLibro()" [class.active]="isActive('/añadirLibro')" class="nav-item">
-    <span class="icon">
-      <img src="assets/img/add_book.png" alt="Add" class="nav-icon-img">
-    </span>
-    <span class="text">{{ 'Menu.anyadir-libro' | translate }}</span>
-  </button>
-</nav>
+      <button (click)="goAnyadirLibro()" [class.active]="isActive('/añadirLibro')" class="nav-item">
+        <span class="icon">
+          <img src="assets/img/add_book.png" alt="Add" class="nav-icon-img">
+        </span>
+        <span class="text">{{ 'Menu.anyadir-libro' | translate }}</span>
+      </button>
+    </nav>
 
     <div class="aside-footer">
       <div class="user-profile">
-        <div class="user-avatar-initial">
-          {{ userInitial }}
-        </div>
+        <div class="user-avatar-initial">{{ userInitial }}</div>
         <div class="user-info">
           <p class="user-name">{{ userName }}</p>
           <p class="user-email">{{ userEmail }}</p>
         </div>
       </div>
       <button (click)="logout()" class="btn-logout">
-        {{ 'Menu.logout' | translate }}
+        <img src="assets/img/logout.png" alt="Logout" class="logout-icon-img">
+        <span class="text">{{ 'Menu.logout' | translate }}</span>
       </button>
     </div>
 
