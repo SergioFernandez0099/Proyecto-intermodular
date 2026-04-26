@@ -26,6 +26,11 @@ class CopyPolicy
         return $user->ownsBook($book);
     }
 
+    public function status(User $user, Book $book): bool
+    {
+        return $user->ownsBook($book);
+    }
+
     public function update(User $user, Copy $copy): bool
     {
         return $user->ownsCopy($copy);

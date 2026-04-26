@@ -20,6 +20,11 @@ class Loan extends Model
     protected $hidden = [
     ];
 
+    protected $casts = [
+        'loan_date'   => 'datetime',
+        'return_date' => 'datetime',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -75,6 +75,39 @@ class CopyController extends Controller
         return response()->json(null, 204);
     }
 
+    public function status(Book $book)
+    {
+        $this->authorize('status', [Copy::class, $book]);
+
+        $copies = Copy::where('book_id', $book->id)
+            ->with([
+                'loans' => fn($q) => $q->whereNull('return_date')
+                    ->with('user')
+                    ->latest()
+            ])
+            ->get();
+
+        $data = $copies->map(function ($copy) {
+            $activeLoan = $copy->loans->first();
+
+            return [
+                'id'          => $copy->id,
+                'code'        => $copy->code,
+                'state'       => $copy->state,
+                'active_loan' => $activeLoan ? [
+                    'id'        => $activeLoan->id,
+                    'created_at' => $activeLoan->created_at,
+                    'user'      => [
+                        'id'   => $activeLoan->user->id,
+                        'name' => $activeLoan->user->name,
+                    ],
+                ] : null,
+            ];
+        });
+
+        return response()->json(['data' => $data]);
+    }
+
     // Generador de código único
     private static function generateCode(int $bookId): string
     {

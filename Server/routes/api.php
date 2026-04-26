@@ -68,6 +68,7 @@ Route::middleware(['auth:sanctum', 'active'])->group(function () {
         // COPIAS
         Route::get('copies', [CopyController::class, 'byBook']);
         Route::post('copies', [CopyController::class, 'storeByBook']);
+        Route::get('copies/status', [CopyController::class, 'status']);
         Route::patch('copies/{copy}', [CopyController::class, 'update'])->middleware('role:admin');
         Route::delete('copies/{copy}', [CopyController::class, 'destroy']);
 
