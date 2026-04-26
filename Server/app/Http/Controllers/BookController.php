@@ -51,6 +51,11 @@ class BookController extends Controller
     {
         $this->authorize('view', $book);
 
+        $book->loadCount([
+            'copies as available_copies_count' => fn($q) => $q->where('state', 'available'),
+            'copies as copies_count',
+        ]);
+
         $book->load([
             'genre',
             'authors',

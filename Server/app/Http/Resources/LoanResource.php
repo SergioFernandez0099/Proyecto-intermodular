@@ -18,6 +18,7 @@ class LoanResource extends JsonResource
             'id' => $this->id,
             'loan_date' => $this->created_at,
             'return_date' => $this->return_date,
+            'updated_at' => $this->updated_at,
             'copy' => $this->whenLoaded('copy', fn() => [
                 'id' => $this->copy->id,
                 'code' => $this->copy->code,
