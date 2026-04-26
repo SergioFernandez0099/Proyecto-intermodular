@@ -22,7 +22,7 @@ class CopyController extends Controller
 
     public function storeByBook(Request $request, Book $book)
     {
-        $this->authorize('create', [Copy::class, $book]);
+        $this->authorize('storeCopy', $book);
 
         // Máximo 50
         $request->validate([

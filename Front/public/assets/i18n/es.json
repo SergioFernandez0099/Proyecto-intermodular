@@ -93,13 +93,50 @@
     "error_ano_invalido": "Ingresa un año válido (4 dígitos)",
     "error_campos_requeridos": "Por favor completa todos los campos correctamente",
     "error_crear_libro": "Error al crear el libro. Por favor intenta de nuevo.",
+    "error_crear_copia": "Error al crear la copia. Por favor intenta de nuevo.",
     "error_crear_autor": "Error al crear el autor. Por favor intenta de nuevo.",
     "error_cargar_generos": "Error al cargar géneros",
     "error_cargar_autores": "Error al cargar autores",
+    "error_cargar_datos": "Error al cargar los datos iniciales. Por favor recarga la página.",
     "requerido": "Requerido",
     "new_book": "Nuevo libro",
     "new_copy": "Nueva copia",
-    "existente_titulo": "Añadir Nueva Copia"
+    "existente_titulo": "Añadir Nueva Copia",
+    "csv_title": "Importar desde CSV",
+    "csv_instructions": "Carga un archivo CSV con columnas: title, author_name, genre, publication_year, language.",
+    "csv_select": "Seleccionar CSV",
+    "csv_cargado": "Datos cargados desde CSV.",
+    "error_csv_tipo": "El archivo debe ser un CSV.",
+    "error_csv_sin_filas": "El CSV está vacío o no tiene filas válidas.",
+    "error_csv_campos": "El CSV debe incluir las columnas: title, author_name, genre, publication_year, language.",
+    "error_csv_genero": "El género del CSV no coincide con la lista. Selecciona uno válido.",
+    "error_csv_general": "No se pudo leer el CSV. Revisa el archivo e inténtalo de nuevo."
+  },
+  "MisLibros": {
+    "titulo": "Mis Libros",
+    "subtitulo": "Gestiona tu colección personal y el estado de tus libros.",
+    "boton_nuevo": "+ Nuevo Libro",
+    "buscar_placeholder": "Buscar en mi biblioteca...",
+    "tabs": {
+      "todos": "Todos",
+      "disponibles": "Disponibles",
+      "prestados": "Prestados"
+    },
+    "tabla": {
+      "portada": "Portada",
+      "titulo": "Título",
+      "autor": "Autor",
+      "copias": "Copias",
+      "acciones": "Acciones"
+    },
+    "acciones": {
+      "ver": "Ver"
+    },
+    "sin_libros": "No hay libros en esta vista.",
+    "stats": {
+      "total": "Total libros",
+      "disponibles": "Disponibles",
+      "prestamo": "En préstamo"
+    }
   }
-
 }

@@ -1,0 +1,100 @@
+<div class="libro-container">
+  <app-menu></app-menu>
+
+  <main class="libro-content">
+    @if (!isLoading()) {
+    <header class="content-header">
+      <div class="header-titles">
+        <h2>{{ 'MisLibros.titulo' | translate }}</h2>
+        <p>{{ 'MisLibros.subtitulo' | translate }}</p>
+      </div>
+      <button class="btn-new" (click)="goAddBook()">{{ 'MisLibros.boton_nuevo' | translate }}</button>
+    </header>
+
+    <section class="content-body">
+      <div class="toolbar-row">
+        <div class="search-bar">
+          <input type="text" [placeholder]="'MisLibros.buscar_placeholder' | translate" (input)="onSearch($event)">
+        </div>
+
+        <div class="tabs-row">
+          <button class="tab" [class.active]="activeTab() === 'all'" (click)="setTab('all')">{{ 'MisLibros.tabs.todos' | translate }}</button>
+          <button class="tab" [class.active]="activeTab() === 'available'" (click)="setTab('available')">{{ 'MisLibros.tabs.disponibles' | translate }}</button>
+          <button class="tab" [class.active]="activeTab() === 'borrowed'" (click)="setTab('borrowed')">{{ 'MisLibros.tabs.prestados' | translate }}</button>
+        </div>
+      </div>
+
+      @if (errorMessage()) {
+      <div class="error-box">{{ errorMessage() }}</div>
+      }
+
+      <div class="table-wrapper">
+        @if (paginatedBooks().length > 0) {
+        <table class="books-table">
+          <thead>
+            <tr>
+              <th>{{ 'MisLibros.tabla.portada' | translate }}</th>
+              <th>{{ 'MisLibros.tabla.titulo' | translate }}</th>
+              <th>{{ 'MisLibros.tabla.autor' | translate }}</th>
+              <th>{{ 'MisLibros.tabla.copias' | translate }}</th>
+              
+            </tr>
+          </thead>
+          <tbody>
+            @for (book of paginatedBooks(); track book.id) {
+            <tr>
+              <td>
+                <img class="cover-thumb" [src]="book.cover_image || 'https://placehold.co/80x120?text=Sin+portada'" [alt]="book.title" onerror="this.src='https://placehold.co/80x120?text=Sin+portada'">
+              </td>
+              <td>
+                <div class="title-cell">
+                  <strong>{{ book.title }}</strong>
+                  <span class="meta">Editado en {{ book.publication_year || 'N/A' }}</span>
+                </div>
+              </td>
+              <td>{{ getBookAuthors(book) }}</td>
+              <td>
+                <span class="status-pill">
+                  {{ getStatusText(book) }}
+                </span>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+
+        <div class="pagination-wrapper">
+          <button class="pag-btn" (click)="prevPage()" [disabled]="currentPage() === 0">Anterior</button>
+          <span>{{ currentPage() + 1 }} / {{ totalPages() }}</span>
+          <button class="pag-btn" (click)="nextPage()" [disabled]="currentPage() + 1 >= totalPages()">Siguiente</button>
+        </div>
+        } @else {
+        <div class="empty-state">
+          {{ 'MisLibros.sin_libros' | translate }}
+        </div>
+        }
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card stat-primary">
+          <span class="stat-title">{{ 'MisLibros.stats.total' | translate }}</span>
+          <strong>{{ totalCount() }}</strong>
+        </div>
+        <div class="stat-card stat-success">
+          <span class="stat-title">{{ 'MisLibros.stats.disponibles' | translate }}</span>
+          <strong>{{ availableCount() }}</strong>
+        </div>
+        <div class="stat-card stat-warning">
+          <span class="stat-title">{{ 'MisLibros.stats.prestamo' | translate }}</span>
+          <strong>{{ borrowedCount() }}</strong>
+        </div>
+      </div>
+    </section>
+    } @else {
+    <div class="loading-screen">
+      <div class="spinner"></div>
+      <p>Cargando tus libros...</p>
+    </div>
+    }
+  </main>
+</div>

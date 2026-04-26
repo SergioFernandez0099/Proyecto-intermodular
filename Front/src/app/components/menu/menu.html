@@ -53,16 +53,13 @@
         <div class="user-avatar-initial">
           {{ userInitial }}
         </div>
-        <div class="user-info hide-mobile">
+        <div class="user-info">
           <p class="user-name">{{ userName }}</p>
-          <p class="user-plan">{{ userRole }}</p>
+          <p class="user-email">{{ userEmail }}</p>
         </div>
       </div>
       <button (click)="logout()" class="btn-logout">
-        <span class="icon">
-          <img src="assets/img/logout.png" alt="Logout" class="nav-icon-img">
-        </span>
-        <span class="text">{{ 'Menu.logout' | translate }}</span>
+        {{ 'Menu.logout' | translate }}
       </button>
     </div>
 

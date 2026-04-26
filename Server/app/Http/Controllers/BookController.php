@@ -24,6 +24,7 @@ class BookController extends Controller
         ->withCount(['copies as available_copies_count' => function ($query) {
             $query->where('state', 'available');
         }])
+        ->withCount(['copies as copies_count'])
         ->latest()
         ->get();
 
@@ -36,6 +37,10 @@ class BookController extends Controller
         $books = Book::with(['genre', 'authors', 'copies'])
             ->where('owner_id', $request->user()->id)
             ->when($request->search, fn($q) => $q->where('title', 'like', "%{$request->search}%"))
+            ->withCount(['copies as available_copies_count' => function ($query) {
+                $query->where('state', 'available');
+            }])
+            ->withCount(['copies as copies_count'])
             ->get();
 
         return BookResource::collection($books);

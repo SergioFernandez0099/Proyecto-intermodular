@@ -6,6 +6,7 @@ export interface IBook {
     id: number,
     title: string,
     available_copies_count: number;
+    copies_count?: number;
     genre_id: number;
     cover_image: string | null,
     publication_year: number | null,

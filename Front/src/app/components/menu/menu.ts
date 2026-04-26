@@ -66,7 +66,7 @@ export class Menu implements OnInit {
   }
 
   public goMisLibros() {
-    this.router.navigate(['/mis-libros']);
+    this.router.navigate(['/misLibros']);
   }
 
   public goPrestamos() {

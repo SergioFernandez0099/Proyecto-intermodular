@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Menu } from "../../components/menu/menu";
 import { BookService } from '../../services/book';
 import { AuthorService } from '../../services/author';
@@ -32,6 +32,9 @@ export class AnyadirLibro implements OnInit {
   selectedFile = signal<File | null>(null);
   submitError = signal<string | null>(null);
   isDragging = signal(false);
+  csvFileName = signal<string | null>(null);
+  csvImportMessage = signal<string | null>(null);
+  csvImportError = signal<string | null>(null);
 
   languages = [
     { label: 'Español', value: 'Español' },
@@ -46,7 +49,8 @@ export class AnyadirLibro implements OnInit {
     private _copyService: CopyService,
     private _authorService: AuthorService,
     private _genreService: GenreService,
-    private _router: Router
+    private _router: Router,
+    private _route: ActivatedRoute
   ) {}
 
   activeTab: string = 'newBook';
@@ -55,9 +59,20 @@ export class AnyadirLibro implements OnInit {
     this.activeTab = tabName;
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.initializeForm();
-    this.loadInitialData();
+    await this.loadInitialData();
+
+    this._route.queryParams.subscribe(params => {
+      if (params['tab'] === 'copy' && params['bookId']) {
+        this.setTab('newCopy');
+        const bookId = +params['bookId'];
+        const book = this.books().find(b => b.id === bookId);
+        if (book) {
+          this.form.get('title')?.setValue(book.title);
+        }
+      }
+    });
   }
 
   private initializeForm(): void {
@@ -75,7 +90,7 @@ export class AnyadirLibro implements OnInit {
       const [genres, authors, books] = await Promise.all([
         firstValueFrom(this._genreService.getGenres()),
         firstValueFrom(this._authorService.getAuthors()),
-        firstValueFrom(this._bookService.getBooks())
+        firstValueFrom(this._bookService.getMyBooks())
       ]);
       this.genres.set(genres);
       this.authors.set(authors);
@@ -88,6 +103,16 @@ export class AnyadirLibro implements OnInit {
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files?.[0]) this.processFile(input.files[0]);
+  }
+
+  onCsvSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+    this.csvFileName.set(file.name);
+    this.csvImportMessage.set(null);
+    this.csvImportError.set(null);
+    this.parseCsvFile(file);
   }
 
   onDragOver(event: DragEvent): void {
@@ -112,6 +137,61 @@ export class AnyadirLibro implements OnInit {
     reader.onload = (e) => this.previewImage.set(e.target?.result as string);
     reader.readAsDataURL(file);
   }
+
+ private parseCsvFile(file: File): void {
+  if (!file.name.toLowerCase().endsWith('.csv')) {
+    this.csvImportError.set('AnyadirLibro.error_csv_tipo');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    const text = reader.result as string;
+    try {
+      const lines = text.replace(/^\uFEFF/, '').split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+      
+      if (lines.length < 2) throw new Error('AnyadirLibro.error_csv_sin_filas');
+
+      const delimiter = lines[0].includes(';') ? ';' : ',';
+
+      const headers = lines[0].split(delimiter).map(h => h.trim().toLowerCase());
+      const values = lines[1].split(delimiter).map(v => v.trim());
+
+      const row = headers.reduce((acc, header, i) => ({ ...acc, [header]: values[i] }), {} as any);
+
+      const normalize = (str: string) => 
+        str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+      const genreMatch = this.genres().find(g => 
+        normalize(g.name) === normalize(row['genre'] || '')
+      );
+      
+      const languageMatch = this.languages.find(l => 
+        normalize(l.value) === normalize(row['language'] || '')
+      );
+
+      this.form.patchValue({
+        title: row['title'] || '',
+        author_name: row['author_name'] || '',
+        publication_year: row['publication'] ? Number(row['publication']) : new Date().getFullYear(),
+        language: languageMatch ? languageMatch.value : 'Español',
+      });
+
+      if (genreMatch) {
+        this.form.get('genre_id')?.setValue(genreMatch.id);
+        this.csvImportMessage.set('AnyadirLibro.csv_cargado');
+        this.csvImportError.set(null);
+      } else {
+        this.form.get('genre_id')?.setValue('');
+        this.csvImportError.set(`Género "${row['genre']}" no encontrado en el sistema`);
+      }
+
+    } catch (error: any) {
+      this.csvImportError.set('AnyadirLibro.error_csv_general');
+    }
+  };
+  reader.readAsText(file);
+}
 
   removeCover(): void {
     this.previewImage.set(null);
@@ -155,18 +235,27 @@ export class AnyadirLibro implements OnInit {
       let book = await firstValueFrom(this._bookService.createBook(formData));
       await firstValueFrom(this._copyService.createCopy(book.id));
 
-      this._router.navigate(['/explorar']);
+      this._router.navigate(['/mis-libros']);
 
     } catch (error: any) {
+      console.error('Error al crear libro:', error);
       this.submitError.set(error.error?.message || 'AnyadirLibro.error_crear_libro');
     } finally {
       this.isLoading.set(false);
     }
   }
 
-  
+  isCopyTabInvalid(): boolean {
+    if (this.activeTab === 'newCopy') {
+      const titleControl = this.form.get('title');
+      return !titleControl || titleControl.invalid;
+    }
+
+    return this.form.invalid;
+  }
+
   async onSubmitCopy(): Promise<void> {
-    if (this.form.invalid || this.isLoading()) return;
+    if (this.isCopyTabInvalid() || this.isLoading()) return;
 
     this.isLoading.set(true);
     this.submitError.set(null);
@@ -187,10 +276,11 @@ export class AnyadirLibro implements OnInit {
 
       await firstValueFrom(this._copyService.createCopy(bookId));
 
-      this._router.navigate(['/explorar']);
+      this._router.navigate(['/mis-libros']);
 
     } catch (error: any) {
-      this.submitError.set(error.error?.message || 'AnyadirLibro.error_crear_libro');
+      console.error('Error al crear copia:', error);
+      this.submitError.set(error.error?.message || 'AnyadirLibro.error_crear_copia');
     } finally {
       this.isLoading.set(false);
     }

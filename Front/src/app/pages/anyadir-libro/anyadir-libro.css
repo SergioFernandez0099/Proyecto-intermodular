@@ -136,6 +136,60 @@
   border-top: 1px solid #f1f5f9;
 }
 
+.csv-import-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.2rem 1.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.csv-import-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.csv-import-header strong {
+  font-size: 1rem;
+  color: #0f172a;
+}
+
+.csv-import-header p {
+  margin: 0;
+  color: #475569;
+  font-size: 0.92rem;
+}
+
+.csv-import-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.csv-btn {
+  padding: 0.75rem 1rem;
+}
+
+.csv-file-name {
+  color: #334155;
+  font-size: 0.92rem;
+}
+
+.csv-success {
+  margin-top: 0.85rem;
+  color: #166534;
+  font-size: 0.92rem;
+}
+
+.csv-error {
+  margin-top: 0.85rem;
+  color: #b91c1c;
+  font-size: 0.92rem;
+}
+
 .btn {
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
@@ -161,15 +215,30 @@
   cursor: not-allowed;
 }
 
-.tabs-header button {
-  margin-left: 1rem;
-  padding: 10px;
-  cursor: pointer;
-  background: none;
-  border: none;
+.tabs-header {
+  display: flex;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 2rem;
 }
 
-.active {
-  font-weight: bold;
-  text-decoration: underline;
+.tabs-header button {
+  padding: 1rem 1.5rem;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.tabs-header button.active {
+  color: #2563eb;
+  border-bottom-color: #2563eb;
+  background: rgba(37, 99, 235, 0.05);
+}
+
+.tabs-header button:hover {
+  color: #2563eb;
+  background: rgba(37, 99, 235, 0.05);
 }

@@ -24,6 +24,28 @@
             </div>
           }
 
+          <div class="csv-import-box">
+            <div class="csv-import-header">
+              <strong>{{ 'AnyadirLibro.csv_title' | translate }}</strong>
+              <p>{{ 'AnyadirLibro.csv_instructions' | translate }}</p>
+            </div>
+            <div class="csv-import-actions">
+              <label for="csv-input" class="btn btn-secondary csv-btn">
+                {{ 'AnyadirLibro.csv_select' | translate }}
+              </label>
+              <input type="file" id="csv-input" (change)="onCsvSelected($event)" accept=".csv" hidden />
+              @if (csvFileName()) {
+                <span class="csv-file-name">{{ csvFileName() }}</span>
+              }
+            </div>
+            @if (csvImportMessage()) {
+              <p class="csv-success">{{ csvImportMessage() | translate }}</p>
+            }
+            @if (csvImportError()) {
+              <p class="csv-error">{{ csvImportError() | translate }}</p>
+            }
+          </div>
+
           <form [formGroup]="form" (ngSubmit)="onSubmit()" class="libro-form" id="libro-form">
             <div class="form-grid">
               
@@ -98,7 +120,7 @@
 
             <div class="form-actions">
               <button type="button" class="btn btn-secondary" (click)="onCancel()">{{ 'AnyadirLibro.cancelar' | translate }}</button>
-              <button type="submit" class="btn btn-primary" [disabled]="form.invalid || isLoading()">
+              <button type="submit" class="btn btn-primary" [disabled]="isCopyTabInvalid() || isLoading()">
                 {{ isLoading() ? ('AnyadirLibro.guardando' | translate) : ('AnyadirLibro.guardar_libro' | translate) }}
               </button>
             </div>
@@ -137,7 +159,7 @@
 
             <div class="form-actions">
               <button type="button" class="btn btn-secondary" (click)="onCancel()">{{ 'AnyadirLibro.cancelar' | translate }}</button>
-              <button type="submit" class="btn btn-primary" [disabled]="form.invalid || isLoading()">
+              <button type="submit" class="btn btn-primary" [disabled]="isCopyTabInvalid() || isLoading()">
                 {{ isLoading() ? ('AnyadirLibro.guardando' | translate) : ('AnyadirLibro.guardar_libro' | translate) }}
               </button>
             </div>

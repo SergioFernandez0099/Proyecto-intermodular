@@ -24,6 +24,7 @@ class BookResource extends JsonResource
         "publication_year" => $this->publication_year,
         
         'available_copies_count' => (int) ($this->available_copies_count ?? 0),
+        'copies_count' => (int) ($this->copies_count ?? 0),
 
         'genre' => $this->whenLoaded('genre', fn() => [
             'id' => $this->genre->id,
