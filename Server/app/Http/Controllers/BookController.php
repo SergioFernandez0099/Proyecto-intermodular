@@ -16,7 +16,7 @@ class BookController extends Controller
     // Todos los libros excepto los del usuario autenticado
     public function index(Request $request)
 {
-    $books = Book::with(['genre', 'authors']) 
+    $books = Book::with(['genre', 'authors'])
         ->where('owner_id', '!=', $request->user()->id)
         ->whereHas('owner', fn($q) => $q->where('active', true))
         ->when($request->genre_id, fn($q) => $q->where('genre_id', $request->genre_id))
@@ -227,43 +227,76 @@ class BookController extends Controller
 
         $path = $request->file('file')->getRealPath();
         $handle = fopen($path, 'r');
-        $header = fgetcsv($handle); // lee la primera fila como cabecera
+        $header = fgetcsv($handle);
 
         $imported = [];
         $failed = [];
-        $row = 1; // fila 1 es la cabecera, empezamos en 2
+        $row = 1;
 
         while (($line = fgetcsv($handle)) !== false) {
             $row++;
 
-            // Mapea la fila con la cabecera → array asociativo
             $data = array_combine($header, $line);
 
-            // Parsea author_ids separados por |
-            $authorIds = collect(explode('|', $data['author_ids'] ?? ''))
-                ->map(fn($id) => trim($id))
-                ->filter()
-                ->values()
-                ->all();
+            // Resolver genre_name → genre_id
+            $genreName = trim($data['genre_name'] ?? '');
+            $genre = \App\Models\Genre::where('name', $genreName)->first();
 
-            // Valida la fila individualmente
+            if (! $genre) {
+                $failed[] = [
+                    'row'    => $row,
+                    'data'   => $data,
+                    'errors' => ['genre_name' => ["El género '{$genreName}' no existe."]],
+                ];
+                continue;
+            }
+
+            // Resolver author_name(s) separados por | → author_ids
+            $authorNames = collect(explode('|', $data['author_name'] ?? ''))
+                ->map(fn($name) => trim($name))
+                ->filter()
+                ->values();
+
+            $authorIds = [];
+            $authorErrors = [];
+
+            foreach ($authorNames as $name) {
+                $author = \App\Models\Author::where('name', $name)->first();
+
+                if ($author) {
+                    $authorIds[] = $author->id;
+                } else {
+                    $authorErrors[] = "El autor '{$name}' no existe.";
+                }
+            }
+
+            if (! empty($authorErrors)) {
+                $failed[] = [
+                    'row'    => $row,
+                    'data'   => $data,
+                    'errors' => ['author_name' => $authorErrors],
+                ];
+                continue;
+            }
+
+            // Validar el resto de los campos
             $validator = validator([
-                'title' => $data['title'] ?? null,
-                'genre_id' => $data['genre_id'] ?? null,
+                'title'            => $data['title'] ?? null,
+                'genre_id'         => $genre->id,
                 'publication_year' => $data['publication_year'] ?? null,
-                'author_ids' => $authorIds,
+                'author_ids'       => $authorIds,
             ], [
-                'title' => 'required|string|max:255',
-                'genre_id' => 'required|exists:genres,id',
+                'title'            => 'required|string|max:255',
+                'genre_id'         => 'required|exists:genres,id',
                 'publication_year' => 'nullable|integer|min:1000|max:2099',
-                'author_ids' => 'required|array|min:1',
-                'author_ids.*' => 'exists:authors,id',
+                'author_ids'       => 'required|array|min:1',
+                'author_ids.*'     => 'exists:authors,id',
             ]);
 
             if ($validator->fails()) {
                 $failed[] = [
-                    'row' => $row,
-                    'data' => $data,
+                    'row'    => $row,
+                    'data'   => $data,
                     'errors' => $validator->errors(),
                 ];
                 continue;
@@ -284,11 +317,11 @@ class BookController extends Controller
                     }
 
                     $book = Book::create([
-                        'title' => $validated['title'],
-                        'genre_id' => $validated['genre_id'],
+                        'title'            => $validated['title'],
+                        'genre_id'         => $validated['genre_id'],
                         'publication_year' => $validated['publication_year'] ?? null,
-                        'cover_image' => null,
-                        'owner_id' => $request->user()->id,
+                        'cover_image'      => null,
+                        'owner_id'         => $request->user()->id,
                     ]);
 
                     $book->authors()->sync($validated['author_ids']);
@@ -300,8 +333,8 @@ class BookController extends Controller
 
             } catch (ValidationException $e) {
                 $failed[] = [
-                    'row' => $row,
-                    'data' => $data,
+                    'row'    => $row,
+                    'data'   => $data,
                     'errors' => $e->errors(),
                 ];
             }
@@ -311,9 +344,9 @@ class BookController extends Controller
 
         return response()->json([
             'imported_count' => count($imported),
-            'failed_count' => count($failed),
-            'imported_ids' => $imported,
-            'failed' => $failed,
+            'failed_count'   => count($failed),
+            'imported_ids'   => $imported,
+            'failed'         => $failed,
         ]);
     }
 }

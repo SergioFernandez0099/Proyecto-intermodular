@@ -1,10 +1,13 @@
-title,genre_id,publication_year,author_ids
-Cien años de soledad,1,1967,2
-El Quijote,2,1605,1|3
-1984,1,1949,4
-El señor de los anillos,3,1954,5
-El señor de los diablos,3,1954,5
-Rayuela,1,1963,6
-El nombre de la rosa,2,1980,7|8
-Fahrenheit 451,1,1953,4
-La sombra del viento,2,2001,9
+title,author_name,genre_name,publication_year
+The Lost Horizon,Armando Johnston,Ficción,1937
+Shadows of Tomorrow,Christina McGlynn I,Ciencia ficción,2001
+Whispers in the Dark,Natalie Kohler DVM,Terror,1988
+The Iron Path,Jackson Brekke,Historia,2010
+Beyond the Stars,Mr. Theron Sporer DVM,Ciencia ficción,1975
+A Gentle Storm,Cooper Kovacek,Romance,2003
+The Forgotten King,Lizzie Kertzmann,Fantasía,1999
+Echoes of War,Fiona Bergstrom,Historia,2015
+Silent Witness,Evelyn Sawayn,No ficción,2008
+The Last Theorem,Prof. Norris Pfeffer DDS,Ficción,1992
+Dual Minds,Armando Johnston|Christina McGlynn I,Ciencia ficción,2018
+Dark Alliance,Natalie Kohler DVM|Jackson Brekke,Terror,2005
