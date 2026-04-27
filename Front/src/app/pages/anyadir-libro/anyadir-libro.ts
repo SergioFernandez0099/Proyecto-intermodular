@@ -8,7 +8,7 @@ import { GenreService } from '../../services/genre';
 import { IGenre } from '../../models/genre';
 import { IAuthor } from '../../models/author';
 import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 import { CopyService } from '../../services/copy';
 import { IBook } from '../../models/book';
@@ -37,10 +37,10 @@ export class AnyadirLibro implements OnInit {
   csvImportError = signal<string | null>(null);
 
   languages = [
-    { label: 'Español', value: 'Español' },
-    { label: 'Inglés', value: 'Inglés' },
-    { label: 'Francés', value: 'Francés' },
-    { label: 'Portugués', value: 'Portugués' }
+    { labelKey: 'AnyadirLibro.idioma_español', value: 'Español' },
+    { labelKey: 'AnyadirLibro.idioma_ingles', value: 'Inglés' },
+    { labelKey: 'AnyadirLibro.idioma_frances', value: 'Francés' },
+    { labelKey: 'AnyadirLibro.idioma_portugues', value: 'Portugués' }
   ];
 
   constructor(
@@ -50,7 +50,8 @@ export class AnyadirLibro implements OnInit {
     private _authorService: AuthorService,
     private _genreService: GenreService,
     private _router: Router,
-    private _route: ActivatedRoute
+    private _route: ActivatedRoute,
+    private translate: TranslateService
   ) {}
 
   activeTab: string = 'newBook';
@@ -183,7 +184,7 @@ export class AnyadirLibro implements OnInit {
         this.csvImportError.set(null);
       } else {
         this.form.get('genre_id')?.setValue('');
-        this.csvImportError.set(`Género "${row['genre']}" no encontrado en el sistema`);
+        this.csvImportError.set(this.translate.instant('AnyadirLibro.error_csv_genero_detalle', { genre: row['genre'] || '' }));
       }
 
     } catch (error: any) {
@@ -235,7 +236,7 @@ export class AnyadirLibro implements OnInit {
       let book = await firstValueFrom(this._bookService.createBook(formData));
       await firstValueFrom(this._copyService.createCopy(book.id));
 
-      this._router.navigate(['/mis-libros']);
+      this._router.navigate(['/misLibros']);
 
     } catch (error: any) {
       console.error('Error al crear libro:', error);
@@ -276,7 +277,7 @@ export class AnyadirLibro implements OnInit {
 
       await firstValueFrom(this._copyService.createCopy(bookId));
 
-      this._router.navigate(['/mis-libros']);
+      this._router.navigate(['/misLibros']);
 
     } catch (error: any) {
       console.error('Error al crear copia:', error);
@@ -288,5 +289,34 @@ export class AnyadirLibro implements OnInit {
 
   onCancel(): void {
     this._router.navigate(['/explorar']);
+  }
+  translateGenreName(name?: string): string {
+    if (!name) {
+      return '';
+    }
+
+    const normalizedName = name
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
+
+    const genreKeyMap: Record<string, string> = {
+      ficcion: 'Explorar.categorias.ficcion',
+      fiction: 'Explorar.categorias.ficcion',
+      ciencia: 'Explorar.categorias.ciencia',
+      science: 'Explorar.categorias.ciencia',
+      historia: 'Explorar.categorias.historia',
+      history: 'Explorar.categorias.historia',
+      biografias: 'Explorar.categorias.biografias',
+      biographies: 'Explorar.categorias.biografias',
+      arte: 'Explorar.categorias.arte',
+      art: 'Explorar.categorias.arte',
+      tecnologia: 'Explorar.categorias.tecnologia',
+      technology: 'Explorar.categorias.tecnologia'
+    };
+
+    const translationKey = genreKeyMap[normalizedName];
+    return translationKey ? this.translate.instant(translationKey) : name;
   }
 }

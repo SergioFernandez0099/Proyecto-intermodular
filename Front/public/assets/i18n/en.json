@@ -33,6 +33,7 @@
     "libros": "My Books",
     "prestamo": "Loans",
     "anyadir-libro": "Add Book",
+    "configuracion": "Settings",
     "logout": "Logout"
   },
   "Explorar": {
@@ -55,7 +56,13 @@
       "arte": "Art",
       "tecnologia": "Technology"
     },
-    "buscar": "Search"
+    "buscar": "Search",
+    "agotado": "Out of stock",
+    "stock_disponible": "{{count}} avail.",
+    "cargando": "Loading...",
+    "cargando_biblioteca": "Loading library...",
+    "prestamo_exito": "Book reserved successfully!",
+    "error_prestamo": "Error requesting the loan"
   },
   "AnyadirLibro": {
     "titulo": "Add New Book",
@@ -79,6 +86,7 @@
     "portada": "Book Cover (Optional)",
     "subir_archivo": "Upload a file or drag it here",
     "subir_formato": "PNG, JPG, GIF up to 10MB",
+    "opcional": "Optional",
     "cambiar_portada": "Change Cover",
     "eliminar_portada": "Remove",
     "consejo_titulo": "LibreShare Advice",
@@ -95,10 +103,82 @@
     "error_crear_autor": "Error creating the author. Please try again.",
     "error_cargar_generos": "Error loading genres",
     "error_cargar_autores": "Error loading authors",
+    "error_cargar_datos": "Error loading initial data. Please reload the page.",
     "requerido": "Required",
     "new_book": "New book",
     "new_copy": "New copy",
-    "existente_titulo": "Add New Copy"
+    "existente_titulo": "Add New Copy",
+    "csv_title": "Import from CSV",
+    "csv_instructions": "Upload a CSV file with columns: title, author_name, genre, publication_year, language.",
+    "csv_select": "Select CSV",
+    "csv_cargado": "Data loaded from CSV.",
+    "error_csv_tipo": "The file must be a CSV.",
+    "error_csv_sin_filas": "The CSV is empty or has no valid rows.",
+    "error_csv_campos": "The CSV must include the columns: title, author_name, genre, publication_year, language.",
+    "error_csv_genero": "The CSV genre does not match the list. Select a valid one.",
+    "error_csv_genero_detalle": "Genre \"{{genre}}\" was not found in the system.",
+    "error_csv_general": "The CSV could not be read. Check the file and try again."
+  },
+  "MisLibros": {
+    "titulo": "My Books",
+    "subtitulo": "Manage your personal collection and the status of your books.",
+    "boton_nuevo": "+ New Book",
+    "buscar_placeholder": "Search in my library...",
+    "tabs": {
+      "todos": "All",
+      "disponibles": "Available",
+      "prestados": "Borrowed"
+    },
+    "tabla": {
+      "portada": "Cover",
+      "titulo": "Title",
+      "autor": "Author",
+      "copias": "Copies",
+      "acciones": "Actions"
+    },
+    "acciones": {
+      "ver": "View",
+      "editar": "Edit",
+      "eliminar": "Delete"
+    },
+    "stats": {
+      "total": "Total books",
+      "disponibles": "Available",
+      "prestamo": "On loan"
+    },
+    "estado": {
+      "disponible": "Available",
+      "prestado": "Borrowed"
+    },
+    "paginacion": {
+      "anterior": "Previous",
+      "siguiente": "Next"
+    },
+    "modal": {
+      "editar_titulo": "Edit Book",
+      "guardar": "Save Changes",
+      "guardando": "Saving..."
+    },
+    "sin_libros": "There are no books in this view.",
+    "cargando": "Loading your books...",
+    "editado_en": "Edited in",
+    "no_disponible": "N/A",
+    "error_carga": "Your books could not be loaded. Try again later.",
+    "error_guardar": "Error saving the changes. Try again.",
+    "error_eliminar": "Error deleting the book. Try again.",
+    "error_portada": "Error updating the cover",
+    "confirmar_eliminar": "Are you sure you want to delete \"{{title}}\"?"
+  },
+  "Configuracion": {
+    "titulo": "Settings",
+    "perfil": "User Profile",
+    "guardar": "Save Changes",
+    "guardando": "Saving...",
+    "idioma-titulo": "Language",
+    "idioma-es": "Español",
+    "idioma-en": "English",
+    "idioma-fr": "Français",
+    "idioma-pr": "Português"
   },
   "Dashboard": {
     "titulo": "Welcome, ",
