@@ -4,7 +4,7 @@ import { BookService } from '../../services/book';
 import { IBook } from '../../models/book';
 import { ILoan } from '../../models/loan';
 import { LoanService } from '../../services/loan';
-import { DatePipe, JsonPipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
 import { IUser } from '../../models/user';
 import { AuthService } from '../../core/services/auth.service';
@@ -14,7 +14,7 @@ import { CopyService, CopyStatus } from '../../services/copy';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [Menu, TranslatePipe, DatePipe, JsonPipe],
+  imports: [Menu, TranslatePipe, DatePipe],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -25,7 +25,7 @@ export class Dashboard {
   private copyService = inject(CopyService);
   public user = signal<IUser>({} as IUser);
   public myBooks = signal<IBook[]>([]);
-  public myBooksStatus: CopyStatus[] = [];
+  public myBooksStatus = signal<CopyStatus[]>([]);
   public myLoans = signal<ILoan[]>([]);
   isLoading = signal<boolean>(true);
   errorMessage = signal<string | null>(null);
@@ -56,19 +56,7 @@ export class Dashboard {
       this.myBooks.set(myBooks);
       this.myLoans.set(myLoans);
       this.user.set(user.data);
-      //this.getMyBooksStatus();
-
-      let data: CopyStatus[] = [];
-      // myBooks.map(book => 
-      //   data = [...data, firstValueFrom(this.copyService.getCopiesStatus(book.id))]
-      // );
-      
-      let dataB = firstValueFrom(this.copyService.getCopiesStatus(this.myBooks()[0].id));
-      console.log(dataB);
-      
-
-      this.myBooksStatus = data;
-
+      this.getMyBooksStatus(myBooks);
 
     } catch (err) {
       console.error('Error al cargar datos:', err);
@@ -77,12 +65,17 @@ export class Dashboard {
     }
   }
 
-  getMyBooksStatus() {
-    const data: any[] = [];
-    this.myBooks().map(book => {
-      data.push(firstValueFrom(this.copyService.getCopiesStatus(book.id)))
+  getMyBooksStatus(myBooks: IBook[]) {
+    myBooks.map(book => {
+      firstValueFrom(this.copyService.getCopiesStatus(book.id))
+        .then((copies: CopyStatus[]) => {
+          this.myBooksStatus.update(current => ([...current, ...copies]));
+        })
     });
-    this.myBooksStatus = data;
+  }
+
+  countCurrentlyLoaned(): number {
+    return this.myBooksStatus().filter(copy => copy.state === "borrowed").length;
   }
 
   prevPage(): void {

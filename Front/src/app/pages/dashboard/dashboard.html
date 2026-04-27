@@ -11,7 +11,7 @@
         <div class="stat-grid">
           <div class="stat-card stat-primary">
             <p class="stat-title">{{ "Dashboard.misLibros" | translate }}</p>
-            <span class="number">{{ myBooks().length }}</span>
+            <span class="number">{{ myBooksStatus().length }}</span>
           </div>
 
           <div class="stat-card stat-success">
@@ -19,10 +19,10 @@
             <span class="number">{{ myLoans().length }}</span>
           </div>
 
-          <!-- <div class="stat-card stat-warning">
+          <div class="stat-card stat-warning">
             <p class="stat-title">{{ "Dashboard.librosEnPrestamo" | translate }}</p>
-            <span class="number">{{ myBooks().length }}</span>
-          </div> -->
+            <span class="number">{{ countCurrentlyLoaned() }}</span>
+          </div>
 
         </div>
 
@@ -67,10 +67,6 @@
           </div>
           }
         </div>
-
-        <pre>
-          {{ myBooksStatus | json }}
-        </pre>
 
       </section>
     </main>
