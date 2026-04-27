@@ -33,6 +33,7 @@
     "libros": "My Books",
     "prestamo": "Loans",
     "anyadir-libro": "Add Book",
+    "configuracion": "Settings",
     "logout": "Logout"
   },
   "Explorar": {
@@ -99,5 +100,14 @@
     "new_book": "New book",
     "new_copy": "New copy",
     "existente_titulo": "Add New Copy"
+  },
+  "Configuracion": {
+    "titulo": "Settings",
+    "perfil": "User Profile",
+    "guardar": "Save Changes",
+    "guardando": "Saving...",
+    "idioma-titulo": "Language",
+    "idioma-es": "Español",
+    "idioma-en": "English"
   }
 }

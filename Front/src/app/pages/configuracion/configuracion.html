@@ -1,0 +1,55 @@
+<div class="configuracion-container">
+    <app-menu></app-menu>
+
+    <main class="configuracion-content">
+        <header class="content-header">
+            <h2>{{ 'Configuracion.titulo' | translate }}</h2>
+        </header>
+
+        <section class="content-body">
+            <div class="configuracion-card">
+                <h3>{{ 'Configuracion.perfil' | translate }}</h3>
+
+                <form (ngSubmit)="saveProfile()" class="profile-form">
+                    <div class="form-group">
+                        <label for="name">{{ 'Register.nombre' | translate }}</label>
+                        <input type="text" id="name" [(ngModel)]="name" name="name" class="form-input"
+                            [disabled]="loading" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastname">{{ 'Register.apellidos' | translate }}</label>
+                        <input type="text" id="lastname" [(ngModel)]="lastname" name="lastname" class="form-input"
+                            [disabled]="loading" />
+                    </div>
+
+                    <button type="submit" class="btn-save" [disabled]="loading">
+                        {{ loading ? ('Configuracion.guardando' | translate) : ('Configuracion.guardar' | translate) }}
+                    </button>
+                </form>
+
+                <div *ngIf="message" [class]="'message message-' + messageType">
+                    {{ message }}
+                </div>
+            </div>
+
+            <div class="configuracion-card">
+                <h3>{{ 'Configuracion.idioma-titulo' | translate }}</h3>
+
+                <div class="language-options">
+                    <button (click)="changeLanguage('es')" [class.active]="currentLanguage === 'es'"
+                        class="language-btn">
+                        <span class="flag">🇪🇸</span>
+                        <span>{{ 'Configuracion.idioma-es' | translate }}</span>
+                    </button>
+
+                    <button (click)="changeLanguage('en')" [class.active]="currentLanguage === 'en'"
+                        class="language-btn">
+                        <span class="flag">🇬🇧</span>
+                        <span>{{ 'Configuracion.idioma-en' | translate }}</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>

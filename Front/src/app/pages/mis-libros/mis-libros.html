@@ -18,9 +18,12 @@
         </div>
 
         <div class="tabs-row">
-          <button class="tab" [class.active]="activeTab() === 'all'" (click)="setTab('all')">{{ 'MisLibros.tabs.todos' | translate }}</button>
-          <button class="tab" [class.active]="activeTab() === 'available'" (click)="setTab('available')">{{ 'MisLibros.tabs.disponibles' | translate }}</button>
-          <button class="tab" [class.active]="activeTab() === 'borrowed'" (click)="setTab('borrowed')">{{ 'MisLibros.tabs.prestados' | translate }}</button>
+          <button class="tab" [class.active]="activeTab() === 'all'" (click)="setTab('all')">{{ 'MisLibros.tabs.todos' |
+            translate }}</button>
+          <button class="tab" [class.active]="activeTab() === 'available'" (click)="setTab('available')">{{
+            'MisLibros.tabs.disponibles' | translate }}</button>
+          <button class="tab" [class.active]="activeTab() === 'borrowed'" (click)="setTab('borrowed')">{{
+            'MisLibros.tabs.prestados' | translate }}</button>
         </div>
       </div>
 
@@ -37,14 +40,15 @@
               <th>{{ 'MisLibros.tabla.titulo' | translate }}</th>
               <th>{{ 'MisLibros.tabla.autor' | translate }}</th>
               <th>{{ 'MisLibros.tabla.copias' | translate }}</th>
-              
+              <th>{{ 'MisLibros.tabla.acciones' | translate }}</th>
             </tr>
           </thead>
           <tbody>
             @for (book of paginatedBooks(); track book.id) {
             <tr>
               <td>
-                <img class="cover-thumb" [src]="book.cover_image || 'https://placehold.co/80x120?text=Sin+portada'" [alt]="book.title" onerror="this.src='https://placehold.co/80x120?text=Sin+portada'">
+                <img class="cover-thumb" [src]="book.cover_image || 'https://placehold.co/80x120?text=Sin+portada'"
+                  [alt]="book.title" onerror="this.src='https://placehold.co/80x120?text=Sin+portada'">
               </td>
               <td>
                 <div class="title-cell">
@@ -57,6 +61,16 @@
                 <span class="status-pill">
                   {{ getStatusText(book) }}
                 </span>
+              </td>
+              <td>
+                <div class="actions-cell">
+                  <button class="btn-action btn-edit" (click)="openEditModal(book)" title="Editar">
+                    <img src="assets/img/editar.png" alt="Editar" class="action-icon">
+                  </button>
+                  <button class="btn-action btn-delete" (click)="deleteBook(book)" title="Eliminar">
+                    <img src="assets/img/borrar.png" alt="Eliminar" class="action-icon">
+                  </button>
+                </div>
               </td>
             </tr>
             }
@@ -97,4 +111,93 @@
     </div>
     }
   </main>
+
+  <!-- MODAL DE EDICIÓN -->
+  @if (showEditModal() && editingBook()) {
+  <div class="modal-overlay" (click)="closeEditModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Editar Libro</h3>
+        <button class="btn-close" (click)="closeEditModal()">&times;</button>
+      </div>
+
+      @if (editError()) {
+      <div class="error-banner">
+        <span class="error-icon">⚠️</span>
+        <p>{{ editError() }}</p>
+      </div>
+      }
+
+      <div class="modal-body">
+        <form [formGroup]="editForm" (ngSubmit)="saveChanges()" class="edit-form">
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label class="form-label">Título del Libro *</label>
+              <input type="text" formControlName="title" class="form-input" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Género *</label>
+              <select formControlName="genre_id" class="form-input form-select">
+                <option value="" disabled>Selecciona un género</option>
+                @for (genre of genres(); track genre.id) {
+                <option [value]="genre.id">{{ genre.name }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Año de Publicación *</label>
+              <input type="number" formControlName="publication_year" class="form-input" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Idioma *</label>
+              <select formControlName="language" class="form-input form-select">
+                @for (lang of languages; track lang.value) {
+                <option [value]="lang.value">{{ lang.label }}</option>
+                }
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label">Portada (Opcional)</label>
+            <div class="upload-container" [class.dragging]="isDragging()" (dragover)="onDragOver($event)"
+              (dragleave)="onDragLeave()" (drop)="onFileDrop($event)">
+              @if (!previewImage()) {
+              <label for="cover-input" class="upload-placeholder">
+                <div class="icon-circle">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                    <circle cx="8.5" cy="8.5" r="1.5" />
+                    <polyline points="21 15 16 10 5 21" />
+                  </svg>
+                </div>
+                <p><span class="highlight">Subir una imagen</span> o arrastrar y soltar</p>
+                <p class="upload-hint">PNG, JPG, GIF hasta 10MB</p>
+                <input type="file" id="cover-input" (change)="onFileSelected($event)" accept="image/*" hidden />
+              </label>
+              } @else {
+              <div class="preview-card">
+                <img [src]="previewImage()" class="img-preview" alt="Vista previa" />
+                <button type="button" class="btn-remove-float" (click)="removeCover()">×</button>
+              </div>
+              }
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" (click)="closeEditModal()"
+              [disabled]="isSubmitting()">Cancelar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="!editForm.valid || isSubmitting()">
+              {{ isSubmitting() ? 'Guardando...' : 'Guardar Cambios' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  }
 </div>

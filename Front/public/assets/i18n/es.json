@@ -33,6 +33,7 @@
     "libros": "Mis libros",
     "prestamo": "Préstamos",
     "anyadir-libro": "Añadir libro",
+    "configuracion": "Configuración",
     "logout": "Cerrar Sesión"
 
   },
@@ -138,5 +139,14 @@
       "disponibles": "Disponibles",
       "prestamo": "En préstamo"
     }
+  },
+  "Configuracion": {
+    "titulo": "Configuración",
+    "perfil": "Perfil de Usuario",
+    "guardar": "Guardar Cambios",
+    "guardando": "Guardando...",
+    "idioma-titulo": "Idioma",
+    "idioma-es": "Español",
+    "idioma-en": "English"
   }
 }

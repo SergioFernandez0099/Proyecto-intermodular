@@ -80,6 +80,7 @@ export class Menu implements OnInit {
   public goMisLibros() { this.router.navigate(['/misLibros']); }
   public goPrestamos() { this.router.navigate(['/prestamos']); }
   public goAnyadirLibro() { this.router.navigate(['/añadirLibro']); }
+  public goConfiguracion() { this.router.navigate(['/configuracion']); }
 
   public logout() {
     this.authService.logout().subscribe(() => {
