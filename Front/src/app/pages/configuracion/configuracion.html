@@ -48,6 +48,18 @@
                         <span class="flag">🇬🇧</span>
                         <span>{{ 'Configuracion.idioma-en' | translate }}</span>
                     </button>
+
+                    <button (click)="changeLanguage('fr')" [class.active]="currentLanguage === 'fr'"
+                        class="language-btn">
+                        <span class="flag">🇫🇷</span>
+                        <span>{{ 'Configuracion.idioma-fr' | translate }}</span>
+                    </button>
+
+                    <button (click)="changeLanguage('pr')" [class.active]="currentLanguage === 'pr'"
+                        class="language-btn">
+                        <span class="flag">🇵🇹</span>
+                        <span>{{ 'Configuracion.idioma-pr' | translate }}</span>
+                    </button>
                 </div>
             </div>
         </section>

@@ -57,7 +57,13 @@
       "arte": "Arte",
       "tecnologia": "Tecnología"
     },
-    "buscar":"Buscar"
+    "buscar":"Buscar",
+    "agotado": "Agotado",
+    "stock_disponible": "{{count}} disp.",
+    "cargando": "Cargando...",
+    "cargando_biblioteca": "Cargando biblioteca...",
+    "prestamo_exito": "¡Libro reservado con éxito!",
+    "error_prestamo": "Error al solicitar el préstamo"
   },
   "AnyadirLibro": {
     "titulo": "Añadir Nuevo Libro",
@@ -111,7 +117,9 @@
     "error_csv_sin_filas": "El CSV está vacío o no tiene filas válidas.",
     "error_csv_campos": "El CSV debe incluir las columnas: title, author_name, genre, publication_year, language.",
     "error_csv_genero": "El género del CSV no coincide con la lista. Selecciona uno válido.",
-    "error_csv_general": "No se pudo leer el CSV. Revisa el archivo e inténtalo de nuevo."
+    "error_csv_genero_detalle": "El género \"{{genre}}\" no se encontró en el sistema.",
+    "error_csv_general": "No se pudo leer el CSV. Revisa el archivo e inténtalo de nuevo.",
+    "opcional": "Opcional"
   },
   "MisLibros": {
     "titulo": "Mis Libros",
@@ -131,14 +139,37 @@
       "acciones": "Acciones"
     },
     "acciones": {
-      "ver": "Ver"
+      "ver": "Ver",
+      "editar": "Editar",
+      "eliminar": "Eliminar"
     },
     "sin_libros": "No hay libros en esta vista.",
     "stats": {
       "total": "Total libros",
       "disponibles": "Disponibles",
       "prestamo": "En préstamo"
-    }
+    },
+    "estado": {
+      "disponible": "Disponible",
+      "prestado": "Prestado"
+    },
+    "paginacion": {
+      "anterior": "Anterior",
+      "siguiente": "Siguiente"
+    },
+    "modal": {
+      "editar_titulo": "Editar Libro",
+      "guardar": "Guardar Cambios",
+      "guardando": "Guardando..."
+    },
+    "cargando": "Cargando tus libros...",
+    "editado_en": "Editado en",
+    "no_disponible": "N/A",
+    "error_carga": "No se pudieron cargar tus libros. Intenta de nuevo más tarde.",
+    "error_guardar": "Error al guardar los cambios. Intenta de nuevo.",
+    "error_eliminar": "Error al eliminar el libro. Intenta de nuevo.",
+    "error_portada": "Error al actualizar la portada",
+    "confirmar_eliminar": "¿Estás seguro de que deseas eliminar \"{{title}}\"?"
   },
   "Configuracion": {
     "titulo": "Configuración",
@@ -147,6 +178,8 @@
     "guardando": "Guardando...",
     "idioma-titulo": "Idioma",
     "idioma-es": "Español",
-    "idioma-en": "English"
+    "idioma-en": "English",
+    "idioma-fr": "Français",
+    "idioma-pr": "Português"
   }
 }

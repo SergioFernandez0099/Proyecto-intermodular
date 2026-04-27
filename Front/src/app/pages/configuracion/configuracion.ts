@@ -66,10 +66,7 @@ export class Configuracion implements OnInit {
     this.loading = true;
     this.userService.updateProfile(this.name, this.lastname).subscribe({
       next: () => {
-        this.message = 'Perfil actualizado exitosamente';
-        this.messageType = 'success';
-        this.loading = false;
-        setTimeout(() => this.message = '', 3000);
+        window.location.reload();
       },
       error: () => {
         this.message = 'Error al actualizar el perfil';

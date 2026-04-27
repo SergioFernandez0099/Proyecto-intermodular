@@ -384,8 +384,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 46px;
+  height: 40px;
   border-radius: 8px;
   transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
   flex-shrink: 0;
@@ -398,21 +398,10 @@
 }
 
 .settings-icon-img {
-  width: 20px;
-  height: 20px;
+  width: 28px;
+  height: 28px;
   display: block;
   object-fit: contain;
-}
-
-.settings-icon {
-  width: 20px;
-  height: 20px;
-  color: #374151;
-  animation: spin 3s linear infinite;
-}
-
-.btn-settings:hover .settings-icon {
-  animation: spin 1s linear infinite;
 }
 
 .dashboard-aside.collapsed .btn-settings {

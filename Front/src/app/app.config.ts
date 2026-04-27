@@ -11,8 +11,9 @@ import { catchError, of } from 'rxjs';
 
 function initTranslations(translate: TranslateService) {
   return () => {
-    translate.setDefaultLang('es');
-    return translate.use('es').toPromise();
+    const savedLanguage = localStorage.getItem('language') || 'es';
+    translate.setDefaultLang(savedLanguage);
+    return translate.use(savedLanguage).toPromise();
   };
 }
 

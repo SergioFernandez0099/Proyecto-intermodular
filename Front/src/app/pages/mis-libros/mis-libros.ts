@@ -4,6 +4,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { FormsModule, FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Menu } from '../../components/menu/menu';
+import { TranslateService } from '@ngx-translate/core';
 import { BookService } from '../../services/book';
 import { GenreService } from '../../services/genre';
 import { AuthorService } from '../../services/author';
@@ -41,10 +42,10 @@ export class MisLibros implements OnInit {
   editError = signal<string | null>(null);
 
   languages = [
-    { label: 'Español', value: 'Español' },
-    { label: 'Inglés', value: 'Inglés' },
-    { label: 'Francés', value: 'Francés' },
-    { label: 'Portugués', value: 'Portugués' }
+    { labelKey: 'AnyadirLibro.idioma_español', value: 'Español' },
+    { labelKey: 'AnyadirLibro.idioma_ingles', value: 'Inglés' },
+    { labelKey: 'AnyadirLibro.idioma_frances', value: 'Francés' },
+    { labelKey: 'AnyadirLibro.idioma_portugues', value: 'Portugués' }
   ];
 
   filteredBooks = computed(() => {
@@ -98,7 +99,8 @@ export class MisLibros implements OnInit {
     private bookService: BookService,
     private genreService: GenreService,
     private authorService: AuthorService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -127,7 +129,7 @@ export class MisLibros implements OnInit {
       },
       error: error => {
         console.error('Error al cargar Mis Libros:', error);
-        this.errorMessage.set('No se pudieron cargar tus libros. Intenta de nuevo más tarde.');
+        this.errorMessage.set('MisLibros.error_carga');
         this.isLoading.set(false);
       }
     });
@@ -178,11 +180,13 @@ export class MisLibros implements OnInit {
   }
 
   getBookAuthors(book: IBook): string {
-    return book.authors?.map(author => author.name).filter(Boolean).join(', ') || 'N/A';
+    return book.authors?.map(author => author.name).filter(Boolean).join(', ') || this.translate.instant('MisLibros.no_disponible');
   }
 
   getBookStatus(book: IBook): string {
-    return (book.available_copies_count ?? 0) > 0 ? 'Disponible' : 'Prestado';
+    return (book.available_copies_count ?? 0) > 0
+      ? this.translate.instant('MisLibros.estado.disponible')
+      : this.translate.instant('MisLibros.estado.prestado');
   }
 
   getStatusText(book: IBook): string {
@@ -197,6 +201,36 @@ export class MisLibros implements OnInit {
     } else {
       return borrowed.toString();
     }
+  }
+
+  translateGenreName(name?: string): string {
+    if (!name) {
+      return '';
+    }
+
+    const normalizedName = name
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
+
+    const genreKeyMap: Record<string, string> = {
+      ficcion: 'Explorar.categorias.ficcion',
+      fiction: 'Explorar.categorias.ficcion',
+      ciencia: 'Explorar.categorias.ciencia',
+      science: 'Explorar.categorias.ciencia',
+      historia: 'Explorar.categorias.historia',
+      history: 'Explorar.categorias.historia',
+      biografias: 'Explorar.categorias.biografias',
+      biographies: 'Explorar.categorias.biografias',
+      arte: 'Explorar.categorias.arte',
+      art: 'Explorar.categorias.arte',
+      tecnologia: 'Explorar.categorias.tecnologia',
+      technology: 'Explorar.categorias.tecnologia'
+    };
+
+    const translationKey = genreKeyMap[normalizedName];
+    return translationKey ? this.translate.instant(translationKey) : name;
   }
 
   // ========== Métodos de Edición ==========
@@ -291,7 +325,7 @@ export class MisLibros implements OnInit {
               this.closeEditModal();
             },
             error: () => {
-              this.editError.set('Error al actualizar la portada');
+              this.editError.set('MisLibros.error_portada');
               this.isSubmitting.set(false);
             }
           });
@@ -302,14 +336,14 @@ export class MisLibros implements OnInit {
       },
       error: (error) => {
         console.error('Error al actualizar libro:', error);
-        this.editError.set('Error al guardar los cambios. Intenta de nuevo.');
+        this.editError.set('MisLibros.error_guardar');
         this.isSubmitting.set(false);
       }
     });
   }
 
   deleteBook(book: IBook): void {
-    if (!confirm(`¿Estás seguro de que deseas eliminar "${book.title}"?`)) {
+    if (!confirm(this.translate.instant('MisLibros.confirmar_eliminar', { title: book.title }))) {
       return;
     }
 
@@ -321,7 +355,7 @@ export class MisLibros implements OnInit {
       },
       error: (error) => {
         console.error('Error al eliminar libro:', error);
-        this.editError.set('Error al eliminar el libro. Intenta de nuevo.');
+        this.editError.set('MisLibros.error_eliminar');
         this.isSubmitting.set(false);
       }
     });
