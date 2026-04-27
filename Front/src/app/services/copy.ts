@@ -13,6 +13,17 @@ export interface SingleCopyResponse {
   data: ICopy;
 }
 
+export interface CopyStatusResponse {
+  data: CopyStatus[];
+}
+
+export interface CopyStatus {
+  id: number,
+  code: string,
+  state: string,
+  active_loan: any
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -40,6 +51,14 @@ export class CopyService {
 
   deleteCopy(copy: ICopy): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${copy.book?.id}/copies/${copy.id}`).pipe(
+      map(response => response.data)
+    );
+  }
+
+
+
+  getCopiesStatus(bookId: number): Observable<CopyStatus[]> {
+    return this.http.get<CopyStatusResponse>(`${this.apiUrl}/${bookId}/copies/status`).pipe(
       map(response => response.data)
     );
   }

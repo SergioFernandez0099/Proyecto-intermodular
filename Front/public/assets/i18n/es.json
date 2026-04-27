@@ -181,5 +181,16 @@
     "idioma-en": "English",
     "idioma-fr": "Français",
     "idioma-pr": "Português"
+  },
+  "Dashboard": {
+    "titulo": "Bienvenido, ",
+    "misLibros": "Mis libros:",
+    "misPrestamos": "Mis préstamos:",
+    "librosEnPrestamo": "Libros en préstamo:",
+    "tabla": {
+      "libro": "Libro",
+      "cambio": "Último cambio"
+    },
+    "sin_datos": "No hay entradas en esta vista."
   }
 }

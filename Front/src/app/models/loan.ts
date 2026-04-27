@@ -6,5 +6,6 @@ export interface ILoan {
     loan_date: string,
     return_date: string | null,
     copy?: Partial<ICopy>,
-    user?: Partial<IUser>
+    user?: Partial<IUser>,
+    updated_at?: string
 }

@@ -179,5 +179,16 @@
     "idioma-en": "English",
     "idioma-fr": "Français",
     "idioma-pr": "Português"
+  },
+  "Dashboard": {
+    "titulo": "Welcome, ",
+    "misLibros": "My books:",
+    "misPrestamos": "My loans:",
+    "librosEnPrestamo": "Books on loan:",
+    "tabla": {
+      "libro": "Book",
+      "cambio": "Last change"
+    },
+    "sin_datos": "There's no entries in this view."
   }
 }
