@@ -73,7 +73,7 @@
         <div class="pagination-wrapper">
           <button class="pag-btn" (click)="prevPage()" [disabled]="currentPage() === 0">
             <span class="material-icons">
-              <<< /span>
+              </span>
           </button>
           <span class="page-indicator">{{ currentPage() + 1 }} / {{ totalPages() }}</span>
           <button class="pag-btn" (click)="nextPage()" [disabled]="currentPage() + 1 >= totalPages()">

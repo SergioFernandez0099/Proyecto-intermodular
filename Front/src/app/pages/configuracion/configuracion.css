@@ -147,14 +147,13 @@
 
 /* ---- Opciones de Idioma ---- */
 .language-options {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
     gap: 1rem;
-    flex-wrap: wrap;
 }
 
 .language-btn {
-    flex: 1;
-    min-width: 150px;
+    width: 100%; 
     padding: 16px;
     border: 2px solid #e5e7eb;
     background: white;
@@ -213,5 +212,13 @@
 @media (max-width: 480px) {
     .configuracion-content {
         margin-left: 0;
+    }
+    .language-options {
+        gap: 0.5rem;
+    }
+    
+    .language-btn {
+        padding: 10px;
+        font-size: 0.85rem;
     }
 }
