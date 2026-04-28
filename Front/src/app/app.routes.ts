@@ -8,6 +8,7 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { NoAuthGuard } from './core/guards/no-auth.guard';
 import { AnyadirLibro } from './pages/anyadir-libro/anyadir-libro';
 import { MisLibros } from './pages/mis-libros/mis-libros';
+import { Prestamos } from './pages/prestamos/prestamos';
 
 export const routes: Routes = [
 
@@ -18,5 +19,6 @@ export const routes: Routes = [
     { path: 'configuracion', component: Configuracion, canActivate: [AuthGuard] },
     { path: 'añadirLibro', component: AnyadirLibro, canActivate: [AuthGuard] },
     { path: 'misLibros', component: MisLibros, canActivate: [AuthGuard] },
+    { path: 'prestamos', component: Prestamos, canActivate: [AuthGuard] },
     { path: '**', redirectTo: '' }
 ];

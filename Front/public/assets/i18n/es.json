@@ -192,5 +192,12 @@
       "cambio": "Último cambio"
     },
     "sin_datos": "No hay entradas en esta vista."
+  },
+  "Prestamos": {
+    "titulo": "Mis préstamos",
+    "pedido_en": "Pedido:",
+    "devuelto_en": "Devuelto:",
+    "total": "Total de préstamos:",
+    "devolver": "Devolver"
   }
 }
