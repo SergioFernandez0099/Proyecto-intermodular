@@ -1,4 +1,4 @@
-.explorar-container {         
+.explorar-container {
   display: flex;
   min-height: 100vh;
   background-color: var(--color-bg);
@@ -6,7 +6,7 @@
 
 .explorar-content {
   flex: 1;
-  margin-left: 260px;          
+  margin-left: 260px;
   padding: 2rem;
   box-sizing: border-box;
   transition: margin-left 0.3s ease;
@@ -128,7 +128,7 @@
 .books-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  grid-auto-rows: auto;        
+  grid-auto-rows: auto;
   gap: 2rem;
 }
 
@@ -138,6 +138,7 @@
   border-radius: 12px;
   padding: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  min-width: 15rem;
 }
 
 .card-media {
@@ -181,7 +182,7 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  background: #16a34a; 
+  background: #16a34a;
   color: white;
   padding: 4px 8px;
   border-radius: 6px;
@@ -190,7 +191,7 @@
 }
 
 .stock-badge.out-of-stock {
-  background: #dc2626; 
+  background: #dc2626;
 }
 .author {
   color: #6B7280;
@@ -217,8 +218,8 @@
 
 .books-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); 
-  grid-template-rows: repeat(2, auto);        
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, auto);
   gap: 2rem;
 }
 
@@ -229,19 +230,19 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
-  height: 100%; 
+  height: 100%;
 }
 
 .card-info {
 
   display: flex;
   flex-direction: column;
-  flex: 1; 
+  flex: 1;
 }
 
 .text-content {
 
-  flex: 1; 
+  flex: 1;
 }
 
 .card-info h4 {
@@ -307,6 +308,50 @@
   margin-bottom: 1rem;
 }
 
+.detail-link {
+  display: inline-block;
+  margin-top: 0.2rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--color-primary);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.rating-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rating-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rating-value {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.rating-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 2px;
+}
+
+.rating-footer {
+  font-size: 13px;
+  display: flex;
+  justify-content: flex-end;
+
+}
+
+.detail-link:hover {
+  text-decoration: underline;
+}
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
@@ -316,5 +361,10 @@
   .explorar-content {
     margin-left: 80px;
     padding: 1.5rem;
+  }
+
+  .books-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
   }
 }

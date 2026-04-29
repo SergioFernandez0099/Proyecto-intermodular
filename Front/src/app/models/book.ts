@@ -14,6 +14,7 @@ export interface IBook {
     authors?: Partial<IAuthor>[],
     available?: boolean,
     ratings_count?: number,
-    average_rating?: number,
+    average_rating: number,
+    average_rating_raw?: number,
     ratings?: IRating[],
 }

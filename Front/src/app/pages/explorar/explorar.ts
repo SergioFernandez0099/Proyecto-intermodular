@@ -1,4 +1,4 @@
-import { Component, computed, OnInit, signal } from '@angular/core';
+import { Component, computed, OnInit, signal,  ViewChild, ElementRef } from '@angular/core';
 import { Menu } from '../../components/menu/menu';
 import { BookService } from '../../services/book';
 import { GenreService } from '../../services/genre';
@@ -7,11 +7,15 @@ import { TranslateModule } from '@ngx-translate/core';
 import { IBook } from '../../models/book';
 import { IGenre } from '../../models/genre';
 import { firstValueFrom } from 'rxjs';
+import { RatingModule } from 'primeng/rating';
+import { FormsModule } from '@angular/forms';
+import { DecimalPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-explorar',
   standalone: true,
-  imports: [Menu, TranslateModule],
+  imports: [Menu, TranslateModule, FormsModule, RatingModule, DecimalPipe, RouterLink],
   templateUrl: './explorar.html',
   styleUrl: './explorar.css',
 })
@@ -22,13 +26,15 @@ export class Explorar implements OnInit {
   selectedGenreId = signal<number | null>(null);
   isLoading = signal<boolean>(true);
   filterText = signal('');
-  
+
   // Signal para evitar múltiples clics en el botón de préstamo
   isProcessingLoan = signal<number | null>(null);
 
   // Paginación
   currentPage = signal(0);
   itemsPerPage = 8;
+
+  @ViewChild('booksGrid') booksGridRef!: ElementRef;
 
   constructor(
     private bookService: BookService,
@@ -40,7 +46,6 @@ export class Explorar implements OnInit {
     this.loadData();
   }
 
-
   async loadData() {
     this.isLoading.set(true);
     try {
@@ -48,7 +53,7 @@ export class Explorar implements OnInit {
         firstValueFrom(this.bookService.getBooks()),
         firstValueFrom(this.genreService.getGenres())
       ]);
-      this.books.set(booksData);
+      this.books.set(this.transformBooks(booksData));
       this.genres.set(genresData);
     } catch (err) {
       console.error('Error al cargar datos:', err);
@@ -60,12 +65,11 @@ export class Explorar implements OnInit {
 
   getLibros(): void {
     this.bookService.getBooks().subscribe({
-      next: (data) => this.books.set(data),
+      next: (data) => this.books.set(this.transformBooks(data)),
       error: (err) => console.error('Error al refrescar libros:', err)
     });
   }
 
-  
   pedirPrestamo(bookId: number) {
     if (this.isProcessingLoan()) return;
 
@@ -75,7 +79,7 @@ export class Explorar implements OnInit {
       next: (res) => {
         alert('¡Libro reservado con éxito!');
         this.isProcessingLoan.set(null);
-        this.getLibros(); 
+        this.getLibros();
       },
       error: (err) => {
         this.isProcessingLoan.set(null);
@@ -97,8 +101,8 @@ export class Explorar implements OnInit {
     }
 
     if (term) {
-      result = result.filter(book => 
-        book.title.toLowerCase().includes(term) || 
+      result = result.filter(book =>
+        book.title.toLowerCase().includes(term) ||
         book.authors?.some(author => author.name?.toLowerCase().includes(term))
       );
     }
@@ -120,13 +124,13 @@ export class Explorar implements OnInit {
 
   setGenre(id: number | null) {
     this.selectedGenreId.set(id);
-    this.currentPage.set(0); 
+    this.currentPage.set(0);
   }
 
   onSearch(event: Event) {
     const element = event.target as HTMLInputElement;
     this.filterText.set(element.value);
-    this.currentPage.set(0); 
+    this.currentPage.set(0);
   }
 
   getBookAuthors(book: IBook): string | undefined {
@@ -136,12 +140,28 @@ export class Explorar implements OnInit {
   nextPage() {
     if (this.currentPage() + 1 < this.totalPages()) {
       this.currentPage.update(p => p + 1);
+      this.scrollToGrid();
     }
   }
 
   prevPage() {
     if (this.currentPage() > 0) {
       this.currentPage.update(p => p - 1);
+      this.scrollToGrid();
     }
   }
+
+  private scrollToGrid() {
+    this.booksGridRef?.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  private transformBooks(books: IBook[]): IBook[] {
+    return books.map(book => ({
+      ...book,
+      average_rating_raw: book.average_rating,
+      average_rating: Math.round(book.average_rating)
+    }));
+  }
+
+  protected readonly Math = Math;
 }
