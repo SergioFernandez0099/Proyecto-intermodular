@@ -86,37 +86,23 @@
                         Ver valoraciones ({{ book.ratings_count }})
                       </a>
                     </div>
+                    <button class="btn-request"
+                            [disabled]="book.available_copies_count === 0 || isProcessingLoan() === book.id"
+                            (click)="pedirPrestamo(book.id)">
 
+                      @if (isProcessingLoan() === book.id) {
+                        <span>{{ 'Explorar.cargando' | translate }}</span>
+                      } @else {
+                        {{ book.available_copies_count > 0 ? ('Explorar.pedir_prestado' | translate) : ('Explorar.no_disponible'
+                        | translate) }}
+                      }
+                    </button>
                   </div>
-                  <button
-                    class="btn-request"
-                    [disabled]="book.available_copies_count === 0 || isProcessingLoan() === book.id"
-                    (click)="pedirPrestamo(book.id)">
-
-                    @if (isProcessingLoan() === book.id) {
-                      <span>Cargando...</span>
-                    } @else {
-                      {{ book.available_copies_count > 0 ? 'Pedir prestado' : 'No disponible' }}
-                    }
-                  </button>
+                  </div>
                 </div>
-              </div>
             }
           </div>
-              <button class="btn-request"
-                [disabled]="book.available_copies_count === 0 || isProcessingLoan() === book.id"
-                (click)="pedirPrestamo(book.id)">
 
-                @if (isProcessingLoan() === book.id) {
-                <span>{{ 'Explorar.cargando' | translate }}</span>
-                } @else {
-                {{ book.available_copies_count > 0 ? ('Explorar.pedir_prestado' | translate) : ('Explorar.no_disponible'
-                | translate) }}
-                }
-              </button>
-            </div>
-          </div>
-          }
         </div>
 
           <div class="pagination-wrapper">
@@ -129,7 +115,6 @@
               <span class="material-icons">>></span>
             </button>
           </div>
-        </div>
       </section>
     } @else {
       <div class="loading-screen">
