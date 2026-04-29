@@ -1,100 +1,213 @@
-<div class="libro-container">
-  <app-menu></app-menu>
+  <div class="libro-container">
+    <app-menu></app-menu>
 
-  <main class="libro-content">
-    @if (!isLoading()) {
-    <header class="content-header">
+    <main class="libro-content">
+      @if (!isLoading()) {
       <div class="header-titles">
-        <h2>{{ 'MisLibros.titulo' | translate }}</h2>
+        <div class="header-row">
+          <h2>{{ 'MisLibros.titulo' | translate }}</h2>
+          <button class="btn-new" (click)="goAddBook()">
+            {{ 'MisLibros.boton_nuevo' | translate }}
+          </button>
+        </div>
         <p>{{ 'MisLibros.subtitulo' | translate }}</p>
       </div>
-      <button class="btn-new" (click)="goAddBook()">{{ 'MisLibros.boton_nuevo' | translate }}</button>
-    </header>
+  
+      <section class="content-body">
+        <div class="toolbar-row">
+          <div class="search-bar">
+            <input type="text" [placeholder]="'MisLibros.buscar_placeholder' | translate" (input)="onSearch($event)">
+          </div>
 
-    <section class="content-body">
-      <div class="toolbar-row">
-        <div class="search-bar">
-          <input type="text" [placeholder]="'MisLibros.buscar_placeholder' | translate" (input)="onSearch($event)">
+          <div class="tabs-row">
+            <button class="tab" [class.active]="activeTab() === 'all'" (click)="setTab('all')">{{ 'MisLibros.tabs.todos' |
+              translate }}</button>
+            <button class="tab" [class.active]="activeTab() === 'available'" (click)="setTab('available')">{{
+              'MisLibros.tabs.disponibles' | translate }}</button>
+            <button class="tab" [class.active]="activeTab() === 'borrowed'" (click)="setTab('borrowed')">{{
+              'MisLibros.tabs.prestados' | translate }}</button>
+          </div>
         </div>
 
-        <div class="tabs-row">
-          <button class="tab" [class.active]="activeTab() === 'all'" (click)="setTab('all')">{{ 'MisLibros.tabs.todos' | translate }}</button>
-          <button class="tab" [class.active]="activeTab() === 'available'" (click)="setTab('available')">{{ 'MisLibros.tabs.disponibles' | translate }}</button>
-          <button class="tab" [class.active]="activeTab() === 'borrowed'" (click)="setTab('borrowed')">{{ 'MisLibros.tabs.prestados' | translate }}</button>
+        @if (errorMessage()) {
+        <div class="error-box">{{ errorMessage() }}</div>
+        }
+
+        <div class="table-wrapper">
+          @if (paginatedBooks().length > 0) {
+          <table class="books-table">
+            <thead>
+              <tr>
+                <th>{{ 'MisLibros.tabla.portada' | translate }}</th>
+                <th>{{ 'MisLibros.tabla.titulo' | translate }}</th>
+                <th>{{ 'MisLibros.tabla.autor' | translate }}</th>
+                <th>{{ 'MisLibros.tabla.copias' | translate }}</th>
+                <th>{{ 'MisLibros.tabla.acciones' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (book of paginatedBooks(); track book.id) {
+              <tr>
+                <td>
+                  <img class="cover-thumb" [src]="book.cover_image || 'https://placehold.co/80x120?text=Sin+portada'"
+                    [alt]="book.title" onerror="this.src='https://placehold.co/80x120?text=Sin+portada'">
+                </td>
+                <td>
+                  <div class="title-cell">
+                    <strong>{{ book.title }}</strong>
+                    <span class="meta">{{ 'MisLibros.editado_en' | translate }} {{ book.publication_year ||
+                      ('MisLibros.no_disponible' | translate) }}</span>
+                  </div>
+                </td>
+                <td>{{ getBookAuthors(book) }}</td>
+                <td>
+                  <span class="status-pill">
+                    {{ getStatusText(book) }}
+                  </span>
+                </td>
+                <td>
+                  <div class="actions-cell">
+                    <button class="btn-action btn-edit" (click)="openEditModal(book)"
+                      [title]="'MisLibros.acciones.editar' | translate">
+                      <img src="assets/img/editar.png" [alt]="'MisLibros.acciones.editar' | translate"
+                        class="action-icon">
+                    </button>
+                    <button class="btn-action btn-delete" (click)="deleteBook(book)"
+                      [title]="'MisLibros.acciones.eliminar' | translate">
+                      <img src="assets/img/borrar.png" [alt]="'MisLibros.acciones.eliminar' | translate"
+                        class="action-icon">
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+
+          <div class="pagination-wrapper">
+            <button class="pag-btn" (click)="prevPage()" [disabled]="currentPage() === 0">{{
+              'MisLibros.paginacion.anterior' | translate }}</button>
+            <span>{{ currentPage() + 1 }} / {{ totalPages() }}</span>
+            <button class="pag-btn" (click)="nextPage()" [disabled]="currentPage() + 1 >= totalPages()">{{
+              'MisLibros.paginacion.siguiente' | translate }}</button>
+          </div>
+          } @else {
+          <div class="empty-state">
+            {{ 'MisLibros.sin_libros' | translate }}
+          </div>
+          }
         </div>
+
+        <div class="stats-row">
+          <div class="stat-card stat-primary">
+            <span class="stat-title">{{ 'MisLibros.stats.total' | translate }}</span>
+            <strong>{{ totalCount() }}</strong>
+          </div>
+          <div class="stat-card stat-success">
+            <span class="stat-title">{{ 'MisLibros.stats.disponibles' | translate }}</span>
+            <strong>{{ availableCount() }}</strong>
+          </div>
+          <div class="stat-card stat-warning">
+            <span class="stat-title">{{ 'MisLibros.stats.prestamo' | translate }}</span>
+            <strong>{{ borrowedCount() }}</strong>
+          </div>
+        </div>
+      </section>
+      } @else {
+      <div class="loading-screen">
+        <div class="spinner"></div>
+        <p>{{ 'MisLibros.cargando' | translate }}</p>
       </div>
-
-      @if (errorMessage()) {
-      <div class="error-box">{{ errorMessage() }}</div>
       }
+    </main>
 
-      <div class="table-wrapper">
-        @if (paginatedBooks().length > 0) {
-        <table class="books-table">
-          <thead>
-            <tr>
-              <th>{{ 'MisLibros.tabla.portada' | translate }}</th>
-              <th>{{ 'MisLibros.tabla.titulo' | translate }}</th>
-              <th>{{ 'MisLibros.tabla.autor' | translate }}</th>
-              <th>{{ 'MisLibros.tabla.copias' | translate }}</th>
-              
-            </tr>
-          </thead>
-          <tbody>
-            @for (book of paginatedBooks(); track book.id) {
-            <tr>
-              <td>
-                <img class="cover-thumb" [src]="book.cover_image || 'https://placehold.co/80x120?text=Sin+portada'" [alt]="book.title" onerror="this.src='https://placehold.co/80x120?text=Sin+portada'">
-              </td>
-              <td>
-                <div class="title-cell">
-                  <strong>{{ book.title }}</strong>
-                  <span class="meta">Editado en {{ book.publication_year || 'N/A' }}</span>
-                </div>
-              </td>
-              <td>{{ getBookAuthors(book) }}</td>
-              <td>
-                <span class="status-pill">
-                  {{ getStatusText(book) }}
-                </span>
-              </td>
-            </tr>
-            }
-          </tbody>
-        </table>
-
-        <div class="pagination-wrapper">
-          <button class="pag-btn" (click)="prevPage()" [disabled]="currentPage() === 0">Anterior</button>
-          <span>{{ currentPage() + 1 }} / {{ totalPages() }}</span>
-          <button class="pag-btn" (click)="nextPage()" [disabled]="currentPage() + 1 >= totalPages()">Siguiente</button>
+    <!-- MODAL DE EDICIÓN -->
+    @if (showEditModal() && editingBook()) {
+    <div class="modal-overlay" (click)="closeEditModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>{{ 'MisLibros.modal.editar_titulo' | translate }}</h3>
+          <button class="btn-close" (click)="closeEditModal()">&times;</button>
         </div>
-        } @else {
-        <div class="empty-state">
-          {{ 'MisLibros.sin_libros' | translate }}
+
+        @if (editError()) {
+        <div class="error-banner">
+          <span class="error-icon">⚠️</span>
+          <p>{{ editError() | translate }}</p>
         </div>
         }
-      </div>
 
-      <div class="stats-row">
-        <div class="stat-card stat-primary">
-          <span class="stat-title">{{ 'MisLibros.stats.total' | translate }}</span>
-          <strong>{{ totalCount() }}</strong>
-        </div>
-        <div class="stat-card stat-success">
-          <span class="stat-title">{{ 'MisLibros.stats.disponibles' | translate }}</span>
-          <strong>{{ availableCount() }}</strong>
-        </div>
-        <div class="stat-card stat-warning">
-          <span class="stat-title">{{ 'MisLibros.stats.prestamo' | translate }}</span>
-          <strong>{{ borrowedCount() }}</strong>
+        <div class="modal-body">
+          <form [formGroup]="editForm" (ngSubmit)="saveChanges()" class="edit-form">
+            <div class="form-grid">
+              <div class="form-group full-width">
+                <label class="form-label">{{ 'AnyadirLibro.titulo_libro' | translate }} *</label>
+                <input type="text" formControlName="title" class="form-input" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">{{ 'AnyadirLibro.genero' | translate }} *</label>
+                <select formControlName="genre_id" class="form-input form-select">
+                  <option value="" disabled>{{ 'AnyadirLibro.genero_placeholder' | translate }}</option>
+                  @for (genre of genres(); track genre.id) {
+                  <option [value]="genre.id">{{ translateGenreName(genre.name) }}</option>
+                  }
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">{{ 'AnyadirLibro.ano_publicacion' | translate }} *</label>
+                <input type="number" formControlName="publication_year" class="form-input" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">{{ 'AnyadirLibro.idioma' | translate }} *</label>
+                <select formControlName="language" class="form-input form-select">
+                  @for (lang of languages; track lang.value) {
+                  <option [value]="lang.value">{{ lang.labelKey | translate }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group full-width">
+              <label class="form-label">{{ 'AnyadirLibro.portada' | translate }} ({{ 'AnyadirLibro.opcional' | translate
+                }})</label>
+              <div class="upload-container" [class.dragging]="isDragging()" (dragover)="onDragOver($event)"
+                (dragleave)="onDragLeave()" (drop)="onFileDrop($event)">
+                @if (!previewImage()) {
+                <label for="cover-input" class="upload-placeholder">
+                  <div class="icon-circle">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                      <circle cx="8.5" cy="8.5" r="1.5" />
+                      <polyline points="21 15 16 10 5 21" />
+                    </svg>
+                  </div>
+                  <p><span class="highlight">{{ 'AnyadirLibro.subir_archivo' | translate }}</span></p>
+                  <p class="upload-hint">{{ 'AnyadirLibro.subir_formato' | translate }}</p>
+                  <input type="file" id="cover-input" (change)="onFileSelected($event)" accept="image/*" hidden />
+                </label>
+                } @else {
+                <div class="preview-card">
+                  <img [src]="previewImage()" class="img-preview" alt="Vista previa" />
+                  <button type="button" class="btn-remove-float" (click)="removeCover()">×</button>
+                </div>
+                }
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" (click)="closeEditModal()" [disabled]="isSubmitting()">{{
+                'AnyadirLibro.cancelar' | translate }}</button>
+              <button type="submit" class="btn btn-primary" [disabled]="!editForm.valid || isSubmitting()">
+                {{ isSubmitting() ? ('MisLibros.modal.guardando' | translate) : ('MisLibros.modal.guardar' | translate) }}
+              </button>
+            </div>
+          </form>
         </div>
       </div>
-    </section>
-    } @else {
-    <div class="loading-screen">
-      <div class="spinner"></div>
-      <p>Cargando tus libros...</p>
     </div>
     }
-  </main>
-</div>
+  </div>

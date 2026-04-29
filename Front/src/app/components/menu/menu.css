@@ -20,6 +20,16 @@
   flex-direction: column;
 }
 
+/* ---- Animación de rueda ---- */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Estado colapsado */
 .dashboard-aside.collapsed {
   width: 80px;
@@ -349,4 +359,55 @@
 /* Solo se muestra cuando el menú está colapsado */
 .dashboard-aside.collapsed .logout-icon-img {
   display: block;
+}
+
+/* ---- Contenedor del perfil de usuario ---- */
+.user-profile-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: gap 0.3s;
+}
+
+.dashboard-aside.collapsed .user-profile-container {
+  justify-content: center;
+  gap: 0;
+}
+
+/* ---- Botón de configuración ---- */
+.btn-settings {
+  background: none;
+  border: 1px solid #e5e7eb;
+  padding: 8px;
+  margin: 0;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 40px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.btn-settings:hover {
+  background-color: #f3f4f6;
+  border-color: #d1d5db;
+  transform: rotate(20deg);
+}
+
+.settings-icon-img {
+  width: 28px;
+  height: 28px;
+  display: block;
+  object-fit: contain;
+}
+
+.dashboard-aside.collapsed .btn-settings {
+  width: 100%;
+  height: auto;
+  padding: 8px;
+  border: 1px solid #e5e7eb;
 }

@@ -8,11 +8,16 @@ import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { routes } from './app.routes';
 import { AuthService } from './core/services/auth.service';
 import { catchError, of } from 'rxjs';
+import localeEs from '@angular/common/locales/es';
+import { registerLocaleData } from '@angular/common';
+
+registerLocaleData(localeEs, 'es');
 
 function initTranslations(translate: TranslateService) {
   return () => {
-    translate.setDefaultLang('es');
-    return translate.use('es').toPromise();
+    const savedLanguage = localStorage.getItem('language') || 'es';
+    translate.setDefaultLang(savedLanguage);
+    return translate.use(savedLanguage).toPromise();
   };
 }
 

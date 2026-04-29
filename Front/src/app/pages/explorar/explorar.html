@@ -17,48 +17,42 @@
             <input type="text" [placeholder]="'Explorar.search_placeholder' | translate" (input)="onSearch($event)">
           </div>
 
-          <div class="categories-wrapper">
-            <button
-              class="chip"
-              [class.active]="selectedGenreId() === null"
-              (click)="setGenre(null)">
-              {{ 'Explorar.categorias.todos' | translate }}
-            </button>
+        <div class="categories-wrapper">
+          <button class="chip" [class.active]="selectedGenreId() === null" (click)="setGenre(null)">
+            {{ 'Explorar.categorias.todos' | translate }}
+          </button>
 
-            @for (genre of genres(); track genre.id) {
-              <button
-                class="chip"
-                [class.active]="selectedGenreId() === genre.id"
-                (click)="setGenre(genre.id)">
-                {{ genre.name }}
-              </button>
-            }
-          </div>
+          @for (genre of genres(); track genre.id) {
+          <button class="chip" [class.active]="selectedGenreId() === genre.id" (click)="setGenre(genre.id)">
+            {{ translateGenreName(genre.name) }}
+          </button>
+          }
         </div>
+      </div>
 
         <div class="books-container" #booksGrid>
           <div class="list-header">
             <h3>{{ 'Explorar.libros_disponibles' | translate }}</h3>
           </div>
 
-          <div class="books-grid">
-            @for (book of paginatedBooks(); track book.id) {
-              <div class="book-card">
-                <div class="card-media">
-                  <img [src]="book.cover_image" [alt]="book.title"
-                       onerror="this.src='https://placehold.co/200x300?text=Sin+portada'">
+        <div class="books-grid">
+          @for (book of paginatedBooks(); track book.id) {
+          <div class="book-card">
+            <div class="card-media">
+              <img [src]="book.cover_image" [alt]="book.title"
+                onerror="this.src='https://placehold.co/200x300?text=Sin+portada'">
 
+              <div class="stock-badge" [class.out-of-stock]="book.available_copies_count === 0">
+                {{ book.available_copies_count > 0 ? ('Explorar.stock_disponible' | translate:{ count:
+                book.available_copies_count }) : ('Explorar.agotado' | translate) }}
+              </div>
+            </div>
 
-                  <div class="stock-badge" [class.out-of-stock]="book.available_copies_count === 0">
-                    {{ book.available_copies_count > 0 ? book.available_copies_count + ' disp.' : 'Agotado' }}
-                  </div>
-                </div>
-
-                <div class="card-info">
-                  <div class="text-content">
-                    <h4>{{ book.title }}</h4>
-                    <p class="author">{{ getBookAuthors(book) }}</p>
-                  </div>
+                          <div class="card-info">
+                            <div class="text-content">
+                              <h4>{{ book.title }}</h4>
+                              <p class="author">{{ getBookAuthors(book) }}</p>
+                            </div>
 
                   <div class="rating-container">
 
@@ -109,10 +103,26 @@
               </div>
             }
           </div>
+              <button class="btn-request"
+                [disabled]="book.available_copies_count === 0 || isProcessingLoan() === book.id"
+                (click)="pedirPrestamo(book.id)">
+
+                @if (isProcessingLoan() === book.id) {
+                <span>{{ 'Explorar.cargando' | translate }}</span>
+                } @else {
+                {{ book.available_copies_count > 0 ? ('Explorar.pedir_prestado' | translate) : ('Explorar.no_disponible'
+                | translate) }}
+                }
+              </button>
+            </div>
+          </div>
+          }
+        </div>
 
           <div class="pagination-wrapper">
             <button class="pag-btn" (click)="prevPage()" [disabled]="currentPage() === 0">
-              <span class="material-icons"><<</span>
+              <span class="material-icons">
+              </span>
             </button>
             <span class="page-indicator">{{ currentPage() + 1 }} / {{ totalPages() }}</span>
             <button class="pag-btn" (click)="nextPage()" [disabled]="currentPage() + 1 >= totalPages()">
@@ -124,7 +134,7 @@
     } @else {
       <div class="loading-screen">
         <div class="spinner"></div>
-        <p>Cargando biblioteca...</p>
+        <p>{{ 'Explorar.cargando_biblioteca' | translate }}</p>
       </div>
     }
   </main>

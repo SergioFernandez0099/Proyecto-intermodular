@@ -58,12 +58,17 @@
     </nav>
 
     <div class="aside-footer">
-      <div class="user-profile">
-        <div class="user-avatar-initial">{{ userInitial }}</div>
-        <div class="user-info">
-          <p class="user-name">{{ userName }}</p>
-          <p class="user-email">{{ userEmail }}</p>
+      <div class="user-profile-container">
+        <div class="user-profile">
+          <div class="user-avatar-initial">{{ userInitial }}</div>
+          <div class="user-info">
+            <p class="user-name">{{ userName }}</p>
+            <p class="user-email">{{ userEmail }}</p>
+          </div>
         </div>
+        <button (click)="goConfiguracion()" class="btn-settings" [title]="'Menu.configuracion' | translate">
+          <img src="assets/img/configuraciones.png" alt="Configuracion" class="settings-icon-img">
+        </button>
       </div>
       <button (click)="logout()" class="btn-logout">
         <img src="assets/img/logout.png" alt="Logout" class="logout-icon-img">

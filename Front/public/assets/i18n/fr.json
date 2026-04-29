@@ -1,0 +1,183 @@
+{
+	"Login": {
+		"bienvenido": "Bon retour",
+		"inicio-sesion": "Connectez-vous à votre compte LibreShare",
+		"email": "Adresse e-mail",
+		"password": "Mot de passe",
+		"boton-sesion": "Se connecter",
+		"otro-logeo": "OU CONTINUER AVEC",
+		"crear-cuenta": "Créer un compte",
+		"nuevo-usuario": "Nouvel utilisateur ?"
+	},
+	"Footer": {
+		"privacidad": "Politique de confidentialité",
+		"servicios": "Conditions d'utilisation",
+		"contacto": "Contact",
+		"derechos": "Tous droits réservés"
+	},
+	"Register": {
+		"nombre": "Prénom",
+		"apellidos": "Nom",
+		"email": "Adresse e-mail",
+		"password": "Mot de passe",
+		"confirmar-password": "Confirmer le mot de passe",
+		"boton-crear-cuenta": "Créer un compte",
+		"login": "Connexion",
+		"tienes-cuenta": "Vous avez déjà un compte ?"
+	},
+	"Menu": {
+		"biblioteca": "Ma bibliothèque",
+		"dashboard": "Tableau de bord",
+		"explorar": "Explorer",
+		"libros": "Mes livres",
+		"prestamo": "Prêts",
+		"anyadir-libro": "Ajouter un livre",
+		"configuracion": "Paramètres",
+		"logout": "Se déconnecter"
+	},
+	"Explorar": {
+		"titulo": "Explorer la bibliothèque",
+		"subtitulo": "Trouvez votre prochaine lecture parmi des milliers de livres partagés.",
+		"search_placeholder": "Rechercher par titre, auteur",
+		"libros_disponibles": "Livres disponibles",
+		"ordenar_por": "Trier par",
+		"recientes": "Récents",
+		"pedir_prestado": "Demander un prêt",
+		"no_disponible": "Indisponible",
+		"disponible": "DISPONIBLE",
+		"en_prestamo": "EN PRÊT",
+		"categorias": {
+			"todos": "Tous",
+			"ficcion": "Fiction",
+			"ciencia": "Science",
+			"historia": "Histoire",
+			"biografias": "Biographies",
+			"arte": "Art",
+			"tecnologia": "Technologie"
+		},
+		"buscar": "Rechercher",
+		"agotado": "Épuisé",
+		"stock_disponible": "{{count}} disp.",
+		"cargando": "Chargement...",
+		"cargando_biblioteca": "Chargement de la bibliothèque...",
+		"prestamo_exito": "Livre réservé avec succès !",
+		"error_prestamo": "Erreur lors de la demande de prêt"
+	},
+	"AnyadirLibro": {
+		"titulo": "Ajouter un nouveau livre",
+		"subtitulo": "Complétez les informations pour que les autres membres de la communauté puissent découvrir votre livre.",
+		"titulo_libro": "Titre du livre",
+		"titulo_placeholder": "Ex : Cent ans de solitude",
+		"autor": "Auteur",
+		"autor_placeholder": "Sélectionnez ou saisissez le nom de l'auteur",
+		"autor_no_encontrado": "Aucun auteur trouvé",
+		"genero": "Genre",
+		"genero_placeholder": "Sélectionnez un genre",
+		"ano_publicacion": "Année de publication",
+		"ano_placeholder": "Ex : 1985",
+		"idioma": "Langue",
+		"idioma_español": "Espagnol",
+		"idioma_ingles": "Anglais",
+		"idioma_frances": "Français",
+		"idioma_aleman": "Allemand",
+		"idioma_italiano": "Italien",
+		"idioma_portugues": "Portugais",
+		"portada": "Couverture du livre (optionnel)",
+		"subir_archivo": "Téléversez un fichier ou glissez-le ici",
+		"subir_formato": "PNG, JPG, GIF jusqu'à 10 Mo",
+		"opcional": "Optionnel",
+		"cambiar_portada": "Changer la couverture",
+		"eliminar_portada": "Supprimer",
+		"consejo_titulo": "Conseil LibreShare",
+		"consejo_mensaje": "Assurez-vous que le livre est en bon état physique avant de le proposer au prêt. Une vraie photo de la couverture aide à instaurer la confiance.",
+		"cancelar": "Annuler",
+		"guardar_libro": "Enregistrer le livre",
+		"guardando": "Enregistrement...",
+		"error_titulo_corto": "Le titre doit comporter au moins 3 caractères",
+		"error_autor_requerido": "Vous devez sélectionner un auteur",
+		"error_genero_requerido": "Vous devez sélectionner un genre",
+		"error_ano_invalido": "Saisissez une année valide (4 chiffres)",
+		"error_campos_requeridos": "Veuillez remplir correctement tous les champs",
+		"error_crear_libro": "Erreur lors de la création du livre. Veuillez réessayer.",
+		"error_crear_copia": "Erreur lors de la création de l'exemplaire. Veuillez réessayer.",
+		"error_crear_autor": "Erreur lors de la création de l'auteur. Veuillez réessayer.",
+		"error_cargar_generos": "Erreur lors du chargement des genres",
+		"error_cargar_autores": "Erreur lors du chargement des auteurs",
+		"error_cargar_datos": "Erreur lors du chargement des données initiales. Rechargez la page.",
+		"requerido": "Obligatoire",
+		"new_book": "Nouveau livre",
+		"new_copy": "Nouvel exemplaire",
+		"existente_titulo": "Ajouter un nouvel exemplaire",
+		"csv_title": "Importer depuis CSV",
+		"csv_instructions": "Téléchargez un fichier CSV avec les colonnes : title, author_name, genre, publication_year, language.",
+		"csv_select": "Sélectionner un CSV",
+		"csv_cargado": "Données chargées depuis le CSV.",
+		"error_csv_tipo": "Le fichier doit être un CSV.",
+		"error_csv_sin_filas": "Le CSV est vide ou ne contient aucune ligne valide.",
+		"error_csv_campos": "Le CSV doit inclure les colonnes : title, author_name, genre, publication_year, language.",
+		"error_csv_genero": "Le genre du CSV ne correspond pas à la liste. Sélectionnez-en un valide.",
+		"error_csv_genero_detalle": "Le genre \"{{genre}}\" est introuvable dans le système.",
+		"error_csv_general": "Impossible de lire le CSV. Vérifiez le fichier et réessayez."
+	},
+	"MisLibros": {
+		"titulo": "Mes livres",
+		"subtitulo": "Gérez votre collection personnelle et l'état de vos livres.",
+		"boton_nuevo": "+ Nouveau livre",
+		"buscar_placeholder": "Rechercher dans ma bibliothèque...",
+		"tabs": {
+			"todos": "Tous",
+			"disponibles": "Disponibles",
+			"prestados": "Prêtés"
+		},
+		"tabla": {
+			"portada": "Couverture",
+			"titulo": "Titre",
+			"autor": "Auteur",
+			"copias": "Exemplaires",
+			"acciones": "Actions"
+		},
+		"acciones": {
+			"ver": "Voir",
+			"editar": "Modifier",
+			"eliminar": "Supprimer"
+		},
+		"stats": {
+			"total": "Total des livres",
+			"disponibles": "Disponibles",
+			"prestamo": "En prêt"
+		},
+		"estado": {
+			"disponible": "Disponible",
+			"prestado": "Prêté"
+		},
+		"paginacion": {
+			"anterior": "Précédent",
+			"siguiente": "Suivant"
+		},
+		"modal": {
+			"editar_titulo": "Modifier le livre",
+			"guardar": "Enregistrer les modifications",
+			"guardando": "Enregistrement..."
+		},
+		"sin_libros": "Aucun livre dans cette vue.",
+		"cargando": "Chargement de vos livres...",
+		"editado_en": "Publié en",
+		"no_disponible": "N/A",
+		"error_carga": "Impossible de charger vos livres. Réessayez plus tard.",
+		"error_guardar": "Erreur lors de l'enregistrement des modifications. Réessayez.",
+		"error_eliminar": "Erreur lors de la suppression du livre. Réessayez.",
+		"error_portada": "Erreur lors de la mise à jour de la couverture",
+		"confirmar_eliminar": "Voulez-vous vraiment supprimer \"{{title}}\" ?"
+	},
+	"Configuracion": {
+		"titulo": "Paramètres",
+		"perfil": "Profil utilisateur",
+		"guardar": "Enregistrer les modifications",
+		"guardando": "Enregistrement...",
+		"idioma-titulo": "Langue",
+		"idioma-es": "Español",
+		"idioma-en": "English",
+		"idioma-fr": "Français",
+		"idioma-pr": "Português"
+	}
+}

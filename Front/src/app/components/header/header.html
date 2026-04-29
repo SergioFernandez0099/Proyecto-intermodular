@@ -11,14 +11,15 @@
         </div>
 
         <div class="header-actions">
-            <button (click)="changeLanguage('en')" class="btn-lang" [class.active]="currentLang === 'en'">
-                <img src="assets/img/ukLogo.png" alt="English" class="flag-img">
-                <span class="flag">EN</span>
-            </button>
-            <button (click)="changeLanguage('es')" class="btn-lang" [class.active]="currentLang === 'es'">
-                <img src="assets/img/spainLogo.png" alt="Español" class="flag-img">
-                <span class="flag">ES</span>
-            </button>
+            <div class="language-select-wrapper">
+                <img src="assets/img/idioma.png" alt="Idioma" class="language-icon-img">
+                <select class="language-select" [ngModel]="currentLang" (ngModelChange)="changeLanguage($event)">
+                    <option value="es">ES</option>
+                    <option value="en">EN</option>
+                    <option value="fr">FR</option>
+                    <option value="pr">PR</option>
+                </select>
+            </div>
         </div>
 
     </div>

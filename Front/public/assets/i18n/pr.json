@@ -1,0 +1,183 @@
+{
+	"Login": {
+		"bienvenido": "Bem-vindo de volta",
+		"inicio-sesion": "Inicie sessão na sua conta LibreShare",
+		"email": "Endereço de e-mail",
+		"password": "Palavra-passe",
+		"boton-sesion": "Entrar",
+		"otro-logeo": "OU CONTINUAR COM",
+		"crear-cuenta": "Criar conta",
+		"nuevo-usuario": "Novo utilizador?"
+	},
+	"Footer": {
+		"privacidad": "Política de privacidade",
+		"servicios": "Termos de serviço",
+		"contacto": "Contacto",
+		"derechos": "Todos os direitos reservados"
+	},
+	"Register": {
+		"nombre": "Nome",
+		"apellidos": "Apelidos",
+		"email": "Endereço de e-mail",
+		"password": "Palavra-passe",
+		"confirmar-password": "Confirmar palavra-passe",
+		"boton-crear-cuenta": "Criar conta",
+		"login": "Entrar",
+		"tienes-cuenta": "Já tem conta?"
+	},
+	"Menu": {
+		"biblioteca": "A minha biblioteca",
+		"dashboard": "Painel",
+		"explorar": "Explorar",
+		"libros": "Os meus livros",
+		"prestamo": "Empréstimos",
+		"anyadir-libro": "Adicionar livro",
+		"configuracion": "Configurações",
+		"logout": "Terminar sessão"
+	},
+	"Explorar": {
+		"titulo": "Explorar biblioteca",
+		"subtitulo": "Encontre a sua próxima leitura entre milhares de livros partilhados.",
+		"search_placeholder": "Pesquisar por título, autor",
+		"libros_disponibles": "Livros disponíveis",
+		"ordenar_por": "Ordenar por",
+		"recientes": "Recentes",
+		"pedir_prestado": "Pedir emprestado",
+		"no_disponible": "Indisponível",
+		"disponible": "DISPONÍVEL",
+		"en_prestamo": "EM EMPRÉSTIMO",
+		"categorias": {
+			"todos": "Todos",
+			"ficcion": "Ficção",
+			"ciencia": "Ciência",
+			"historia": "História",
+			"biografias": "Biografias",
+			"arte": "Arte",
+			"tecnologia": "Tecnologia"
+		},
+		"buscar": "Pesquisar",
+		"agotado": "Esgotado",
+		"stock_disponible": "{{count}} disp.",
+		"cargando": "A carregar...",
+		"cargando_biblioteca": "A carregar biblioteca...",
+		"prestamo_exito": "Livro reservado com sucesso!",
+		"error_prestamo": "Erro ao pedir o empréstimo"
+	},
+	"AnyadirLibro": {
+		"titulo": "Adicionar novo livro",
+		"subtitulo": "Complete as informações para que outros membros da comunidade possam descobrir o seu livro.",
+		"titulo_libro": "Título do livro",
+		"titulo_placeholder": "Ex.: Cem Anos de Solidão",
+		"autor": "Autor",
+		"autor_placeholder": "Selecione ou escreva o nome do autor",
+		"autor_no_encontrado": "Nenhum autor encontrado",
+		"genero": "Género",
+		"genero_placeholder": "Selecione um género",
+		"ano_publicacion": "Ano de publicação",
+		"ano_placeholder": "Ex.: 1985",
+		"idioma": "Idioma",
+		"idioma_español": "Espanhol",
+		"idioma_ingles": "Inglês",
+		"idioma_frances": "Francês",
+		"idioma_aleman": "Alemão",
+		"idioma_italiano": "Italiano",
+		"idioma_portugues": "Português",
+		"portada": "Capa do livro (opcional)",
+		"subir_archivo": "Carregue um ficheiro ou arraste-o para aqui",
+		"subir_formato": "PNG, JPG, GIF até 10MB",
+		"opcional": "Opcional",
+		"cambiar_portada": "Alterar capa",
+		"eliminar_portada": "Eliminar",
+		"consejo_titulo": "Conselho LibreShare",
+		"consejo_mensaje": "Certifique-se de que o livro está em bom estado físico antes de o disponibilizar para empréstimo. Uma foto real da capa ajuda a criar confiança na comunidade.",
+		"cancelar": "Cancelar",
+		"guardar_libro": "Guardar livro",
+		"guardando": "A guardar...",
+		"error_titulo_corto": "O título deve ter pelo menos 3 caracteres",
+		"error_autor_requerido": "Tem de selecionar um autor",
+		"error_genero_requerido": "Tem de selecionar um género",
+		"error_ano_invalido": "Introduza um ano válido (4 dígitos)",
+		"error_campos_requeridos": "Preencha corretamente todos os campos",
+		"error_crear_libro": "Erro ao criar o livro. Tente novamente.",
+		"error_crear_copia": "Erro ao criar a cópia. Tente novamente.",
+		"error_crear_autor": "Erro ao criar o autor. Tente novamente.",
+		"error_cargar_generos": "Erro ao carregar géneros",
+		"error_cargar_autores": "Erro ao carregar autores",
+		"error_cargar_datos": "Erro ao carregar os dados iniciais. Recarregue a página.",
+		"requerido": "Obrigatório",
+		"new_book": "Novo livro",
+		"new_copy": "Nova cópia",
+		"existente_titulo": "Adicionar nova cópia",
+		"csv_title": "Importar de CSV",
+		"csv_instructions": "Carregue um ficheiro CSV com as colunas: title, author_name, genre, publication_year, language.",
+		"csv_select": "Selecionar CSV",
+		"csv_cargado": "Dados carregados a partir do CSV.",
+		"error_csv_tipo": "O ficheiro deve ser um CSV.",
+		"error_csv_sin_filas": "O CSV está vazio ou não tem linhas válidas.",
+		"error_csv_campos": "O CSV deve incluir as colunas: title, author_name, genre, publication_year, language.",
+		"error_csv_genero": "O género do CSV não coincide com a lista. Selecione um válido.",
+		"error_csv_genero_detalle": "O género \"{{genre}}\" não foi encontrado no sistema.",
+		"error_csv_general": "Não foi possível ler o CSV. Verifique o ficheiro e tente novamente."
+	},
+	"MisLibros": {
+		"titulo": "Os meus livros",
+		"subtitulo": "Gira a sua coleção pessoal e o estado dos seus livros.",
+		"boton_nuevo": "+ Novo livro",
+		"buscar_placeholder": "Pesquisar na minha biblioteca...",
+		"tabs": {
+			"todos": "Todos",
+			"disponibles": "Disponíveis",
+			"prestados": "Emprestados"
+		},
+		"tabla": {
+			"portada": "Capa",
+			"titulo": "Título",
+			"autor": "Autor",
+			"copias": "Cópias",
+			"acciones": "Ações"
+		},
+		"acciones": {
+			"ver": "Ver",
+			"editar": "Editar",
+			"eliminar": "Eliminar"
+		},
+		"stats": {
+			"total": "Total de livros",
+			"disponibles": "Disponíveis",
+			"prestamo": "Em empréstimo"
+		},
+		"estado": {
+			"disponible": "Disponível",
+			"prestado": "Emprestado"
+		},
+		"paginacion": {
+			"anterior": "Anterior",
+			"siguiente": "Seguinte"
+		},
+		"modal": {
+			"editar_titulo": "Editar livro",
+			"guardar": "Guardar alterações",
+			"guardando": "A guardar..."
+		},
+		"sin_libros": "Não existem livros nesta vista.",
+		"cargando": "A carregar os seus livros...",
+		"editado_en": "Editado em",
+		"no_disponible": "N/A",
+		"error_carga": "Não foi possível carregar os seus livros. Tente novamente mais tarde.",
+		"error_guardar": "Erro ao guardar as alterações. Tente novamente.",
+		"error_eliminar": "Erro ao eliminar o livro. Tente novamente.",
+		"error_portada": "Erro ao atualizar a capa",
+		"confirmar_eliminar": "Tem a certeza de que quer eliminar \"{{title}}\"?"
+	},
+	"Configuracion": {
+		"titulo": "Configurações",
+		"perfil": "Perfil do utilizador",
+		"guardar": "Guardar alterações",
+		"guardando": "A guardar...",
+		"idioma-titulo": "Idioma",
+		"idioma-es": "Español",
+		"idioma-en": "English",
+		"idioma-fr": "Français",
+		"idioma-pr": "Português"
+	}
+}

@@ -40,8 +40,8 @@ export class LoanService {
     );
   }
 
-  returnLoan(loan: ILoan, id: number): Observable<ILoan> {
-    return this.http.put<SingleLoanResponse>(`${this.apiUrl}/${id}/return`, loan).pipe(
+  returnLoan(loan: ILoan): Observable<ILoan> {
+    return this.http.patch<SingleLoanResponse>(`${this.apiUrl}/${loan.id}/return`, loan).pipe(
       map(response => response.data)
     );
   }

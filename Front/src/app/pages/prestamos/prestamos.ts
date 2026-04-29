@@ -1,6 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { Menu } from '../../components/menu/menu';
-import { BookService } from '../../services/book';
 import { IBook } from '../../models/book';
 import { ILoan } from '../../models/loan';
 import { LoanService } from '../../services/loan';
@@ -9,24 +8,21 @@ import { firstValueFrom } from 'rxjs';
 import { IUser } from '../../models/user';
 import { AuthService } from '../../core/services/auth.service';
 import { TranslatePipe } from '@ngx-translate/core';
-import { CopyService, CopyStatus } from '../../services/copy';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-prestamos',
   standalone: true,
   imports: [Menu, TranslatePipe, DatePipe],
-  templateUrl: './dashboard.html',
-  styleUrl: './dashboard.css',
+  templateUrl: './prestamos.html',
+  styleUrl: './prestamos.css',
 })
-export class Dashboard {
-  private bookService = inject(BookService);
+export class Prestamos {
   private loanService = inject(LoanService);
   private authService = inject(AuthService);
-  private copyService = inject(CopyService);
   public user = signal<IUser>({} as IUser);
-  public myBooks = signal<IBook[]>([]);
-  public myBooksStatus = signal<CopyStatus[]>([]);
   public myLoans = signal<ILoan[]>([]);
+  public savedLanguage: string = "";
   isLoading = signal<boolean>(true);
   errorMessage = signal<string | null>(null);
   currentPage = signal(0);
@@ -43,39 +39,24 @@ export class Dashboard {
 
   ngOnInit(): void {
     this.loadData();
+    this.savedLanguage = localStorage.getItem('language') || 'es';
   }
   
   async loadData() {
     this.isLoading.set(true);
     try {
-      const [myBooks, myLoans, user] = await Promise.all([
-        firstValueFrom(this.bookService.getMyBooks()),
+      const [myLoans, user] = await Promise.all([
         firstValueFrom(this.loanService.getLoans()),
         firstValueFrom(this.authService.me()),
       ]);
-      this.myBooks.set(myBooks);
       this.myLoans.set(myLoans);
       this.user.set(user.data);
-      this.getMyBooksStatus(myBooks);
 
     } catch (err) {
       console.error('Error al cargar datos:', err);
     } finally {
       this.isLoading.set(false);
     }
-  }
-
-  getMyBooksStatus(myBooks: IBook[]) {
-    myBooks.map(book => {
-      firstValueFrom(this.copyService.getCopiesStatus(book.id))
-        .then((copies: CopyStatus[]) => {
-          this.myBooksStatus.update(current => ([...current, ...copies]));
-        })
-    });
-  }
-
-  countCurrentlyLoaned(): number {
-    return this.myBooksStatus().filter(copy => copy.state === "borrowed").length;
   }
 
   prevPage(): void {
@@ -92,6 +73,13 @@ export class Dashboard {
 
   getBookAuthors(book: Partial<IBook> | undefined): string {
     return book?.authors?.map(author => author.name).join(', ') || 'N/A';
+  }
+
+  returnBook(loan: ILoan) {
+    this.loanService.returnLoan(loan).subscribe(value => {
+      loan = value;
+    });
+    loan.return_date = new Date() + ""
   }
 
 }

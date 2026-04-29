@@ -3,7 +3,7 @@ import { Menu } from '../../components/menu/menu';
 import { BookService } from '../../services/book';
 import { GenreService } from '../../services/genre';
 import { LoanService } from '../../services/loan';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { IBook } from '../../models/book';
 import { IGenre } from '../../models/genre';
 import { firstValueFrom } from 'rxjs';
@@ -39,7 +39,8 @@ export class Explorar implements OnInit {
   constructor(
     private bookService: BookService,
     private genreService: GenreService,
-    private loanService: LoanService
+    private loanService: LoanService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -77,13 +78,13 @@ export class Explorar implements OnInit {
 
     this.loanService.createLoan(bookId).subscribe({
       next: (res) => {
-        alert('¡Libro reservado con éxito!');
+        alert(this.translate.instant('Explorar.prestamo_exito'));
         this.isProcessingLoan.set(null);
         this.getLibros();
       },
       error: (err) => {
         this.isProcessingLoan.set(null);
-        const mensaje = err.error?.message || 'Error al solicitar el préstamo';
+        const mensaje = err.error?.message || this.translate.instant('Explorar.error_prestamo');
         alert(mensaje);
       }
     });
@@ -135,6 +136,36 @@ export class Explorar implements OnInit {
 
   getBookAuthors(book: IBook): string | undefined {
     return book.authors?.map(auth => auth.name).join(', ');
+  }
+
+  translateGenreName(name?: string): string {
+    if (!name) {
+      return '';
+    }
+
+    const normalizedName = name
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
+
+    const genreKeyMap: Record<string, string> = {
+      ficcion: 'Explorar.categorias.ficcion',
+      fiction: 'Explorar.categorias.ficcion',
+      ciencia: 'Explorar.categorias.ciencia',
+      science: 'Explorar.categorias.ciencia',
+      historia: 'Explorar.categorias.historia',
+      history: 'Explorar.categorias.historia',
+      biografias: 'Explorar.categorias.biografias',
+      biographies: 'Explorar.categorias.biografias',
+      arte: 'Explorar.categorias.arte',
+      art: 'Explorar.categorias.arte',
+      tecnologia: 'Explorar.categorias.tecnologia',
+      technology: 'Explorar.categorias.tecnologia'
+    };
+
+    const translationKey = genreKeyMap[normalizedName];
+    return translationKey ? this.translate.instant(translationKey) : name;
   }
 
   nextPage() {

@@ -1,0 +1,224 @@
+.configuracion-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--color-bg);
+}
+
+.configuracion-content {
+    flex: 1;
+    margin-left: 260px; 
+    padding: 2rem;
+    box-sizing: border-box;
+    transition: margin-left 0.3s ease; 
+}
+
+.content-header {
+    margin-bottom: 2rem;
+}
+
+.content-header h2 {
+    font-size: var(--text-xl);
+    font-weight: var(--font-bold);
+    color: var(--color-text);
+    margin: 0;
+}
+
+.content-body {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+}
+
+.configuracion-card {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.configuracion-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.configuracion-card h3 {
+    font-size: 1.25rem;
+    font-weight: var(--font-bold);
+    color: var(--color-text);
+    margin: 0 0 1.5rem 0;
+}
+
+/* ---- Formulario de Perfil ---- */
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.form-input {
+    padding: 12px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: var(--font-primary);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    background-color: #f9fafb;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    background-color: white;
+}
+
+.form-input:disabled {
+    background-color: #f3f4f6;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.btn-save {
+    padding: 14px 24px;
+    background: linear-gradient(135deg, var(--color-primary), #2563eb);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+    margin-top: 1rem;
+}
+
+.btn-save:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.3);
+}
+
+.btn-save:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ---- Mensajes ---- */
+.message {
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message-success {
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1px solid #6ee7b7;
+}
+
+.message-error {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+}
+
+/* ---- Opciones de Idioma ---- */
+.language-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 1rem;
+}
+
+.language-btn {
+    width: 100%; 
+    padding: 16px;
+    border: 2px solid #e5e7eb;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.language-btn:hover {
+    border-color: var(--color-primary);
+    background-color: #eff6ff;
+}
+
+.language-btn.active {
+    border-color: var(--color-primary);
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(37, 99, 235, 0.1));
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+.flag {
+    font-size: 2rem;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+    .configuracion-content {
+        margin-left: 80px;
+        padding: 1rem;
+    }
+
+    .content-body {
+        grid-template-columns: 1fr;
+    }
+
+    .configuracion-card {
+        padding: 1.5rem;
+    }
+
+    .language-options {
+        flex-direction: column;
+    }
+
+    .language-btn {
+        min-width: unset;
+    }
+}
+
+@media (max-width: 480px) {
+    .configuracion-content {
+        margin-left: 0;
+    }
+    .language-options {
+        gap: 0.5rem;
+    }
+    
+    .language-btn {
+        padding: 10px;
+        font-size: 0.85rem;
+    }
+}
