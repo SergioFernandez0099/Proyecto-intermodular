@@ -20,15 +20,16 @@ import { IRating } from '../../models/rating';
   styleUrl: './valoraciones.css',
 })
 export class Valoraciones implements OnInit {
-  book          = signal<IBook | null>(null);
-  isLoading     = signal(true);
-  isSubmitting  = signal(false);
-  successMsg    = signal<string | null>(null);
-  errorMsg      = signal<string | null>(null);
+  book = signal<IBook | null>(null);
+  isLoading = signal(true);
+  isSubmitting = signal(false);
+  isDeleting = signal(false);
+  successMsg = signal<string | null>(null);
+  errorMsg = signal<string | null>(null);
 
   // Formulario
-  formRating    = signal(0);
-  formComment   = signal('');
+  formRating = signal(0);
+  formComment = signal('');
 
   bookId!: number;
 
@@ -74,13 +75,13 @@ export class Valoraciones implements OnInit {
   myRating = computed<IRating | null>(() => {
     const currentUser = this.authService.currentUser();
     const ratings = this.book()?.ratings ?? [];
-    return ratings.find(r => r.user?.id === currentUser?.id) ?? null;
+    return ratings.find((r) => r.user?.id === currentUser?.id) ?? null;
   });
 
   /** Otras valoraciones (excluyendo la del usuario actual) */
   otherRatings = computed<IRating[]>(() => {
     const currentUser = this.authService.currentUser();
-    return (this.book()?.ratings ?? []).filter(r => r.user?.id !== currentUser?.id);
+    return (this.book()?.ratings ?? []).filter((r) => r.user?.id !== currentUser?.id);
   });
 
   /** ¿El usuario ya tiene una valoración? */
@@ -133,6 +134,47 @@ export class Valoraciones implements OnInit {
       });
     }
   }
+
+ deleteRating() {
+  const mine = this.myRating();
+  if (!mine) return;
+
+  const confirmed = confirm('¿Seguro que quieres eliminar tu valoración?');
+  if (!confirmed) return;
+
+  this.isDeleting.set(true);
+  this.errorMsg.set(null);
+  this.successMsg.set(null);
+
+  this.ratingService.deleteRating(this.bookId, mine.id).subscribe({
+    next: () => {
+      const currentBook = this.book();
+      if (currentBook) {
+        const updatedRatings = (currentBook.ratings ?? []).filter(r => r.id !== mine.id);
+        const avgRating = updatedRatings.length > 0
+          ? updatedRatings.reduce((sum, r) => sum + r.rating, 0) / updatedRatings.length
+          : 0;
+
+        // Actualiza la señal directamente → los computed reaccionan al instante
+        this.book.set({
+          ...currentBook,
+          ratings: updatedRatings,
+          average_rating: avgRating,
+          ratings_count: updatedRatings.length,
+        });
+      }
+
+      this.formRating.set(0);
+      this.formComment.set('');
+      this.successMsg.set('Valoración eliminada correctamente.');
+      this.isDeleting.set(false);
+    },
+    error: (err) => {
+      this.errorMsg.set(err.error?.message ?? 'Error al eliminar la valoración.');
+      this.isDeleting.set(false);
+    },
+  });
+}
 
   // ── Helpers ───────────────────────────────────────────────────────────────
 

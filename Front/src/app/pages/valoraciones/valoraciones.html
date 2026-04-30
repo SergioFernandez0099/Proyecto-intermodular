@@ -4,226 +4,205 @@
   <main class="val-content">
 
     @if (isLoading()) {
-      <div class="loading-screen">
-        <div class="spinner"></div>
-        <p>Cargando valoraciones...</p>
-      </div>
+    <div class="loading-screen">
+      <div class="spinner"></div>
+      <p>Cargando valoraciones...</p>
+    </div>
     } @else if (book()) {
 
-      <!-- ── Cabecera del libro ─────────────────────── -->
-      <header class="book-header">
-        <button class="back-btn" [routerLink]="['/explorar']">
-          <img src="assets/img/atras.png" alt="Flecha atras" class="icono-flecha-atras">
-          Volver a Explorar
-        </button>
+    <!-- ── Cabecera del libro ─────────────────────── -->
+    <header class="book-header">
+      <button class="back-btn" [routerLink]="['/explorar']">
+        <img src="assets/img/atras.png" alt="Flecha atras" class="icono-flecha-atras">
+        Volver a Explorar
+      </button>
 
-        <div class="book-hero">
-          <img
-            class="book-cover"
-            [src]="book()!.cover_image ?? 'https://placehold.co/160x240?text=Sin+portada'"
-            [alt]="book()!.title"
-            onerror="this.src='https://placehold.co/160x240?text=Sin+portada'"
-          >
+      <div class="book-hero">
+        <img class="book-cover" [src]="book()!.cover_image ?? 'https://placehold.co/160x240?text=Sin+portada'"
+          [alt]="book()!.title" onerror="this.src='https://placehold.co/160x240?text=Sin+portada'">
 
-          <div class="book-meta">
-            <h1 class="book-title">{{ book()!.title }}</h1>
-            <p class="book-authors">
-              {{ (book()!.authors ?? []).map(a => a.name ?? '').join(', ') }}
-            </p>
-            <p class="book-genre">{{ book()!.genre?.name }}</p>
+        <div class="book-meta">
+          <h1 class="book-title">{{ book()!.title }}</h1>
+          <p class="book-authors">
+            {{ (book()!.authors ?? []).map(a => a.name ?? '').join(', ') }}
+          </p>
+          <p class="book-genre">{{ book()!.genre?.name }}</p>
 
-            <div class="avg-rating-block">
-              <span class="avg-number">{{ book()!.average_rating | number:'1.1-1' }}</span>
-              <div class="stars-row">
-                @for (filled of getStarsArray(book()!.average_rating); track $index) {
-                  <img
-                    [src]="filled ? 'assets/img/libroLleno.png' : 'assets/img/libroVacio.png'"
-                    alt="estrella"
-                    class="star-icon"
-                  >
-                }
-              </div>
-              <span class="ratings-count">{{ book()!.ratings_count }} valoraciones</span>
+          <div class="avg-rating-block">
+            <span class="avg-number">{{ book()!.average_rating | number:'1.1-1' }}</span>
+            <div class="stars-row">
+              @for (filled of getStarsArray(book()!.average_rating); track $index) {
+              <img [src]="filled ? 'assets/img/libroLleno.png' : 'assets/img/libroVacio.png'" alt="estrella"
+                class="star-icon">
+              }
             </div>
+            <span class="ratings-count">{{ book()!.ratings_count }} valoraciones</span>
           </div>
         </div>
-      </header>
-
-      <!-- ── Cuerpo dividido en dos columnas ───────── -->
-      <div class="val-body">
-
-        <!-- ── Columna izquierda: Formulario ───────── -->
-        <section class="form-section">
-          <div class="form-card">
-            <h2 class="form-title">
-              <img
-                [src]="hasMyRating() ? 'assets/img/editar.png' : 'assets/img/comentarios.png'" alt="Icono de acción" class="action-icon">
-              {{ hasMyRating() ? 'Editar tu valoración' : 'Añadir valoración' }}
-            </h2>
-
-            @if (successMsg()) {
-              <div class="alert alert-success">
-                <img src="assets/img/correcto.png" alt="Correcto" class="icono-correcto">
-                {{ successMsg() }}
-              </div>
-            }
-
-            @if (errorMsg()) {
-              <div class="alert alert-error">
-                <span class="material-icons">error</span>
-                {{ errorMsg() }}
-              </div>
-            }
-
-            <form (ngSubmit)="submitRating()" #ratingForm="ngForm">
-
-              <div class="field-group">
-                <label class="field-label">Tu puntuación *</label>
-                <div class="stars-input-wrapper">
-                  <p-rating
-                    [(ngModel)]="formRating"
-                    name="rating"
-                    [stars]="5">
-                    <ng-template #onicon>
-                      <img src="assets/img/libroLleno.png" alt="lleno" class="star-icon-lg">
-                    </ng-template>
-                    <ng-template #officon>
-                      <img src="assets/img/libroVacio.png" alt="vacío" class="star-icon-lg">
-                    </ng-template>
-                  </p-rating>
-                  @if (formRating() > 0) {
-                    <span class="star-label">{{ formRating() }} / 5</span>
-                  }
-                </div>
-              </div>
-
-              <div class="field-group">
-                <label class="field-label" for="comment">Comentario <span class="optional">(opcional)</span></label>
-                <textarea
-                  id="comment"
-                  name="comment"
-                  class="comment-area"
-                  rows="5"
-                  maxlength="1000"
-                  placeholder="Escribe tu opinión sobre este libro..."
-                  [ngModel]="formComment()"
-                  (ngModelChange)="formComment.set($event)">
-                </textarea>
-                <span class="char-count">{{ formComment().length }} / 1000</span>
-              </div>
-
-              <button
-                type="submit"
-                class="btn-submit"
-                [disabled]="isSubmitting() || formRating() === 0">
-                @if (isSubmitting()) {
-                  <div class="btn-spinner"></div>
-                  Guardando...
-                } @else {
-                  <span class="material-icons">{{ hasMyRating() ? 'save' : 'send' }}</span>
-                  {{ hasMyRating() ? 'Actualizar valoración' : 'Publicar valoración' }}
-                }
-              </button>
-
-            </form>
-          </div>
-        </section>
-
-        <!-- ── Columna derecha: Lista de valoraciones ─ -->
-        <section class="ratings-section">
-
-          @if (hasMyRating()) {
-            <div class="my-rating-card">
-              <div class="rating-card-header">
-                <div class="user-avatar mine-avatar">
-                  {{ authService.currentUser()?.name?.charAt(0) }}{{ authService.currentUser()?.lastname?.charAt(0) }}
-                </div>
-                <div class="user-info">
-                  <span class="user-name">Tú</span>
-                  <span class="rating-date">{{ myRating()!.created_at | date:'d MMM yyyy' }}</span>
-                </div>
-                <span class="my-badge">Tu valoración</span>
-                @if (myRating()!.edited) {
-                  <span class="edited-badge">Editada</span>
-                }
-              </div>
-              <div class="mini-stars">
-                @for (filled of getStarsArray(myRating()!.rating); track $index) {
-                  <img
-                    [src]="filled ? 'assets/img/libroLleno.png' : 'assets/img/libroVacio.png'"
-                    alt="estrella"
-                    class="star-icon-sm"
-                  >
-                }
-                <span class="rating-num">{{ myRating()!.rating }}/5</span>
-              </div>
-              @if (myRating()!.comment) {
-                <p class="rating-comment">{{ myRating()!.comment }}</p>
-              }
-            </div>
-          }
-
-          @if (otherRatings().length > 0) {
-            <h2 class="section-title">
-              <img src="assets/img/foro.png" alt="Icono de foro" class="foro-img">
-              Otras opiniones
-            </h2>
-
-            <div class="ratings-list">
-              @for (rating of otherRatings(); track rating.id) {
-                <div class="rating-card">
-                  <div class="rating-card-header">
-                    <div class="user-avatar">
-                      {{ rating.user?.name?.charAt(0) }}{{ rating.user?.lastname?.charAt(0) }}
-                    </div>
-                    <div class="user-info">
-                      <span class="user-name">{{ getUserDisplayName(rating) }}</span>
-                      <span class="rating-date">{{ rating.created_at | date:'d MMM yyyy' }}</span>
-                    </div>
-                    @if (rating.edited) {
-                      <span class="edited-badge">Editada</span>
-                    }
-                  </div>
-
-                  <div class="mini-stars">
-                    @for (filled of getStarsArray(rating.rating); track $index) {
-                      <img
-                        [src]="filled ? 'assets/img/libroLleno.png' : 'assets/img/libroVacio.png'"
-                        alt="estrella"
-                        class="star-icon-sm"
-                      >
-                    }
-                    <span class="rating-num">{{ rating.rating }}/5</span>
-                  </div>
-
-                  @if (rating.comment) {
-                    <p class="rating-comment">{{ rating.comment }}</p>
-                  }
-                </div>
-              }
-            </div>
-
-          } @else if (!hasMyRating()) {
-            <div class="empty-state">
-              <img
-                [src]="'assets/img/pluma.png'"
-                alt="pluma"
-                class="pluma-icon"
-              >
-              <p>Aún no hay valoraciones.</p>
-              <p class="empty-sub">¡Sé el primero en opinar!</p>
-            </div>
-          }
-
-        </section>
       </div>
+    </header>
+
+    <!-- ── Cuerpo dividido en dos columnas ───────── -->
+    <div class="val-body">
+
+      <!-- ── Columna izquierda: Formulario ───────── -->
+      <section class="form-section">
+        <div class="form-card">
+          <h2 class="form-title">
+            <img [src]="hasMyRating() ? 'assets/img/editar.png' : 'assets/img/comentarios.png'" alt="Icono de acción"
+              class="action-icon">
+            {{ hasMyRating() ? 'Editar tu valoración' : 'Añadir valoración' }}
+          </h2>
+
+          @if (successMsg()) {
+          <div class="alert alert-success">
+            <img src="assets/img/correcto.png" alt="Correcto" class="icono-correcto">
+            {{ successMsg() }}
+          </div>
+          }
+
+          @if (errorMsg()) {
+          <div class="alert alert-error">
+            <img src="assets/img/error.png" alt="Error" class="icono-correcto">
+            {{ errorMsg() }}
+          </div>
+          }
+
+          <form (ngSubmit)="submitRating()" #ratingForm="ngForm">
+
+            <div class="field-group">
+              <label class="field-label">Tu puntuación *</label>
+              <div class="stars-input-wrapper">
+                <p-rating [(ngModel)]="formRating" name="rating" [stars]="5">
+                  <ng-template #onicon>
+                    <img src="assets/img/libroLleno.png" alt="lleno" class="star-icon-lg">
+                  </ng-template>
+                  <ng-template #officon>
+                    <img src="assets/img/libroVacio.png" alt="vacío" class="star-icon-lg">
+                  </ng-template>
+                </p-rating>
+                @if (formRating() > 0) {
+                <span class="star-label">{{ formRating() }} / 5</span>
+                }
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="comment">Comentario <span class="optional">(opcional)</span></label>
+              <textarea id="comment" name="comment" class="comment-area" rows="5" maxlength="1000"
+                placeholder="Escribe tu opinión sobre este libro..." [ngModel]="formComment()"
+                (ngModelChange)="formComment.set($event)">
+                </textarea>
+              <span class="char-count">{{ formComment().length }} / 1000</span>
+            </div>
+
+            <button type="submit" class="btn-submit" [disabled]="isSubmitting() || formRating() === 0">
+              @if (isSubmitting()) {
+              <div class="btn-spinner"></div>
+              Guardando...
+              } @else {
+              <img [src]="hasMyRating() ? 'assets/img/nube.png' : 'assets/img/enviar.png'" class="save-icon" />
+              {{ hasMyRating() ? 'Actualizar valoración' : 'Publicar valoración' }}
+              }
+            </button>
+
+          </form>
+        </div>
+      </section>
+
+      <!-- ── Columna derecha: Lista de valoraciones ─ -->
+      <section class="ratings-section">
+
+        @if (hasMyRating()) {
+        <div class="my-rating-card">
+          <div class="rating-card-header">
+            <div class="user-avatar mine-avatar">
+              {{ authService.currentUser()?.name?.charAt(0) }}{{ authService.currentUser()?.lastname?.charAt(0) }}
+            </div>
+            <div class="user-info">
+              <span class="user-name">Tú</span>
+              <span class="rating-date">{{ myRating()!.created_at | date:'d MMM yyyy' }}</span>
+            </div>
+            <span class="my-badge">Tu valoración</span>
+            @if (myRating()!.edited) {
+            <span class="edited-badge">Editada</span>
+            }
+            <button class="btn-delete" (click)="deleteRating()" [disabled]="isDeleting()">
+              @if (isDeleting()) {
+              <div class="btn-spinner"></div>
+              } @else {
+              <img src="assets/img/borrar.png" alt="Borrar" class="action-icon">
+              }
+            </button>
+          </div>
+          <div class="mini-stars">
+            @for (filled of getStarsArray(myRating()!.rating); track $index) {
+            <img [src]="filled ? 'assets/img/libroLleno.png' : 'assets/img/libroVacio.png'" alt="estrella"
+              class="star-icon-sm">
+            }
+            <span class="rating-num">{{ myRating()!.rating }}/5</span>
+          </div>
+          @if (myRating()!.comment) {
+          <p class="rating-comment">{{ myRating()!.comment }}</p>
+          }
+        </div>
+        }
+
+        @if (otherRatings().length > 0) {
+        <h2 class="section-title">
+          <img src="assets/img/foro.png" alt="Icono de foro" class="foro-img">
+          Otras opiniones
+        </h2>
+
+        <div class="ratings-list">
+          @for (rating of otherRatings(); track rating.id) {
+          <div class="rating-card">
+            <div class="rating-card-header">
+              <div class="user-avatar">
+                {{ rating.user?.name?.charAt(0) }}{{ rating.user?.lastname?.charAt(0) }}
+              </div>
+              <div class="user-info">
+                <span class="user-name">{{ getUserDisplayName(rating) }}</span>
+                <span class="rating-date">{{ rating.created_at | date:'d MMM yyyy' }}</span>
+              </div>
+              @if (rating.edited) {
+              <span class="edited-badge">Editada</span>
+              }
+            </div>
+
+            <div class="mini-stars">
+              @for (filled of getStarsArray(rating.rating); track $index) {
+              <img [src]="filled ? 'assets/img/libroLleno.png' : 'assets/img/libroVacio.png'" alt="estrella"
+                class="star-icon-sm">
+              }
+              <span class="rating-num">{{ rating.rating }}/5</span>
+            </div>
+
+            @if (rating.comment) {
+            <p class="rating-comment">{{ rating.comment }}</p>
+            }
+          </div>
+          }
+        </div>
+
+        } @else if (!hasMyRating()) {
+        <div class="empty-state">
+          <img [src]="'assets/img/pluma.png'" alt="pluma" class="pluma-icon">
+          <p>Aún no hay valoraciones.</p>
+          <p class="empty-sub">¡Sé el primero en opinar!</p>
+        </div>
+        }
+
+      </section>
+    </div>
 
     } @else {
-      <div class="empty-state">
-        <span class="material-icons empty-icon">error_outline</span>
-        <p>No se pudo cargar el libro.</p>
-        <button class="btn-submit" [routerLink]="['/explorar']" style="width:auto; margin-top:1rem">Volver a Explorar</button>
-      </div>
+    <div class="empty-state">
+      <img src="assets/img/error.png" alt="Error" class="icono-correcto">
+      <p>No se pudo cargar el libro.</p>
+      <button class="btn-submit" [routerLink]="['/explorar']" style="width:auto; margin-top:1rem">Volver a
+        Explorar</button>
+    </div>
     }
 
   </main>

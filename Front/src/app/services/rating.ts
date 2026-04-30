@@ -29,9 +29,9 @@ export class RatingService {
   }
 
   deleteRating(bookId: number, ratingId: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/${bookId}/ratings/${ratingId}`).pipe(
-      map(response => response.data)
-    );
-  }
+  return this.http.delete<any>(`${this.apiUrl}/${bookId}/ratings/${ratingId}`).pipe(
+    map(response => response?.data ?? null) // ← null-safe, no explota con 204
+  );
+}
 
 }

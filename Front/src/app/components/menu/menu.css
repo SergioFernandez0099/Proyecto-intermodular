@@ -248,6 +248,9 @@
   gap: 12px;
   padding: 4px;
   transition: gap 0.3s;
+  flex: 1;      
+  min-width: 0;  
+  overflow: hidden; 
 }
 
 .dashboard-aside.collapsed .user-profile {
@@ -276,7 +279,7 @@
   overflow: hidden;
   transition: opacity 0.3s, max-width 0.3s;
   opacity: 1;
-  max-width: 150px;
+  min-width: 0; 
 }
 
 .dashboard-aside.collapsed .user-info {
@@ -291,13 +294,17 @@
   font-weight: 700;
   color: var(--color-text);
   white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .user-email {
   margin: 0;
   font-size: 0.85rem;
   color: #6b7280;
+  overflow: hidden;
   white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 /* Botón logout */
@@ -367,6 +374,7 @@
   align-items: center;
   gap: 8px;
   transition: gap 0.3s;
+  overflow: hidden;
 }
 
 .dashboard-aside.collapsed .user-profile-container {
