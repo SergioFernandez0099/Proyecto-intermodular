@@ -170,7 +170,6 @@ export class Configuracion implements OnInit {
       const updatedUser: IUser = {
         ...user,
         role: ERole.admin
-        role: ERole.admin
       };
       await firstValueFrom(this.adminUserService.updateUser(updatedUser, user.id));
      
