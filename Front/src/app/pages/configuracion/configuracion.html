@@ -64,7 +64,7 @@
             </div>
 
             <!-- Admin Section - Solo visible para admin -->
-            @if (authService.currentUser()?.role === 'admin') {
+            @if (isAdmin) {
             <div class="configuracion-card admin-card">
                 <h3>{{ 'Configuracion.admin.titulo' | translate }}</h3>
 

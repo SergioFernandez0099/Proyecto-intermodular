@@ -8,6 +8,8 @@ import { AuthService } from '../../core/services/auth.service';
 import { UserService as AdminUserService } from '../../services/user';
 import { UserService as ProfileUserService } from '../../core/services/user.service';
 import { IUser } from '../../models/user';
+import { ERole } from '../../models/role';
+
 
 @Component({
   selector: 'app-configuracion',
@@ -22,12 +24,15 @@ export class Configuracion implements OnInit {
   private profileUserService = inject(ProfileUserService);
   private translate = inject(TranslateService);
 
+
   name: string = '';
   lastname: string = '';
   currentLanguage: string = 'es';
   loading: boolean = false;
   message: string = '';
   messageType: 'success' | 'error' = 'success';
+  isAdmin: boolean = false;
+
 
   allUsers = signal<IUser[]>([]);
   searchQuery = signal<string>('');
@@ -35,6 +40,7 @@ export class Configuracion implements OnInit {
   selectedUserToPromote = signal<IUser | null>(null);
   adminLoading = signal<boolean>(false);
   adminMessage = signal<string>('');
+
 
   computed_filteredUsers = computed(() => {
     const query = this.searchQuery().toLowerCase();
@@ -48,15 +54,18 @@ export class Configuracion implements OnInit {
     );
   });
 
+
   ngOnInit(): void {
     this.loadUserData();
     this.currentLanguage = this.profileUserService.getLanguage();
-    
-    const currentUser = this.authService.currentUser();
-    if (currentUser?.role === 'admin') {
+
+
+    this.isAdmin = this.getIsAdminFromStorage();
+    if (this.isAdmin) {
       this.loadAllUsers();
     }
   }
+
 
   private loadUserData(): void {
     const user = this.authService.currentUser();
@@ -75,6 +84,7 @@ export class Configuracion implements OnInit {
     }
   }
 
+
   private decrypt(encrypted: string): any {
     try {
       return JSON.parse(atob(encrypted));
@@ -83,12 +93,27 @@ export class Configuracion implements OnInit {
     }
   }
 
+
+  private getIsAdminFromStorage(): boolean {
+    const encrypted = localStorage.getItem('user_session');
+    if (encrypted) {
+      const user = this.decrypt(encrypted) as IUser | null;
+      return user?.role === ERole.admin;
+    }
+
+
+    const currentUser = this.authService.currentUser();
+    return currentUser?.role === ERole.admin;
+  }
+
+
   saveProfile(): void {
     if (!this.name.trim() || !this.lastname.trim()) {
       this.message = 'Por favor completa todos los campos';
       this.messageType = 'error';
       return;
     }
+
 
     this.loading = true;
     this.profileUserService.updateProfile(this.name, this.lastname).subscribe({
@@ -103,15 +128,17 @@ export class Configuracion implements OnInit {
     });
   }
 
+
   changeLanguage(language: string): void {
     this.profileUserService.setLanguage(language);
     this.currentLanguage = language;
   }
 
+
   private loadAllUsers(): void {
     this.adminUserService.getUsers().subscribe({
       next: (users: IUser[]) => {
-        this.allUsers.set(users.filter((u: IUser) => u.role !== 'admin'));
+        this.allUsers.set(users.filter((u: IUser) => u.role !== ERole.admin));
       },
       error: () => {
         this.adminMessage.set(this.translate.instant('Configuracion.admin.error'));
@@ -119,29 +146,33 @@ export class Configuracion implements OnInit {
     });
   }
 
+
   openPromoteConfirm(user: IUser): void {
     this.selectedUserToPromote.set(user);
     this.showConfirmModal.set(true);
     this.adminMessage.set('');
   }
 
+
   closeConfirmModal(): void {
     this.showConfirmModal.set(false);
     this.selectedUserToPromote.set(null);
   }
 
+
   async promoteToAdmin(): Promise<void> {
     const user = this.selectedUserToPromote();
     if (!user) return;
+
 
     this.adminLoading.set(true);
     try {
       const updatedUser: IUser = {
         ...user,
-        role: 'admin'
+        role: ERole.admin
       };
       await firstValueFrom(this.adminUserService.updateUser(updatedUser, user.id));
-      
+     
       this.adminMessage.set(this.translate.instant('Configuracion.admin.exito'));
       this.closeConfirmModal();
       await new Promise(resolve => setTimeout(resolve, 1500));
@@ -153,3 +184,6 @@ export class Configuracion implements OnInit {
     }
   }
 }
+
+
+

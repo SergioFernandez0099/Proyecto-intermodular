@@ -33,11 +33,15 @@ export class Menu implements OnInit {
   }
 
   private checkScreenSize(): void {
-    this.isCollapsed = window.innerWidth < 768;
+  if (window.innerWidth >= 769) {
+    this.isCollapsed = false; 
+  } else {
+    this.isCollapsed = true;  
   }
+}
 
   toggleMenu(): void {
-    if (window.innerWidth <= 768) {
+    if (window.innerWidth < 769) {
       this.isCollapsed = !this.isCollapsed;
     }
   }

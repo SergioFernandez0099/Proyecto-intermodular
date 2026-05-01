@@ -17,21 +17,7 @@
       <div class="toolbar-row">
         <div class="search-bar">
           <input type="text" [placeholder]="'MisLibros.buscar_placeholder' | translate" (input)="onSearch($event)">
-        </div>
-
-        <div class="genre-filter-wrap">
-          <label class="genre-filter-label" for="genreFilter">{{ 'MisLibros.filtros.genero_label' | translate }}</label>
-          <select id="genreFilter" class="genre-filter-select" (change)="onGenreFilterChange($event)">
-            <option value="all">{{ 'MisLibros.filtros.todos' | translate }}</option>
-            @for (genre of genres(); track genre.id) {
-            <option [value]="genre.id">{{ translateGenreName(genre.name) }}</option>
-            }
-          </select>
-        </div>
-
-        <button class="btn-columns" (click)="openColumnModal()">
-          {{ 'MisLibros.columnas.boton' | translate }}
-        </button>
+        </div>    
 
         <div class="tabs-row">
           <button class="tab" [class.active]="activeTab() === 'all'" (click)="setTab('all')">{{ 'MisLibros.tabs.todos' |
@@ -40,7 +26,11 @@
             'MisLibros.tabs.disponibles' | translate }}</button>
           <button class="tab" [class.active]="activeTab() === 'borrowed'" (click)="setTab('borrowed')">{{
             'MisLibros.tabs.prestados' | translate }}</button>
+            <button class="btn-columns" (click)="openColumnModal()">
+          {{ 'MisLibros.columnas.boton' | translate }}
+        </button>
         </div>
+        
       </div>
 
       @if (errorMessage()) {
