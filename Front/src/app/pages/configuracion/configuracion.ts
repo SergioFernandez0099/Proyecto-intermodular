@@ -8,6 +8,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { UserService as AdminUserService } from '../../services/user';
 import { UserService as ProfileUserService } from '../../core/services/user.service';
 import { IUser } from '../../models/user';
+import { ERole } from '../../models/role';
 
 @Component({
   selector: 'app-configuracion',
@@ -22,6 +23,7 @@ export class Configuracion implements OnInit {
   private profileUserService = inject(ProfileUserService);
   private translate = inject(TranslateService);
 
+  currentUser: IUser | null = {} as IUser;
   name: string = '';
   lastname: string = '';
   currentLanguage: string = 'es';
@@ -52,8 +54,8 @@ export class Configuracion implements OnInit {
     this.loadUserData();
     this.currentLanguage = this.profileUserService.getLanguage();
     
-    const currentUser = this.authService.currentUser();
-    if (currentUser?.role === 'admin') {
+    this.currentUser = this.authService.currentUser();
+    if (this.currentUser?.role === 'admin') {
       this.loadAllUsers();
     }
   }
@@ -138,7 +140,7 @@ export class Configuracion implements OnInit {
     try {
       const updatedUser: IUser = {
         ...user,
-        role: 'admin'
+        role: ERole.admin
       };
       await firstValueFrom(this.adminUserService.updateUser(updatedUser, user.id));
       
