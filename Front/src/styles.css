@@ -18,6 +18,7 @@
   --color-text: #1F2937;
   --color-bg: #F3F4F6;
   --color-primary: #3B82F6;
+  --sidebar-expanded-width: clamp(260px, 24vw, 340px);
 }
 
 body {

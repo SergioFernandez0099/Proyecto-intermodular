@@ -9,9 +9,13 @@ import { routes } from './app.routes';
 import { AuthService } from './core/services/auth.service';
 import { catchError, of } from 'rxjs';
 import localeEs from '@angular/common/locales/es';
+import localeFr from '@angular/common/locales/fr';
+import localePt from '@angular/common/locales/pt';
 import { registerLocaleData } from '@angular/common';
 
 registerLocaleData(localeEs, 'es');
+registerLocaleData(localeFr, 'fr');
+registerLocaleData(localePt, 'pt');
 
 function initTranslations(translate: TranslateService) {
   return () => {

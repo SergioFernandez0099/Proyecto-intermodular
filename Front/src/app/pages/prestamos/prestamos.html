@@ -1,65 +1,135 @@
 <div class="dashboard-container">
   <app-menu></app-menu>
 
-  @if (!isLoading()) {
-    <main class="dashboard-content">
-      <header class="content-header">
-        <h2>{{ "Prestamos.titulo" | translate }}</h2>
-      </header>
-      
-      <section class="content-body">
-        <div class="stat-card stat-primary">
-          <p class="stat-title">{{ "Prestamos.total" | translate }}</p>
-          <span class="number">{{ myLoans().length }}</span>
-        </div>
+  <main class="dashboard-content">
+    @if (!isLoading()) {
+    <header class="content-header">
+      <h2>{{ "Prestamos.titulo" | translate }}</h2>
+    </header>
 
-        <div class="table-wrapper">
+    <section class="content-body">
+      <div class="stat-card stat-primary">
+        <p class="stat-title">{{ "Prestamos.total" | translate }}</p>
+        <span class="number">{{ myLoans().length }}</span>
+      </div>
+
+      <div class="toolbar-row">
+        <button class="btn-columns" (click)="openColumnModal()">
+          {{ 'Prestamos.columnas.boton' | translate }}
+        </button>
+      </div>
+
+      @if (showColumnModal()) {
+      <div class="column-modal-overlay" (click)="closeColumnModal()">
+        <div class="column-modal" (click)="$event.stopPropagation()">
+          <h4>{{ 'Prestamos.columnas.titulo' | translate }}</h4>
+          <p>{{ 'Prestamos.columnas.subtitulo' | translate }}</p>
+
+          <div class="column-options">
+            @for (column of columns; track column.key) {
+            <label class="column-option">
+              <input type="checkbox" [checked]="isColumnVisible(column.key)" (change)="toggleColumn(column.key)">
+              <span>{{ column.labelKey | translate }}</span>
+            </label>
+            }
+          </div>
+
+          <button class="btn-close-mini" (click)="closeColumnModal()">{{ 'Prestamos.columnas.cerrar' | translate
+            }}</button>
+        </div>
+      </div>
+      }
+
+      <div class="table-wrapper">
+        <div class="table-scroll">
           @if (paginatedLoans().length > 0) {
-          @for (loan of paginatedLoans(); track loan.id) {
-            <div class="card">
-              <div class="cover">
-                <img class="cover-thumb" [src]="loan.copy?.book?.cover_image || 'https://placehold.co/80x120?text=Sin+portada'" [alt]="loan.copy?.book?.title" onerror="this.src='https://placehold.co/80x120?text=Sin+portada'">
-              </div>
-              <div class="book-info">
-                <div class="title-cell">
-                  <strong>{{ loan.copy?.book?.title }}</strong>
-                  <span>{{ getBookAuthors(loan.copy?.book) }}</span>
-                </div>
-              </div>
-              <div class="loan-info">
-                <div>
-                  <span>{{ "Prestamos.pedido_en" | translate }} {{ loan.loan_date | date: 'MMMM d, y, H:mm' : undefined : savedLanguage }}</span>
-                </div>
-                <div class="return">
+          <table class="loans-table">
+            <thead>
+              <tr>
+                @if (isColumnVisible('cover')) {
+                <th>{{ 'Prestamos.tabla.portada' | translate }}</th>
+                }
+                @if (isColumnVisible('book')) {
+                <th>{{ 'Prestamos.tabla.libro' | translate }}</th>
+                }
+                @if (isColumnVisible('loanDate')) {
+                <th>{{ 'Prestamos.tabla.pedido' | translate }}</th>
+                }
+                @if (isColumnVisible('returnDate')) {
+                <th>{{ 'Prestamos.tabla.devuelto' | translate }}</th>
+                }
+                @if (isColumnVisible('actions')) {
+                <th>{{ 'Prestamos.tabla.acciones' | translate }}</th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @for (loan of paginatedLoans(); track loan.id) {
+              <tr>
+                @if (isColumnVisible('cover')) {
+                <td [attr.data-label]="'Prestamos.tabla.portada' | translate">
+                  <img class="cover-thumb" [src]="getCoverUrl(loan.copy?.book?.cover_image)"
+                    [alt]="loan.copy?.book?.title || ('Prestamos.tabla.portada' | translate)"
+                    onerror="this.src='assets/img/bookSwap.png'">
+                </td>
+                }
+                @if (isColumnVisible('book')) {
+                <td [attr.data-label]="'Prestamos.tabla.libro' | translate">
+                  <div class="title-cell">
+                    <strong>{{ loan.copy?.book?.title || ('Prestamos.no_disponible' | translate) }}</strong>
+                    <span>{{ getBookAuthors(loan.copy?.book) }}</span>
+                  </div>
+                </td>
+                }
+                @if (isColumnVisible('loanDate')) {
+                <td [attr.data-label]="'Prestamos.tabla.pedido' | translate">
+                  {{ loan.loan_date | date: 'MMMM d, y, H:mm' : undefined : savedLanguage }}
+                </td>
+                }
+                @if (isColumnVisible('returnDate')) {
+                <td [attr.data-label]="'Prestamos.tabla.devuelto' | translate">
                   @if (loan.return_date) {
-                    <span>{{ "Prestamos.devuelto_en" | translate }} {{ loan.return_date | date: 'MMMM d, y, H:mm' : undefined : savedLanguage }}</span>
+                  {{ loan.return_date | date: 'MMMM d, y, H:mm' : undefined : savedLanguage }}
+                  } @else {
+                  {{ 'Prestamos.no_disponible' | translate }}
                   }
-                  @else {
-                    <button (click)="returnBook(loan)">{{ "Prestamos.devolver" | translate }}</button>
+                </td>
+                }
+                @if (isColumnVisible('actions')) {
+                <td [attr.data-label]="'Prestamos.tabla.acciones' | translate">
+                  @if (!loan.return_date) {
+                  <button class="btn-return" (click)="returnBook(loan)">{{ 'Prestamos.devolver' | translate }}</button>
+                  } @else {
+                  <span class="returned-ok">{{ 'Prestamos.devuelto_en' | translate }}</span>
                   }
-                </div>
-              </div>
-            </div>
-          }
+                </td>
+                }
+              </tr>
+              }
+            </tbody>
+          </table>
 
           <div class="pagination-wrapper">
-            <button class="pag-btn" (click)="prevPage()" [disabled]="currentPage() === 0">Anterior</button>
+            <button class="pag-btn" (click)="prevPage()" [disabled]="currentPage() === 0">{{
+              'MisLibros.paginacion.anterior' | translate }}</button>
             <span>{{ currentPage() + 1 }} / {{ totalPages() }}</span>
-            <button class="pag-btn" (click)="nextPage()" [disabled]="currentPage() + 1 >= totalPages()">Siguiente</button>
+            <button class="pag-btn" (click)="nextPage()" [disabled]="currentPage() + 1 >= totalPages()">{{
+              'MisLibros.paginacion.siguiente' | translate }}</button>
           </div>
           } @else {
           <div class="empty-state">
-            {{ 'MisLibros.sin_libros' | translate }}
+            {{ 'Prestamos.sin_prestamos' | translate }}
           </div>
           }
         </div>
+      </div>
 
-      </section>
-    </main>
-  } @else {
-    <div class="loading-screen">
+    </section>
+    } @else {
+    <div class="loading-screen content-loading">
       <div class="spinner"></div>
-      <p>Cargando tus préstamos...</p>
+      <p>{{ 'Prestamos.cargando' | translate }}</p>
     </div>
     }
+  </main>
 </div>

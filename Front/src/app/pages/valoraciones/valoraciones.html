@@ -6,7 +6,7 @@
     @if (isLoading()) {
     <div class="loading-screen">
       <div class="spinner"></div>
-      <p>Cargando valoraciones...</p>
+      <p>{{ 'Valoraciones.cargando' | translate }}</p>
     </div>
     } @else if (book()) {
 
@@ -14,7 +14,7 @@
     <header class="book-header">
       <button class="back-btn" [routerLink]="['/explorar']">
         <img src="assets/img/atras.png" alt="Flecha atras" class="icono-flecha-atras">
-        Volver a Explorar
+        {{ 'Valoraciones.volver_explorar' | translate }}
       </button>
 
       <div class="book-hero">
@@ -36,7 +36,8 @@
                 class="star-icon">
               }
             </div>
-            <span class="ratings-count">{{ book()!.ratings_count }} valoraciones</span>
+            <span class="ratings-count">{{ 'Valoraciones.total_valoraciones' | translate:{ count: book()!.ratings_count
+              } }}</span>
           </div>
         </div>
       </div>
@@ -51,7 +52,8 @@
           <h2 class="form-title">
             <img [src]="hasMyRating() ? 'assets/img/editar.png' : 'assets/img/comentarios.png'" alt="Icono de acción"
               class="action-icon">
-            {{ hasMyRating() ? 'Editar tu valoración' : 'Añadir valoración' }}
+            {{ hasMyRating() ? ('Valoraciones.form.editar_titulo' | translate) : ('Valoraciones.form.anyadir_titulo' |
+            translate) }}
           </h2>
 
           @if (successMsg()) {
@@ -71,7 +73,7 @@
           <form (ngSubmit)="submitRating()" #ratingForm="ngForm">
 
             <div class="field-group">
-              <label class="field-label">Tu puntuación *</label>
+              <label class="field-label">{{ 'Valoraciones.form.tu_puntuacion' | translate }} *</label>
               <div class="stars-input-wrapper">
                 <p-rating [(ngModel)]="formRating" name="rating" [stars]="5">
                   <ng-template #onicon>
@@ -88,9 +90,10 @@
             </div>
 
             <div class="field-group">
-              <label class="field-label" for="comment">Comentario <span class="optional">(opcional)</span></label>
+              <label class="field-label" for="comment">{{ 'Valoraciones.form.comentario' | translate }} <span
+                  class="optional">({{ 'Valoraciones.form.opcional' | translate }})</span></label>
               <textarea id="comment" name="comment" class="comment-area" rows="5" maxlength="1000"
-                placeholder="Escribe tu opinión sobre este libro..." [ngModel]="formComment()"
+                [placeholder]="'Valoraciones.form.placeholder' | translate" [ngModel]="formComment()"
                 (ngModelChange)="formComment.set($event)">
                 </textarea>
               <span class="char-count">{{ formComment().length }} / 1000</span>
@@ -99,10 +102,11 @@
             <button type="submit" class="btn-submit" [disabled]="isSubmitting() || formRating() === 0">
               @if (isSubmitting()) {
               <div class="btn-spinner"></div>
-              Guardando...
+              {{ 'Valoraciones.form.guardando' | translate }}
               } @else {
               <img [src]="hasMyRating() ? 'assets/img/nube.png' : 'assets/img/enviar.png'" class="save-icon" />
-              {{ hasMyRating() ? 'Actualizar valoración' : 'Publicar valoración' }}
+              {{ hasMyRating() ? ('Valoraciones.form.actualizar' | translate) : ('Valoraciones.form.publicar' |
+              translate) }}
               }
             </button>
 
@@ -120,12 +124,12 @@
               {{ authService.currentUser()?.name?.charAt(0) }}{{ authService.currentUser()?.lastname?.charAt(0) }}
             </div>
             <div class="user-info">
-              <span class="user-name">Tú</span>
+              <span class="user-name">{{ 'Valoraciones.tu_usuario' | translate }}</span>
               <span class="rating-date">{{ myRating()!.created_at | date:'d MMM yyyy' }}</span>
             </div>
-            <span class="my-badge">Tu valoración</span>
+            <span class="my-badge">{{ 'Valoraciones.tu_valoracion' | translate }}</span>
             @if (myRating()!.edited) {
-            <span class="edited-badge">Editada</span>
+            <span class="edited-badge">{{ 'Valoraciones.editada' | translate }}</span>
             }
             <button class="btn-delete" (click)="deleteRating()" [disabled]="isDeleting()">
               @if (isDeleting()) {
@@ -151,7 +155,7 @@
         @if (otherRatings().length > 0) {
         <h2 class="section-title">
           <img src="assets/img/foro.png" alt="Icono de foro" class="foro-img">
-          Otras opiniones
+          {{ 'Valoraciones.otras_opiniones' | translate }}
         </h2>
 
         <div class="ratings-list">
@@ -166,7 +170,7 @@
                 <span class="rating-date">{{ rating.created_at | date:'d MMM yyyy' }}</span>
               </div>
               @if (rating.edited) {
-              <span class="edited-badge">Editada</span>
+              <span class="edited-badge">{{ 'Valoraciones.editada' | translate }}</span>
               }
             </div>
 
@@ -188,8 +192,8 @@
         } @else if (!hasMyRating()) {
         <div class="empty-state">
           <img [src]="'assets/img/pluma.png'" alt="pluma" class="pluma-icon">
-          <p>Aún no hay valoraciones.</p>
-          <p class="empty-sub">¡Sé el primero en opinar!</p>
+          <p>{{ 'Valoraciones.sin_valoraciones' | translate }}</p>
+          <p class="empty-sub">{{ 'Valoraciones.se_primero' | translate }}</p>
         </div>
         }
 
@@ -199,9 +203,9 @@
     } @else {
     <div class="empty-state">
       <img src="assets/img/error.png" alt="Error" class="icono-correcto">
-      <p>No se pudo cargar el libro.</p>
-      <button class="btn-submit" [routerLink]="['/explorar']" style="width:auto; margin-top:1rem">Volver a
-        Explorar</button>
+      <p>{{ 'Valoraciones.error_cargar_libro' | translate }}</p>
+      <button class="btn-submit" [routerLink]="['/explorar']" style="width:auto; margin-top:1rem">{{
+        'Valoraciones.volver_explorar' | translate }}</button>
     </div>
     }
 

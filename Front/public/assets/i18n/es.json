@@ -162,6 +162,16 @@
       "guardar": "Guardar Cambios",
       "guardando": "Guardando..."
     },
+    "columnas": {
+      "boton": "Columnas",
+      "titulo": "Elegir columnas",
+      "subtitulo": "Selecciona las celdas que deseas ver en la tabla.",
+      "cerrar": "Cerrar"
+    },
+    "filtros": {
+      "genero_label": "Género:",
+      "todos": "Todos los géneros"
+    },
     "cargando": "Cargando tus libros...",
     "editado_en": "Editado en",
     "no_disponible": "N/A",
@@ -180,7 +190,29 @@
     "idioma-es": "Español",
     "idioma-en": "English",
     "idioma-fr": "Français",
-    "idioma-pr": "Português"
+    "idioma-pr": "Português",
+    "admin": {
+      "titulo": "Gestión de Usuarios",
+      "buscar_placeholder": "Buscar por nombre, apellido o correo...",
+      "tabla": {
+        "nombre": "Nombre",
+        "apellidos": "Apellidos",
+        "correo": "Correo",
+        "acciones": "Acciones",
+        "hacer_admin": "Hacer Administrador"
+      },
+      "no_usuarios": "No hay usuarios disponibles para promover.",
+      "exito": "Usuario promovido a administrador correctamente.",
+      "error": "Error al cargar los usuarios.",
+      "error_promover": "Error al promover el usuario a administrador."
+    },
+    "adminModal": {
+      "titulo": "Confirmar Promoción a Administrador",
+      "pregunta": "¿Estás seguro de que deseas hacer administrador a este usuario?",
+      "cancelar": "Cancelar",
+      "confirmar": "Confirmar",
+      "procesando": "Procesando..."
+    }
   },
   "Dashboard": {
     "titulo": "Bienvenido, ",
@@ -195,9 +227,59 @@
   },
   "Prestamos": {
     "titulo": "Mis préstamos",
+    "sin_prestamos": "No tienes préstamos en esta vista.",
+    "cargando": "Cargando tus préstamos...",
     "pedido_en": "Pedido:",
     "devuelto_en": "Devuelto:",
     "total": "Total de préstamos:",
-    "devolver": "Devolver"
+    "devolver": "Devolver",
+    "no_disponible": "N/A",
+    "tabla": {
+      "portada": "Portada",
+      "libro": "Libro",
+      "pedido": "Fecha de pedido",
+      "devuelto": "Fecha de devolución",
+      "acciones": "Acciones"
+    },
+    "columnas": {
+      "boton": "Columnas",
+      "titulo": "Elegir celdas",
+      "subtitulo": "Selecciona qué celdas quieres ver en tus préstamos.",
+      "cerrar": "Cerrar"
+    }
+  },
+  "Valoraciones": {
+    "cargando": "Cargando valoraciones...",
+    "volver_explorar": "Volver a Explorar",
+    "total_valoraciones": "{{count}} valoraciones",
+    "tu_usuario": "Tú",
+    "tu_valoracion": "Tu valoración",
+    "editada": "Editada",
+    "otras_opiniones": "Otras opiniones",
+    "sin_valoraciones": "Aún no hay valoraciones.",
+    "se_primero": "¡Sé el primero en opinar!",
+    "error_cargar_libro": "No se pudo cargar el libro.",
+    "usuario_desconocido": "Usuario desconocido",
+    "form": {
+      "editar_titulo": "Editar tu valoración",
+      "anyadir_titulo": "Añadir valoración",
+      "tu_puntuacion": "Tu puntuación",
+      "comentario": "Comentario",
+      "opcional": "opcional",
+      "placeholder": "Escribe tu opinión sobre este libro...",
+      "guardando": "Guardando...",
+      "actualizar": "Actualizar valoración",
+      "publicar": "Publicar valoración"
+    },
+    "mensajes": {
+      "rating_invalida": "Selecciona una puntuación entre 1 y 5 estrellas.",
+      "actualizada_ok": "¡Valoración actualizada correctamente!",
+      "error_actualizar": "Error al actualizar la valoración.",
+      "enviada_ok": "¡Valoración enviada correctamente!",
+      "error_enviar": "Error al enviar la valoración.",
+      "confirmar_eliminar": "¿Seguro que quieres eliminar tu valoración?",
+      "eliminada_ok": "Valoración eliminada correctamente.",
+      "error_eliminar": "Error al eliminar la valoración."
+    }
   }
 }

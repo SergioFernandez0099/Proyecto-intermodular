@@ -159,6 +159,16 @@
 			"guardar": "Enregistrer les modifications",
 			"guardando": "Enregistrement..."
 		},
+		"columnas": {
+			"boton": "Colonnes",
+			"titulo": "Choisir les colonnes",
+			"subtitulo": "Sélectionnez les cellules que vous souhaitez voir dans le tableau.",
+			"cerrar": "Fermer"
+		},
+		"filtros": {
+			"genero_label": "Genre :",
+			"todos": "Tous les genres"
+		},
 		"sin_libros": "Aucun livre dans cette vue.",
 		"cargando": "Chargement de vos livres...",
 		"editado_en": "Publié en",
@@ -178,6 +188,85 @@
 		"idioma-es": "Español",
 		"idioma-en": "English",
 		"idioma-fr": "Français",
-		"idioma-pr": "Português"
+		"idioma-pr": "Português",
+		"admin": {
+			"titulo": "Gestion des utilisateurs",
+			"buscar_placeholder": "Rechercher par nom, prénom ou e-mail...",
+			"tabla": {
+				"nombre": "Nom",
+				"apellidos": "Prénom",
+				"correo": "E-mail",
+				"acciones": "Actions",
+				"hacer_admin": "Rendre administrateur"
+			},
+			"no_usuarios": "Aucun utilisateur disponible à promouvoir.",
+			"exito": "Utilisateur promu administrateur avec succès.",
+			"error": "Erreur lors du chargement des utilisateurs.",
+			"error_promover": "Erreur lors de la promotion de l'utilisateur en administrateur."
+		},
+		"adminModal": {
+			"titulo": "Confirmer la promotion en administrateur",
+			"pregunta": "Êtes-vous sûr de vouloir faire de cet utilisateur un administrateur ?",
+			"cancelar": "Annuler",
+			"confirmar": "Confirmer",
+			"procesando": "Traitement..."
+		}
+	},
+	"Prestamos": {
+		"titulo": "Mes prêts",
+		"sin_prestamos": "Vous n'avez aucun prêt dans cette vue.",
+		"cargando": "Chargement de vos prêts...",
+		"pedido_en": "Demandé :",
+		"devuelto_en": "Retourné :",
+		"total": "Total des prêts :",
+		"devolver": "Retourner",
+		"no_disponible": "N/A",
+		"tabla": {
+			"portada": "Couverture",
+			"libro": "Livre",
+			"pedido": "Date de demande",
+			"devuelto": "Date de retour",
+			"acciones": "Actions"
+		},
+		"columnas": {
+			"boton": "Colonnes",
+			"titulo": "Choisir les cellules",
+			"subtitulo": "Sélectionnez les cellules à afficher dans vos prêts.",
+			"cerrar": "Fermer"
+		}
+	},
+	"Valoraciones": {
+		"cargando": "Chargement des avis...",
+		"volver_explorar": "Retourner à Explorer",
+		"total_valoraciones": "{{count}} avis",
+		"tu_usuario": "Vous",
+		"tu_valoracion": "Votre avis",
+		"editada": "Modifiée",
+		"otras_opiniones": "Autres avis",
+		"sin_valoraciones": "Il n'y a pas encore d'avis.",
+		"se_primero": "Soyez le premier à donner votre avis !",
+		"error_cargar_libro": "Impossible de charger le livre.",
+		"usuario_desconocido": "Utilisateur inconnu",
+		"form": {
+			"editar_titulo": "Modifier votre avis",
+			"anyadir_titulo": "Ajouter un avis",
+			"tu_puntuacion": "Votre note",
+			"comentario": "Commentaire",
+			"opcional": "optionnel",
+			"placeholder": "Écrivez votre avis sur ce livre...",
+			"guardando": "Enregistrement...",
+			"actualizar": "Mettre à jour l'avis",
+			"publicar": "Publier l'avis"
+		},
+		"mensajes": {
+			"rating_invalida": "Sélectionnez une note entre 1 et 5 étoiles.",
+			"actualizada_ok": "Avis mis à jour avec succès !",
+			"error_actualizar": "Erreur lors de la mise à jour de l'avis.",
+			"enviada_ok": "Avis envoyé avec succès !",
+			"error_enviar": "Erreur lors de l'envoi de l'avis.",
+			"confirmar_eliminar": "Voulez-vous vraiment supprimer votre avis ?",
+			"eliminada_ok": "Avis supprimé avec succès.",
+			"error_eliminar": "Erreur lors de la suppression de l'avis."
+		}
 	}
 }

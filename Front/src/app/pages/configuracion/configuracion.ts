@@ -1,10 +1,12 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { firstValueFrom } from 'rxjs';
 import { Menu } from '../../components/menu/menu';
 import { AuthService } from '../../core/services/auth.service';
-import { UserService } from '../../core/services/user.service';
+import { UserService as AdminUserService } from '../../services/user';
+import { UserService as ProfileUserService } from '../../core/services/user.service';
 import { IUser } from '../../models/user';
 
 @Component({
@@ -16,7 +18,8 @@ import { IUser } from '../../models/user';
 })
 export class Configuracion implements OnInit {
   private authService = inject(AuthService);
-  private userService = inject(UserService);
+  private adminUserService = inject(AdminUserService);
+  private profileUserService = inject(ProfileUserService);
   private translate = inject(TranslateService);
 
   name: string = '';
@@ -26,9 +29,33 @@ export class Configuracion implements OnInit {
   message: string = '';
   messageType: 'success' | 'error' = 'success';
 
+  allUsers = signal<IUser[]>([]);
+  searchQuery = signal<string>('');
+  showConfirmModal = signal<boolean>(false);
+  selectedUserToPromote = signal<IUser | null>(null);
+  adminLoading = signal<boolean>(false);
+  adminMessage = signal<string>('');
+
+  computed_filteredUsers = computed(() => {
+    const query = this.searchQuery().toLowerCase();
+    if (!query) {
+      return this.allUsers();
+    }
+    return this.allUsers().filter((user: IUser) =>
+      user.name.toLowerCase().includes(query) ||
+      user.lastname.toLowerCase().includes(query) ||
+      user.email.toLowerCase().includes(query)
+    );
+  });
+
   ngOnInit(): void {
     this.loadUserData();
-    this.currentLanguage = this.userService.getLanguage();
+    this.currentLanguage = this.profileUserService.getLanguage();
+    
+    const currentUser = this.authService.currentUser();
+    if (currentUser?.role === 'admin') {
+      this.loadAllUsers();
+    }
   }
 
   private loadUserData(): void {
@@ -64,7 +91,7 @@ export class Configuracion implements OnInit {
     }
 
     this.loading = true;
-    this.userService.updateProfile(this.name, this.lastname).subscribe({
+    this.profileUserService.updateProfile(this.name, this.lastname).subscribe({
       next: () => {
         window.location.reload();
       },
@@ -77,7 +104,52 @@ export class Configuracion implements OnInit {
   }
 
   changeLanguage(language: string): void {
-    this.userService.setLanguage(language);
+    this.profileUserService.setLanguage(language);
     this.currentLanguage = language;
+  }
+
+  private loadAllUsers(): void {
+    this.adminUserService.getUsers().subscribe({
+      next: (users: IUser[]) => {
+        this.allUsers.set(users.filter((u: IUser) => u.role !== 'admin'));
+      },
+      error: () => {
+        this.adminMessage.set(this.translate.instant('Configuracion.admin.error'));
+      }
+    });
+  }
+
+  openPromoteConfirm(user: IUser): void {
+    this.selectedUserToPromote.set(user);
+    this.showConfirmModal.set(true);
+    this.adminMessage.set('');
+  }
+
+  closeConfirmModal(): void {
+    this.showConfirmModal.set(false);
+    this.selectedUserToPromote.set(null);
+  }
+
+  async promoteToAdmin(): Promise<void> {
+    const user = this.selectedUserToPromote();
+    if (!user) return;
+
+    this.adminLoading.set(true);
+    try {
+      const updatedUser: IUser = {
+        ...user,
+        role: 'admin'
+      };
+      await firstValueFrom(this.adminUserService.updateUser(updatedUser, user.id));
+      
+      this.adminMessage.set(this.translate.instant('Configuracion.admin.exito'));
+      this.closeConfirmModal();
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      this.loadAllUsers();
+    } catch (error) {
+      this.adminMessage.set(this.translate.instant('Configuracion.admin.error_promover'));
+    } finally {
+      this.adminLoading.set(false);
+    }
   }
 }

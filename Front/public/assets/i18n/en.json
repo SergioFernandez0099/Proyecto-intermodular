@@ -159,6 +159,16 @@
       "guardar": "Save Changes",
       "guardando": "Saving..."
     },
+    "columnas": {
+      "boton": "Columns",
+      "titulo": "Choose columns",
+      "subtitulo": "Select the cells you want to see in the table.",
+      "cerrar": "Close"
+    },
+    "filtros": {
+      "genero_label": "Genre:",
+      "todos": "All genres"
+    },
     "sin_libros": "There are no books in this view.",
     "cargando": "Loading your books...",
     "editado_en": "Edited in",
@@ -178,7 +188,29 @@
     "idioma-es": "Español",
     "idioma-en": "English",
     "idioma-fr": "Français",
-    "idioma-pr": "Português"
+    "idioma-pr": "Português",
+    "admin": {
+      "titulo": "User Management",
+      "buscar_placeholder": "Search by name, surname or email...",
+      "tabla": {
+        "nombre": "Name",
+        "apellidos": "Surname",
+        "correo": "Email",
+        "acciones": "Actions",
+        "hacer_admin": "Make Admin"
+      },
+      "no_usuarios": "No users available to promote.",
+      "exito": "User successfully promoted to administrator.",
+      "error": "Error loading users.",
+      "error_promover": "Error promoting user to administrator."
+    },
+    "adminModal": {
+      "titulo": "Confirm Admin Promotion",
+      "pregunta": "Are you sure you want to make this user an administrator?",
+      "cancelar": "Cancel",
+      "confirmar": "Confirm",
+      "procesando": "Processing..."
+    }
   },
   "Dashboard": {
     "titulo": "Welcome, ",
@@ -190,5 +222,62 @@
       "cambio": "Last change"
     },
     "sin_datos": "There's no entries in this view."
+  },
+  "Prestamos": {
+    "titulo": "My loans",
+    "sin_prestamos": "You have no loans in this view.",
+    "cargando": "Loading your loans...",
+    "pedido_en": "Requested:",
+    "devuelto_en": "Returned:",
+    "total": "Total loans:",
+    "devolver": "Return",
+    "no_disponible": "N/A",
+    "tabla": {
+      "portada": "Cover",
+      "libro": "Book",
+      "pedido": "Request date",
+      "devuelto": "Return date",
+      "acciones": "Actions"
+    },
+    "columnas": {
+      "boton": "Columns",
+      "titulo": "Choose cells",
+      "subtitulo": "Select which cells you want to see in your loans.",
+      "cerrar": "Close"
+    }
+  },
+  "Valoraciones": {
+    "cargando": "Loading ratings...",
+    "volver_explorar": "Back to Explore",
+    "total_valoraciones": "{{count}} ratings",
+    "tu_usuario": "You",
+    "tu_valoracion": "Your rating",
+    "editada": "Edited",
+    "otras_opiniones": "Other opinions",
+    "sin_valoraciones": "There are no ratings yet.",
+    "se_primero": "Be the first to share your opinion!",
+    "error_cargar_libro": "The book could not be loaded.",
+    "usuario_desconocido": "Unknown user",
+    "form": {
+      "editar_titulo": "Edit your rating",
+      "anyadir_titulo": "Add rating",
+      "tu_puntuacion": "Your rating",
+      "comentario": "Comment",
+      "opcional": "optional",
+      "placeholder": "Write your opinion about this book...",
+      "guardando": "Saving...",
+      "actualizar": "Update rating",
+      "publicar": "Publish rating"
+    },
+    "mensajes": {
+      "rating_invalida": "Select a rating between 1 and 5 stars.",
+      "actualizada_ok": "Rating updated successfully!",
+      "error_actualizar": "Error updating the rating.",
+      "enviada_ok": "Rating submitted successfully!",
+      "error_enviar": "Error submitting the rating.",
+      "confirmar_eliminar": "Are you sure you want to delete your rating?",
+      "eliminada_ok": "Rating deleted successfully.",
+      "error_eliminar": "Error deleting the rating."
+    }
   }
 }

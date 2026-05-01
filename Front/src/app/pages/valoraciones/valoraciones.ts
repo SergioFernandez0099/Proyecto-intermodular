@@ -11,11 +11,12 @@ import { RatingService } from '../../services/rating';
 import { AuthService } from '../../core/services/auth.service';
 import { IBook } from '../../models/book';
 import { IRating } from '../../models/rating';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-valoraciones',
   standalone: true,
-  imports: [Menu, FormsModule, RatingModule, DecimalPipe, DatePipe, RouterLink],
+  imports: [Menu, FormsModule, RatingModule, DecimalPipe, DatePipe, RouterLink, TranslateModule],
   templateUrl: './valoraciones.html',
   styleUrl: './valoraciones.css',
 })
@@ -39,6 +40,7 @@ export class Valoraciones implements OnInit {
     private bookService: BookService,
     private ratingService: RatingService,
     public authService: AuthService,
+    private translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -91,7 +93,7 @@ export class Valoraciones implements OnInit {
 
   submitRating() {
     if (this.formRating() < 1 || this.formRating() > 5) {
-      this.errorMsg.set('Selecciona una puntuación entre 1 y 5 estrellas.');
+      this.errorMsg.set(this.translate.instant('Valoraciones.mensajes.rating_invalida'));
       return;
     }
 
@@ -110,12 +112,12 @@ export class Valoraciones implements OnInit {
       // Editar con PUT
       this.ratingService.updateRating(this.bookId, payload, mine.id).subscribe({
         next: () => {
-          this.successMsg.set('¡Valoración actualizada correctamente!');
+          this.successMsg.set(this.translate.instant('Valoraciones.mensajes.actualizada_ok'));
           this.isSubmitting.set(false);
           this.loadBook();
         },
         error: (err) => {
-          this.errorMsg.set(err.error?.message ?? 'Error al actualizar la valoración.');
+          this.errorMsg.set(err.error?.message ?? this.translate.instant('Valoraciones.mensajes.error_actualizar'));
           this.isSubmitting.set(false);
         },
       });
@@ -123,12 +125,12 @@ export class Valoraciones implements OnInit {
       // Crear con POST
       this.ratingService.createRating(this.bookId, payload).subscribe({
         next: () => {
-          this.successMsg.set('¡Valoración enviada correctamente!');
+          this.successMsg.set(this.translate.instant('Valoraciones.mensajes.enviada_ok'));
           this.isSubmitting.set(false);
           this.loadBook();
         },
         error: (err) => {
-          this.errorMsg.set(err.error?.message ?? 'Error al enviar la valoración.');
+          this.errorMsg.set(err.error?.message ?? this.translate.instant('Valoraciones.mensajes.error_enviar'));
           this.isSubmitting.set(false);
         },
       });
@@ -139,7 +141,7 @@ export class Valoraciones implements OnInit {
   const mine = this.myRating();
   if (!mine) return;
 
-  const confirmed = confirm('¿Seguro que quieres eliminar tu valoración?');
+  const confirmed = confirm(this.translate.instant('Valoraciones.mensajes.confirmar_eliminar'));
   if (!confirmed) return;
 
   this.isDeleting.set(true);
@@ -166,11 +168,11 @@ export class Valoraciones implements OnInit {
 
       this.formRating.set(0);
       this.formComment.set('');
-      this.successMsg.set('Valoración eliminada correctamente.');
+      this.successMsg.set(this.translate.instant('Valoraciones.mensajes.eliminada_ok'));
       this.isDeleting.set(false);
     },
     error: (err) => {
-      this.errorMsg.set(err.error?.message ?? 'Error al eliminar la valoración.');
+      this.errorMsg.set(err.error?.message ?? this.translate.instant('Valoraciones.mensajes.error_eliminar'));
       this.isDeleting.set(false);
     },
   });
@@ -184,7 +186,7 @@ export class Valoraciones implements OnInit {
 
   getUserDisplayName(rating: IRating): string {
     const u = rating.user;
-    if (!u) return 'Usuario desconocido';
+    if (!u) return this.translate.instant('Valoraciones.usuario_desconocido');
     return `${u.name ?? ''} ${u.lastname ?? ''}`.trim();
   }
 

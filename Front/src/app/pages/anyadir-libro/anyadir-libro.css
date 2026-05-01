@@ -6,7 +6,7 @@
 
 .libro-content {
   flex: 1;
-  margin-left: 260px;
+  margin-left: var(--sidebar-expanded-width, 260px);
   padding: 2rem;
   box-sizing: border-box;
   transition: margin-left 0.3s ease;

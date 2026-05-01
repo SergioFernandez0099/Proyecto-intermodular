@@ -12,6 +12,7 @@ import { IBook } from '../../models/book';
 import { IGenre } from '../../models/genre';
 import { IAuthor } from '../../models/author';
 import { firstValueFrom } from 'rxjs';
+import { SERVER_BASE } from '../../core/constants/api';
 
 @Component({
   selector: 'app-mis-libros',
@@ -26,8 +27,26 @@ export class MisLibros implements OnInit {
   errorMessage = signal<string | null>(null);
   activeTab = signal<'all' | 'available' | 'borrowed'>('all');
   filterText = signal('');
+  selectedGenreId = signal<'all' | number>('all');
   currentPage = signal(0);
   itemsPerPage = 3;
+  showColumnModal = signal(false);
+
+  readonly columns = [
+    { key: 'cover', labelKey: 'MisLibros.tabla.portada' },
+    { key: 'title', labelKey: 'MisLibros.tabla.titulo' },
+    { key: 'author', labelKey: 'MisLibros.tabla.autor' },
+    { key: 'copies', labelKey: 'MisLibros.tabla.copias' },
+    { key: 'actions', labelKey: 'MisLibros.tabla.acciones' }
+  ] as const;
+
+  visibleColumns = signal<Record<string, boolean>>({
+    cover: true,
+    title: true,
+    author: true,
+    copies: true,
+    actions: true
+  });
 
   // Modal de edición
   showEditModal = signal(false);
@@ -50,8 +69,13 @@ export class MisLibros implements OnInit {
 
   filteredBooks = computed(() => {
     const search = this.filterText().toLowerCase().trim();
+    const selectedGenre = this.selectedGenreId();
     return this.books()
       .filter(book => {
+        if (selectedGenre !== 'all' && book.genre_id !== selectedGenre) {
+          return false;
+        }
+
         const availableCopies = book.available_copies_count ?? 0;
         const totalCopies = book.copies_count ?? availableCopies;
         const borrowedCopies = Math.max(0, totalCopies - availableCopies);
@@ -159,6 +183,13 @@ export class MisLibros implements OnInit {
     this.currentPage.set(0);
   }
 
+  onGenreFilterChange(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    const value = target.value;
+    this.selectedGenreId.set(value === 'all' ? 'all' : Number(value));
+    this.currentPage.set(0);
+  }
+
   prevPage(): void {
     if (this.currentPage() > 0) {
       this.currentPage.update(value => value - 1);
@@ -169,6 +200,32 @@ export class MisLibros implements OnInit {
     if (this.currentPage() + 1 < this.totalPages()) {
       this.currentPage.update(value => value + 1);
     }
+  }
+
+  openColumnModal(): void {
+    this.showColumnModal.set(true);
+  }
+
+  closeColumnModal(): void {
+    this.showColumnModal.set(false);
+  }
+
+  isColumnVisible(columnKey: string): boolean {
+    return !!this.visibleColumns()[columnKey];
+  }
+
+  toggleColumn(columnKey: string): void {
+    const columns = this.visibleColumns();
+    const enabledCount = Object.values(columns).filter(Boolean).length;
+
+    if (columns[columnKey] && enabledCount === 1) {
+      return;
+    }
+
+    this.visibleColumns.update(current => ({
+      ...current,
+      [columnKey]: !current[columnKey]
+    }));
   }
 
   goAddBook(): void {
@@ -233,11 +290,24 @@ export class MisLibros implements OnInit {
     return translationKey ? this.translate.instant(translationKey) : name;
   }
 
+  getCoverUrl(coverImage: string | null | undefined): string {
+    if (!coverImage) {
+      return 'assets/img/bookSwap.png';
+    }
+
+    if (/^https?:\/\//i.test(coverImage)) {
+      return coverImage;
+    }
+
+    const normalizedPath = coverImage.startsWith('/') ? coverImage : `/${coverImage}`;
+    return `${SERVER_BASE}${normalizedPath}`;
+  }
+
   // ========== Métodos de Edición ==========
 
   openEditModal(book: IBook): void {
     this.editingBook.set(book);
-    this.previewImage.set(book.cover_image);
+    this.previewImage.set(this.getCoverUrl(book.cover_image));
     this.selectedFile.set(null);
     this.editError.set(null);
     this.isSubmitting.set(false);

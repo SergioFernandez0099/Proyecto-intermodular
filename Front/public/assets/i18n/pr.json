@@ -159,6 +159,16 @@
 			"guardar": "Guardar alterações",
 			"guardando": "A guardar..."
 		},
+		"columnas": {
+			"boton": "Colunas",
+			"titulo": "Escolher colunas",
+			"subtitulo": "Selecione as células que deseja ver na tabela.",
+			"cerrar": "Fechar"
+		},
+		"filtros": {
+			"genero_label": "Género:",
+			"todos": "Todos os géneros"
+		},
 		"sin_libros": "Não existem livros nesta vista.",
 		"cargando": "A carregar os seus livros...",
 		"editado_en": "Editado em",
@@ -178,6 +188,85 @@
 		"idioma-es": "Español",
 		"idioma-en": "English",
 		"idioma-fr": "Français",
-		"idioma-pr": "Português"
+		"idioma-pr": "Português",
+		"admin": {
+			"titulo": "Gestão de utilizadores",
+			"buscar_placeholder": "Pesquisar por nome, apelido ou e-mail...",
+			"tabla": {
+				"nombre": "Nome",
+				"apellidos": "Apelido",
+				"correo": "E-mail",
+				"acciones": "Ações",
+				"hacer_admin": "Fazer administrador"
+			},
+			"no_usuarios": "Nenhum utilizador disponível para promover.",
+			"exito": "Utilizador promovido a administrador com sucesso.",
+			"error": "Erro ao carregar os utilizadores.",
+			"error_promover": "Erro ao promover o utilizador a administrador."
+		},
+		"adminModal": {
+			"titulo": "Confirmar promoção a administrador",
+			"pregunta": "Tem certeza de que deseja fazer deste utilizador um administrador?",
+			"cancelar": "Cancelar",
+			"confirmar": "Confirmar",
+			"procesando": "A processar..."
+		}
+	},
+	"Prestamos": {
+		"titulo": "Os meus empréstimos",
+		"sin_prestamos": "Não tem empréstimos nesta vista.",
+		"cargando": "A carregar os seus empréstimos...",
+		"pedido_en": "Pedido:",
+		"devuelto_en": "Devolvido:",
+		"total": "Total de empréstimos:",
+		"devolver": "Devolver",
+		"no_disponible": "N/A",
+		"tabla": {
+			"portada": "Capa",
+			"libro": "Livro",
+			"pedido": "Data do pedido",
+			"devuelto": "Data da devolução",
+			"acciones": "Ações"
+		},
+		"columnas": {
+			"boton": "Colunas",
+			"titulo": "Escolher células",
+			"subtitulo": "Selecione que células quer ver nos seus empréstimos.",
+			"cerrar": "Fechar"
+		}
+	},
+	"Valoraciones": {
+		"cargando": "A carregar avaliações...",
+		"volver_explorar": "Voltar a Explorar",
+		"total_valoraciones": "{{count}} avaliações",
+		"tu_usuario": "Tu",
+		"tu_valoracion": "A tua avaliação",
+		"editada": "Editada",
+		"otras_opiniones": "Outras opiniões",
+		"sin_valoraciones": "Ainda não existem avaliações.",
+		"se_primero": "Sê o primeiro a dar a tua opinião!",
+		"error_cargar_libro": "Não foi possível carregar o livro.",
+		"usuario_desconocido": "Utilizador desconhecido",
+		"form": {
+			"editar_titulo": "Editar a tua avaliação",
+			"anyadir_titulo": "Adicionar avaliação",
+			"tu_puntuacion": "A tua pontuação",
+			"comentario": "Comentário",
+			"opcional": "opcional",
+			"placeholder": "Escreve a tua opinião sobre este livro...",
+			"guardando": "A guardar...",
+			"actualizar": "Atualizar avaliação",
+			"publicar": "Publicar avaliação"
+		},
+		"mensajes": {
+			"rating_invalida": "Selecione uma pontuação entre 1 e 5 estrelas.",
+			"actualizada_ok": "Avaliação atualizada com sucesso!",
+			"error_actualizar": "Erro ao atualizar a avaliação.",
+			"enviada_ok": "Avaliação enviada com sucesso!",
+			"error_enviar": "Erro ao enviar a avaliação.",
+			"confirmar_eliminar": "Tem a certeza de que quer eliminar a sua avaliação?",
+			"eliminada_ok": "Avaliação eliminada com sucesso.",
+			"error_eliminar": "Erro ao eliminar a avaliação."
+		}
 	}
 }

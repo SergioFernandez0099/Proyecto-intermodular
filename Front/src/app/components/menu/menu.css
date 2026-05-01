@@ -1,6 +1,8 @@
 .dashboard-aside {
   font-family: var(--font-primary);
-  width: 260px;
+  width: var(--sidebar-expanded-width, clamp(260px, 24vw, 340px));
+  min-width: 260px;
+  max-width: 340px;
   height: 100vh;
 
   /* Glassmorphism */
@@ -56,9 +58,9 @@
 .aside-header {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: flex-start;
   margin-bottom: 2.5rem;
-  gap: 12px;
+  gap: 8px;
 }
 
 .app-logo-icon {
@@ -197,9 +199,10 @@
 }
 
 .nav-item.active {
-  background-color: #eff6ff;
-  color: var(--color-primary);
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  color: #1d4ed8;
   font-weight: var(--font-bold);
+  box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.2);
 }
 
 /* Icono fijo */
@@ -374,7 +377,7 @@
   align-items: center;
   gap: 8px;
   transition: gap 0.3s;
-  overflow: hidden;
+  min-width: 0;
 }
 
 .dashboard-aside.collapsed .user-profile-container {
@@ -398,6 +401,7 @@
   border-radius: 8px;
   transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
   flex-shrink: 0;
+  min-width: 46px;
 }
 
 .btn-settings:hover {
