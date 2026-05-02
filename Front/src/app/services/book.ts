@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { IBook } from '../models/book';
+import { API_BASE } from '../core/constants/api';
 
 // Para listas de libros (index, mine)
 export interface BooksResponse {
@@ -18,8 +19,7 @@ export interface SingleBookResponse {
   providedIn: 'root'
 })
 export class BookService {
-  private apiUrl = 'http://localhost:8000/api/books'; 
-  private apiUrlMy = 'http://localhost:8000/api/books/mine'; 
+  private apiUrl = `${API_BASE}/books`;
 
   constructor(private http: HttpClient) {}
 

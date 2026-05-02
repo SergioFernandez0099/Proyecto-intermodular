@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ICopy } from '../models/copy';
+import { API_BASE } from '../core/constants/api';
 
 
 export interface CopiesResponse {
@@ -28,7 +29,7 @@ export interface CopyStatus {
   providedIn: 'root'
 })
 export class CopyService {
-  private apiUrl = 'http://localhost:8000/api/books';
+  private apiUrl = `${API_BASE}/books`; 
   constructor(private http: HttpClient) {}
 
   getMyCopies(): Observable<ICopy[]> {

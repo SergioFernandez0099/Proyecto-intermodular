@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IUser } from '../models/user';
 import { map } from 'rxjs/operators';
+import { API_BASE } from '../core/constants/api';
 
 
 interface UsersResponse {
@@ -17,7 +18,7 @@ interface SingleUserResponse {
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://localhost:8000/api/users';
+  private apiUrl = `${API_BASE}/users`;
   constructor(private http: HttpClient) {}
 
   getUsers(): Observable<IUser[]> {

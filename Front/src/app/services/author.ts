@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { IAuthor } from '../models/author';
+import { API_BASE } from '../core/constants/api';
 
 
 export interface AuthorsResponse {
@@ -17,7 +18,7 @@ export interface SingleAuthorResponse {
   providedIn: 'root'
 })
 export class AuthorService {
-  private apiUrl = 'http://localhost:8000/api/authors';  
+  private apiUrl = `${API_BASE}/authors`;  
   constructor(private http: HttpClient) {}
 
   getAuthors(): Observable<IAuthor[]> {
