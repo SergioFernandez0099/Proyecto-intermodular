@@ -48,10 +48,10 @@ Route::middleware(['auth:sanctum', 'active'])->group(function () {
     | AUTORES
     */
     Route::apiResource('authors', AuthorController::class)
-        ->only(['index', 'show']);
+        ->only(['index', 'show', 'store']);
 
     Route::apiResource('authors', AuthorController::class)
-        ->only(['store', 'update', 'destroy'])
+        ->only(['update', 'destroy'])
         ->middleware('role:admin');
 
     /*
