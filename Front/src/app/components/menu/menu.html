@@ -1,7 +1,18 @@
 <aside class="dashboard-aside" [class.collapsed]="isCollapsed">
-  <!-- Contenedor del toggle, encima del header -->
-  <div class="aside-toggle-container">
-    <button class="menu-toggle" (click)="toggleMenu()" [class.open]="!isCollapsed" aria-label="Toggle menu">
+
+  <div class="aside-header">
+    <div class="app-logo-icon">
+      <img src="assets/img/bookSwap.png" alt="Logo" class="nav-icon-img">
+    </div>
+    <div class="app-info hide-mobile">
+      <h1 class="app-name">LibreShare</h1>
+      <p class="app-subtitle">{{ 'Menu.biblioteca' | translate }}</p>
+    </div>
+    <button
+      class="menu-toggle"
+      (click)="toggleMenu()"
+      [class.open]="!isCollapsed"
+      aria-label="Toggle menu">
       <span></span>
       <span></span>
       <span></span>
@@ -9,16 +20,6 @@
   </div>
 
   <div class="aside-container">
-
-    <div class="aside-header">
-      <div class="app-logo-icon">
-        <img src="assets/img/bookSwap.png" alt="Logo" class="nav-icon-img">
-      </div>
-      <div class="app-info hide-mobile">
-        <h1 class="app-name">LibreShare</h1>
-        <p class="app-subtitle">{{ 'Menu.biblioteca' | translate }}</p>
-      </div>
-    </div>
 
     <nav class="aside-nav">
       <button (click)="goDashboard()" [class.active]="isActive('/dashboard')" class="nav-item">
@@ -70,9 +71,10 @@
           <img src="assets/img/configuraciones.png" alt="Configuracion" class="settings-icon-img">
         </button>
       </div>
-      <button (click)="logout()" class="btn-logout">
+
+      <!-- Logout: solo icono -->
+      <button (click)="logout()" class="btn-logout" [title]="'Menu.logout' | translate">
         <img src="assets/img/logout.png" alt="Logout" class="logout-icon-img">
-        <span class="text">{{ 'Menu.logout' | translate }}</span>
       </button>
     </div>
 
