@@ -19,6 +19,7 @@ class Copy extends Model
 
     protected $fillable = [
         'book_id',
+        'owner_id',
         'code',
         'state'
     ];
@@ -36,5 +37,10 @@ class Copy extends Model
     public function loans()
     {
         return $this->hasMany(Loan::class);
+    }
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class);
     }
 }

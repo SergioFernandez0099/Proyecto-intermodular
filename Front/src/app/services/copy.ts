@@ -31,6 +31,12 @@ export class CopyService {
   private apiUrl = 'http://localhost:8000/api/books';
   constructor(private http: HttpClient) {}
 
+  getMyCopies(): Observable<ICopy[]> {
+    return this.http.get<CopiesResponse>(`${this.apiUrl}/mine`).pipe(
+      map(response => response.data)
+    );
+  }
+
   getCopies(bookId: number): Observable<ICopy[]> {
     return this.http.get<CopiesResponse>(`${this.apiUrl}/${bookId}/copies`).pipe(
       map(response => response.data)

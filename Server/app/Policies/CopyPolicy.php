@@ -18,17 +18,17 @@ class CopyPolicy
 
     public function view(User $user, Book $book): bool
     {
-        return $user->ownsBook($book);
+        return true;
     }
 
     public function create(User $user, Book $book): bool
     {
-        return $user->ownsBook($book);
+        return true;
     }
 
     public function status(User $user, Book $book): bool
     {
-        return $user->ownsBook($book);
+        return true;
     }
 
     public function update(User $user, Copy $copy): bool

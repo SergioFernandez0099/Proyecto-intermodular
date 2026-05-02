@@ -189,15 +189,24 @@
 }
 
   .btn-return:hover {
-    background-color: #3b7cd1;
+    background-color: #9fb4cf;
 }
 
   .btn-return:active {
     transform: scale(0.98);
 }
 
+tr.mine td {
+  background-color: #cce6fc;
+}
+
   .returned-ok {
     color: #1f7a3e;
+    font-weight: 600;
+  }
+
+  .returned-no-ok {
+    color: #7a1f1f;
     font-weight: 600;
   }
 

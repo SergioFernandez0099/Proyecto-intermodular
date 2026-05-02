@@ -131,9 +131,8 @@
     },
     "tabla": {
       "portada": "Cover",
-      "titulo": "Title",
-      "autor": "Author",
-      "copias": "Copies",
+      "libro": "Book",
+      "estado": "Status",
       "acciones": "Actions"
     },
     "acciones": {
@@ -231,7 +230,10 @@
     "devuelto_en": "Returned:",
     "total": "Total loans:",
     "devolver": "Return",
-    "no_disponible": "N/A",
+    "no_disponible": "-",
+    "prestado_usuario": "Loaned to another user",
+    "loaned_x_ago_1": "Loaned",
+    "loaned_x_ago_2": "days ago",
     "tabla": {
       "portada": "Cover",
       "libro": "Book",

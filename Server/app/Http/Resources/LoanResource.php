@@ -16,11 +16,12 @@ class LoanResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'loan_date' => $this->created_at,
+            'loan_date' => $this->loan_date,
             'return_date' => $this->return_date,
             'updated_at' => $this->updated_at,
             'copy' => $this->whenLoaded('copy', fn() => [
                 'id' => $this->copy->id,
+                'owner' => $this->copy->owner_id,
                 'code' => $this->copy->code,
                 'book' => $this->copy->book ? [
                     'id' => $this->copy->book->id,
@@ -36,13 +37,10 @@ class LoanResource extends JsonResource
                     ]),
                 ] : null,
             ]),
-            'user' => $this->whenLoaded('user', function () {
-                if (!auth()->user()->isAdmin()) return null;
-                return [
-                    'id'   => $this->user->id,
-                    'name' => $this->user->name,
-                ];
-            }),
+            'user' => [
+                'id'   => $this->user->id,
+                'name' => $this->user->name,
+            ]
         ];
     }
 }

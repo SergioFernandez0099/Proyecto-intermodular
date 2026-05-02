@@ -31,12 +31,6 @@ export class BookService {
     );
   }
 
-  getMyBooks(): Observable<IBook[]> {
-    return this.http.get<BooksResponse>(this.apiUrlMy).pipe(
-      map(response => response.data)
-    );
-  }
-
   // --- MÉTODOS QUE DEVUELVEN UN SOLO OBJETO (IBook) ---
 
   getBook(id: number): Observable<IBook> {

@@ -77,14 +77,11 @@
                 @if (isColumnVisible('cover')) {
                 <th>{{ 'MisLibros.tabla.portada' | translate }}</th>
                 }
-                @if (isColumnVisible('title')) {
-                <th>{{ 'MisLibros.tabla.titulo' | translate }}</th>
+                @if (isColumnVisible('book')) {
+                <th>{{ 'MisLibros.tabla.libro' | translate }}</th>
                 }
-                @if (isColumnVisible('author')) {
-                <th>{{ 'MisLibros.tabla.autor' | translate }}</th>
-                }
-                @if (isColumnVisible('copies')) {
-                <th>{{ 'MisLibros.tabla.copias' | translate }}</th>
+                @if (isColumnVisible('state')) {
+                <th>{{ 'MisLibros.tabla.estado' | translate }}</th>
                 }
                 @if (isColumnVisible('actions')) {
                 <th>{{ 'MisLibros.tabla.acciones' | translate }}</th>
@@ -96,37 +93,29 @@
               <tr>
                 @if (isColumnVisible('cover')) {
                 <td [attr.data-label]="'MisLibros.tabla.portada' | translate">
-                  <img class="cover-thumb" [src]="getCoverUrl(book.cover_image)" [alt]="book.title"
+                  <img class="cover-thumb" [src]="getCoverUrl(book.book?.cover_image)" [alt]="book.book?.title"
                     onerror="this.src='assets/img/bookSwap.png'">
                 </td>
                 }
-                @if (isColumnVisible('title')) {
-                <td [attr.data-label]="'MisLibros.tabla.titulo' | translate">
+                @if (isColumnVisible('book')) {
+                <td [attr.data-label]="'MisLibros.tabla.libro' | translate">
                   <div class="title-cell">
-                    <strong>{{ book.title }}</strong>
-                    <span class="meta">{{ 'MisLibros.editado_en' | translate }} {{ book.publication_year ||
-                      ('MisLibros.no_disponible' | translate) }}</span>
+                    <strong>{{ book.book?.title }}</strong>
+                    <span class="meta">{{ book.code }}</span>
                   </div>
                 </td>
                 }
-                @if (isColumnVisible('author')) {
-                <td [attr.data-label]="'MisLibros.tabla.autor' | translate">{{ getBookAuthors(book) }}</td>
-                }
-                @if (isColumnVisible('copies')) {
-                <td [attr.data-label]="'MisLibros.tabla.copias' | translate">
-                  <span class="status-pill">
-                    {{ getStatusText(book) }}
-                  </span>
-                </td>
+                @if (isColumnVisible('state')) {
+                <td [attr.data-label]="'MisLibros.tabla.state' | translate">{{ (book.state === "borrowed") ? "Prestado" : "Disponible" }}</td>
                 }
                 @if (isColumnVisible('actions')) {
                 <td [attr.data-label]="'MisLibros.tabla.acciones' | translate">
                   <div class="actions-cell">
-                    <button class="btn-action btn-edit" (click)="openEditModal(book)"
+                    <!-- <button class="btn-action btn-edit" (click)="openEditModal(book)"
                       [title]="'MisLibros.acciones.editar' | translate">
                       <img src="assets/img/editar.png" [alt]="'MisLibros.acciones.editar' | translate"
                         class="action-icon">
-                    </button>
+                    </button> -->
                     <button class="btn-action btn-delete" (click)="deleteBook(book)"
                       [title]="'MisLibros.acciones.eliminar' | translate">
                       <img src="assets/img/borrar.png" [alt]="'MisLibros.acciones.eliminar' | translate"

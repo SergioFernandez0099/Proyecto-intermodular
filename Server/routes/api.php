@@ -57,7 +57,7 @@ Route::middleware(['auth:sanctum', 'active'])->group(function () {
     /*
     | LIBROS
     */
-    Route::get('books/mine', [BookController::class, 'mine']);
+    Route::get('books/mine', [CopyController::class, 'mine']);
     Route::post('books/import', [BookController::class, 'import']);
 
     Route::apiResource('books', BookController::class)

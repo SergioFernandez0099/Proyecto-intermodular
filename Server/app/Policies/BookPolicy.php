@@ -17,21 +17,24 @@ class BookPolicy
 
     public function view(User $user, Book $book): bool
     {
-        return $user->ownsBook($book) || $book->owner->active;
+        return true;
     }
 
     public function update(User $user, Book $book): bool
     {
-        return $user->ownsBook($book);
+        //return $user->ownsBook($book);
+        return true;
     }
 
     public function delete(User $user, Book $book): bool
     {
-        return $user->ownsBook($book);
+        //return $user->ownsBook($book);
+        return false;
     }
 
     public function storeCopy(User $user, Book $book): bool
     {
-        return $user->ownsBook($book);
+        //return $user->ownsBook($book);
+        return true;
     }
 }

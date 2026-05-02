@@ -17,11 +17,11 @@ class LoanPolicy
 
     public function view(User $user, Loan $loan): bool
     {
-        return $user->ownsLoan($loan);
+        return $user->isInvolvedInLoan($loan);
     }
 
     public function return(User $user, Loan $loan): bool
     {
-        return $user->ownsLoan($loan);
+        return $user->ownsLoan($loan); 
     }
 }
