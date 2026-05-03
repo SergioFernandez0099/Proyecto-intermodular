@@ -305,7 +305,7 @@
 }
 @media (max-width: 768px) {
   .anyadir-libro-container {
-    flex-direction: column; /* Apila uno arriba y otro abajo */
+    flex-direction: column; 
   }
 
   .libro-content {

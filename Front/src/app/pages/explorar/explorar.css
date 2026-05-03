@@ -10,7 +10,7 @@
   padding: 2rem;
   box-sizing: border-box;
   transition: margin-left 0.3s ease;
-  overflow-y: auto;
+  min-width: 0;
 }
 
 .content-header {
@@ -127,9 +127,9 @@
 
 .books-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  grid-auto-rows: auto;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   gap: 2rem;
+  width: 100%;
 }
 
 /* ── Tarjeta ── */
@@ -355,14 +355,38 @@
   100% { transform: rotate(360deg); }
 }
 /* ── Responsive ── */
+@media (min-width: 1400px) {
+  .books-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 1399px) and (min-width: 1025px) {
+  .books-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  
+  .books-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .books-grid {
+    grid-template-columns: 1fr; 
+  }
+}
 @media (max-width: 768px) {
-  .explorar-content {
-    margin-left: 80px;
-    padding: 1.5rem;
+  .explorar-container {
+    flex-direction: column; 
   }
 
-  .books-grid {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1rem;
+  .explorar-content{
+    margin-left: 80px;
+    padding: 1rem;
   }
 }

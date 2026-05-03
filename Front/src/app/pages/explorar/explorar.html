@@ -3,19 +3,19 @@
 
   <main class="explorar-content">
     @if (!isLoading()) {
-      <header class="content-header">
-        <div class="header-titles">
-          <h2>{{ 'Explorar.titulo' | translate }}</h2>
-          <p class="subtitle">{{ 'Explorar.subtitulo' | translate }}</p>
-        </div>
-      </header>
+    <header class="content-header">
+      <div class="header-titles">
+        <h2>{{ 'Explorar.titulo' | translate }}</h2>
+        <p class="subtitle">{{ 'Explorar.subtitulo' | translate }}</p>
+      </div>
+    </header>
 
-      <section class="content-body">
-        <div class="search-section">
-          <div class="search-bar">
-            <span>{{ 'Explorar.buscar' | translate }}</span>
-            <input type="text" [placeholder]="'Explorar.search_placeholder' | translate" (input)="onSearch($event)">
-          </div>
+    <section class="content-body">
+      <div class="search-section">
+        <div class="search-bar">
+          <span>{{ 'Explorar.buscar' | translate }}</span>
+          <input type="text" [placeholder]="'Explorar.search_placeholder' | translate" (input)="onSearch($event)">
+        </div>
 
         <div class="categories-wrapper">
           <button class="chip" [class.active]="selectedGenreId() === null" (click)="setGenre(null)">
@@ -30,10 +30,10 @@
         </div>
       </div>
 
-        <div class="books-container" #booksGrid>
-          <div class="list-header">
-            <h3>{{ 'Explorar.libros_disponibles' | translate }}</h3>
-          </div>
+      <div class="books-container" #booksGrid>
+        <div class="list-header">
+          <h3>{{ 'Explorar.libros_disponibles' | translate }}</h3>
+        </div>
 
         <div class="books-grid">
           @for (book of paginatedBooks(); track book.id) {
@@ -48,79 +48,75 @@
               </div>
             </div>
 
-                          <div class="card-info">
-                            <div class="text-content">
-                              <h4>{{ book.title }}</h4>
-                              <p class="author">{{ getBookAuthors(book) }}</p>
-                            </div>
+            <div class="card-info">
+              <div class="text-content">
+                <h4>{{ book.title }}</h4>
+                <p class="author">{{ getBookAuthors(book) }}</p>
+              </div>
 
-                  <div class="rating-container">
+              <div class="rating-container">
 
-                    <!-- Fila superior -->
-                    <div class="rating-row">
+                <div class="rating-row">
 
-                      <div class="rating-value">
-                        {{ book.average_rating_raw | number:'1.1-1' }}
-                      </div>
-
-                      <p-rating
-                        [(ngModel)]="book.average_rating"
-                        [readonly]="true"
-                        [stars]="5">
-
-                        <ng-template #onicon>
-                          <img src="assets/img/libroLleno.png" alt="Libro llena" class="rating-icon">
-                        </ng-template>
-
-                        <ng-template #officon>
-                          <img src="assets/img/libroVacio.png" alt="Libro vacía" class="rating-icon">
-                        </ng-template>
-
-                      </p-rating>
-
-                    </div>
-
-                    <!-- Fila inferior -->
-                    <div class="rating-footer">
-                      <a class="detail-link" [routerLink]="['/valoraciones', book.id]">
-                      {{ 'Explorar.valoraciones' | translate }}({{ book.ratings_count }})
-                      </a>
-                    </div>
-                    <button class="btn-request"
-                            [disabled]="book.available_copies_count === 0 || isProcessingLoan() === book.id"
-                            (click)="pedirPrestamo(book.id)">
-
-                      @if (isProcessingLoan() === book.id) {
-                        <span>{{ 'Explorar.cargando' | translate }}</span>
-                      } @else {
-                        {{ book.available_copies_count > 0 ? ('Explorar.pedir_prestado' | translate) : ('Explorar.no_disponible'
-                        | translate) }}
-                      }
-                    </button>
+                  <div class="rating-value">
+                    {{ book.average_rating_raw | number:'1.1-1' }}
                   </div>
-                  </div>
+
+                  <p-rating [(ngModel)]="book.average_rating" [readonly]="true" [stars]="5">
+
+                    <ng-template #onicon>
+                      <img src="assets/img/libroLleno.png" alt="Libro llena" class="rating-icon">
+                    </ng-template>
+
+                    <ng-template #officon>
+                      <img src="assets/img/libroVacio.png" alt="Libro vacía" class="rating-icon">
+                    </ng-template>
+
+                  </p-rating>
+
                 </div>
-            }
-          </div>
 
+                <div class="rating-footer">
+                  <a class="detail-link" [routerLink]="['/valoraciones', book.id]">
+                    {{ 'Explorar.valoraciones' | translate }}({{ book.ratings_count }})
+                  </a>
+                </div>
+                <button class="btn-request"
+                  [disabled]="book.available_copies_count === 0 || isProcessingLoan() === book.id"
+                  (click)="pedirPrestamo(book.id)">
+
+                  @if (isProcessingLoan() === book.id) {
+                  <span>{{ 'Explorar.cargando' | translate }}</span>
+                  } @else {
+                  {{ book.available_copies_count > 0 ? ('Explorar.pedir_prestado' | translate) :
+                  ('Explorar.no_disponible'
+                  | translate) }}
+                  }
+                </button>
+              </div>
+            </div>
+          </div>
+          }
         </div>
 
-          <div class="pagination-wrapper">
-            <button class="pag-btn" (click)="prevPage()" [disabled]="currentPage() === 0">
-              {{'MisLibros.paginacion.anterior' | translate }}
-            </button>
-            <span class="page-indicator">{{ currentPage() + 1 }} / {{ totalPages() }}</span>
-            <button class="pag-btn" (click)="nextPage()" [disabled]="currentPage() + 1 >= totalPages()">
-              {{
-              'MisLibros.paginacion.siguiente' | translate }}
-            </button>
-          </div>
-      </section>
-    } @else {
-      <div class="loading-screen">
-        <div class="spinner"></div>
-        <p>{{ 'Explorar.cargando_biblioteca' | translate }}</p>
       </div>
+
+      <div class="pagination-wrapper">
+        <button class="pag-btn" (click)="prevPage()" [disabled]="currentPage() === 0">
+          {{'MisLibros.paginacion.anterior' | translate }}
+        </button>
+        <span class="page-indicator">{{ currentPage() + 1 }} / {{ totalPages() }}</span>
+        <button class="pag-btn" (click)="nextPage()" [disabled]="currentPage() + 1 >= totalPages()">
+          {{
+          'MisLibros.paginacion.siguiente' | translate }}
+        </button>
+      </div>
+    </section>
+    } @else {
+    <div class="loading-screen">
+      <div class="spinner"></div>
+      <p>{{ 'Explorar.cargando_biblioteca' | translate }}</p>
+    </div>
     }
   </main>
 </div>
