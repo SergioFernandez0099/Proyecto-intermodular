@@ -76,24 +76,12 @@ export class Dashboard {
     }
   }
 
-  getMyBooksStatus(myBooks: IBook[]) {
-    myBooks.map(book => {
-      firstValueFrom(this.copyService.getCopiesStatus(book.id))
-        .then((copies: CopyStatus[]) => {
-          this.myBooksStatus.update(current => ([...current, ...copies]));
-        })
-    });
-  }
-
   getImageUrl(path: string | null | undefined): string {
     if (!path) {
       return 'https://placehold.co/80x120?text=Sin+portada';
     }
     const cleanPath = path.startsWith('/') ? path.substring(1) : path;
     return `${SERVER_BASE}/storage/${cleanPath}`;
-  }
-  countCurrentlyLoaned(): number {
-    return this.myBooksStatus().filter(copy => copy.state === "borrowed").length;
   }
 
   prevPage(): void {
