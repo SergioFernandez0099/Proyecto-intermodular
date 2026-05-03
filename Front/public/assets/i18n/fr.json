@@ -58,6 +58,7 @@
 		"buscar": "Rechercher",
 		"agotado": "Épuisé",
 		"stock_disponible": "{{count}} disp.",
+		"valoraciones": "Voir les évaluations",
 		"cargando": "Chargement...",
 		"cargando_biblioteca": "Chargement de la bibliothèque...",
 		"prestamo_exito": "Livre réservé avec succès !",
@@ -270,5 +271,17 @@
 			"eliminada_ok": "Avis supprimé avec succès.",
 			"error_eliminar": "Erreur lors de la suppression de l'avis."
 		}
-	}
+	},
+	"error": {
+		"title": "Erreur",
+		"warning_title": "Champs",
+		"success_title": "Succès",
+		"password_mismatch": "Les mots de passe ne correspondent pas.",
+		"password_min": "Le mot de passe doit contenir au moins 8 caractères.",
+		"fill_fields": "Veuillez remplir correctement tous les champs.",
+		"success_msg": "Opération réussie.",
+		"generic": "L'email existe déjà ou le serveur a échoué.",
+		"error_login":"Email ou mot de passe incorrect",
+"copia_prestada": "Impossible de supprimer un exemplaire qui est prêté",
+    "error_generico": "Une erreur est survenue lors de la suppression."	}
 }

@@ -59,6 +59,7 @@
     "buscar": "Search",
     "agotado": "Out of stock",
     "stock_disponible": "{{count}} avail.",
+    "valoraciones": "View ratings",
     "cargando": "Loading...",
     "cargando_biblioteca": "Loading library...",
     "prestamo_exito": "Book reserved successfully!",
@@ -281,5 +282,19 @@
       "eliminada_ok": "Rating deleted successfully.",
       "error_eliminar": "Error deleting the rating."
     }
+  },
+  "error": {
+    "title": "Error",
+    "warning_title": "Fields",
+    "success_title": "Success",
+    "password_mismatch": "Passwords do not match.",
+    "password_min": "Password must be at least 8 characters long.",
+    "fill_fields": "Please fill in all fields correctly.",
+    "success_msg": "Operation completed successfully.",
+    "generic": "Email already exists or server failed.",
+    "error_login":"Incorrect email or password",
+    "copia_prestada": "A copy that is on loan cannot be deleted",
+    "error_generico": "An error occurred while trying to delete."
+
   }
 }

@@ -6,6 +6,7 @@ import { Footer } from '../../components/footer/footer';
 import { Router, RouterLink } from '@angular/router';
 import { Header } from '../../components/header/header';
 import { AuthService } from '../../core/services/auth.service';
+import { TranslateService } from '@ngx-translate/core';
 
 // Validador personalizado para confirmar contraseñas
 function passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
@@ -40,6 +41,7 @@ export class Register {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
+     private translate: TranslateService
   ) {
     this.registerForm = this.fb.group({
       name: ['', Validators.required],
@@ -66,33 +68,64 @@ export class Register {
     });
   }
 
-  onSubmit() {
-    if (this.registerForm.invalid) {
-      this.registerForm.markAllAsTouched();
-      if (this.registerForm.errors?.['passwordMismatch']) {
-        this.showToast('Error', 'Las contraseñas no coinciden.', 'error');
-      } else if (this.registerForm.get('password')?.errors?.['minlength'] || this.registerForm.get('password_confirmation')?.errors?.['minlength']) {
-        this.showToast('Error', 'La contraseña debe tener al menos 8 caracteres.', 'error');
-      } else {
-        this.showToast('Campos', 'Por favor rellene todos los campos correctamente.', 'warning');
-      }
-      return;
+ onSubmit() {
+  if (this.registerForm.invalid) {
+    this.registerForm.markAllAsTouched();
+
+    if (this.registerForm.errors?.['passwordMismatch']) {
+      this.showToast(
+        this.translate.instant('error.title'),
+        this.translate.instant('error.password_mismatch'),
+        'error'
+      );
+
+    } else if (
+      this.registerForm.get('password')?.errors?.['minlength'] ||
+      this.registerForm.get('password_confirmation')?.errors?.['minlength']
+    ) {
+      this.showToast(
+        this.translate.instant('error.title'),
+        this.translate.instant('error.password_min'),
+        'error'
+      );
+
+    } else {
+      this.showToast(
+        this.translate.instant('error.warning_title'),
+        this.translate.instant('error.fill_fields'),
+        'warning'
+      );
     }
 
-    const formValue = this.registerForm.value;
-    this.authService.register(formValue.name, formValue.lastname, formValue.email, formValue.password, formValue.password_confirmation).subscribe({
-      next: (res: any) => {
-        this.showToast('Éxito', 'Usuario registrado correctamente.', 'success');
-      },
-      error: (err) => {
-        this.showToast(
-          'Error de registro',
-          err?.error?.message || 'El email ya existe o el servidor falló.',
-          'error',
-        );
-      },
-    });
+    return;
   }
+
+  const formValue = this.registerForm.value;
+
+  this.authService.register(
+    formValue.name,
+    formValue.lastname,
+    formValue.email,
+    formValue.password,
+    formValue.password_confirmation
+  ).subscribe({
+    next: () => {
+      this.showToast(
+        this.translate.instant('error.success_title'),
+        this.translate.instant('error.success_msg'),
+        'success'
+      );
+    },
+
+    error: (err) => {
+      this.showToast(
+        this.translate.instant('error.title'),
+        err?.error?.message || this.translate.instant('error.generic'),
+        'error'
+      );
+    },
+  });
+}
 
   togglePassword() {
     this.showPassword = !this.showPassword;

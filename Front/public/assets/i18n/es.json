@@ -48,6 +48,7 @@
     "no_disponible": "No Disponible",
     "disponible": "DISPONIBLE",
     "en_prestamo": "EN PRÉSTAMO",
+    
     "categorias": {
       "todos": "Todos",
       "ficcion": "Ficción",
@@ -60,6 +61,7 @@
     "buscar":"Buscar",
     "agotado": "Agotado",
     "stock_disponible": "{{count}} disp.",
+    "valoraciones":"Ver valoraciones ",
     "cargando": "Cargando...",
     "cargando_biblioteca": "Cargando biblioteca...",
     "prestamo_exito": "¡Libro reservado con éxito!",
@@ -283,5 +285,19 @@
       "eliminada_ok": "Valoración eliminada correctamente.",
       "error_eliminar": "Error al eliminar la valoración."
     }
+  },
+  "error": {
+    "title": "Error",
+    "warning_title": "Campos",
+    "success_title": "Éxito",
+
+    "password_mismatch": "Las contraseñas no coinciden.",
+    "password_min": "La contraseña debe tener al menos 8 caracteres.",
+    "fill_fields": "Por favor rellene todos los campos correctamente.",
+    "success_msg": "Operación realizada correctamente.",
+    "generic": "El email ya existe o el servidor falló.",
+    "error_login":"COntraseña o email incorrectos",
+    "copia_prestada": "No se puede eliminar una copia que está prestada",
+    "error_generico": "Ha ocurrido un error al intentar eliminar."
   }
 }

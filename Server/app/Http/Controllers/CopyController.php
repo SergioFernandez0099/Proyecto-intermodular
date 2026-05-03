@@ -22,8 +22,14 @@ class CopyController extends Controller
 
     public function mine(Request $request)
     {
-        $copies = Copy::with(['book', 'owner'])
-           ->where('owner_id', $request->user()->id)->get();
+        $copies = Copy::with([
+            'book.genre',
+            'book.authors',
+            'owner'
+        ])
+        ->where('owner_id', $request->user()->id)
+        ->get();
+
         return CopyResource::collection($copies);
     }
 

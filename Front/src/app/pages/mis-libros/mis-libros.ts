@@ -150,14 +150,18 @@ export class MisLibros implements OnInit {
       }
     });
   }
-   getImageUrl(path: string | null | undefined): string {
-    if (!path) {
-      return 'https://placehold.co/80x120?text=Sin+portada';
-    }
-    const cleanPath = path.startsWith('/') ? path.substring(1) : path;
-    return `${SERVER_BASE}/storage/${cleanPath}`;
+
+  getImageUrl(path: string | null | undefined): string {
+  if (!path) {
+    return 'https://placehold.co/80x120?text=Sin+portada';
   }
 
+  if (path.startsWith('http')) {
+    return path;
+  }
+  const cleanPath = path.startsWith('/') ? path.substring(1) : path;
+  return `${SERVER_BASE}/storage/${cleanPath}`;
+}
   private async loadGenresAndAuthors(): Promise<void> {
     try {
       const [genres, authors] = await Promise.all([
@@ -302,7 +306,6 @@ export class MisLibros implements OnInit {
     return `${SERVER_BASE}${normalizedPath}`;
   }
 
-  // ========== Métodos de Edición ==========
 
   openEditModal(book: IBook): void {
     this.editingBook.set(book);
@@ -313,7 +316,7 @@ export class MisLibros implements OnInit {
     
     this.editForm.patchValue({
       title: book.title,
-      genre_id: book.genre_id,
+      genre_id: book.genre?.id,
       publication_year: book.publication_year || new Date().getFullYear(),
       language: 'Español'
     });
@@ -386,7 +389,6 @@ export class MisLibros implements OnInit {
 
     this.bookService.updateBook(updatedBook as IBook, book.id).subscribe({
       next: () => {
-        // Si hay nueva imagen, actualizar la portada
         if (this.selectedFile()) {
           this.bookService.updateCover(this.selectedFile()!, book.id).subscribe({
             next: () => {
@@ -411,32 +413,46 @@ export class MisLibros implements OnInit {
     });
   }
 
-  deleteBook(copy: ICopy): void {
-    if (!confirm(this.translate.instant('MisLibros.confirmar_eliminar', { title: copy.book?.title }))) {
-      return;
-    }
+ deleteBook(copy: ICopy): void {
+  if (!confirm(this.translate.instant('MisLibros.confirmar_eliminar', { title: copy.book?.title }))) {
+    return;
+  }
 
-    this.isSubmitting.set(true);
-    
-    this.copyService.deleteCopy(copy).subscribe({
-      next: () => {
-        this.showToast('Copia eliminada con éxito', 'success');
-        this.loadMyBooks();
-        this.isSubmitting.set(false);
-      },
-      error: (err) => {
-        this.isSubmitting.set(false);
-        let errorMsg = this.translate.instant('MisLibros.error_eliminar');
+  this.isSubmitting.set(true);
+  
+  this.copyService.deleteCopy(copy).subscribe({
+    next: () => {
+      // 1. Éxito: Traducimos también el mensaje de éxito
+      this.showToast(this.translate.instant('MisLibros.exito_eliminar'), 'success');
+      this.loadMyBooks();
+      this.isSubmitting.set(false);
+    },
+    error: (err) => {
+      this.isSubmitting.set(false);
+      
+      let errorMsg = this.translate.instant('error.error_generico');
 
-        if (err.error?.errors) {
-          const firstKey = Object.keys(err.error.errors)[0];
-          errorMsg = err.error.errors[firstKey][0]; 
+      if (err.error?.errors) {
+        const firstKey = Object.keys(err.error.errors)[0];
+        const backendMessage = err.error.errors[firstKey][0]; 
+
+        let errorKey = '';
+        
+        if (backendMessage.toLowerCase().match(/prestada|loan|prêté|emprestada/)) {
+          errorKey = 'error.copia_prestada';
         }
 
-        this.showToast(errorMsg, 'error');
+        if (errorKey) {
+          errorMsg = this.translate.instant(errorKey);
+        } else {
+          errorMsg = backendMessage;
+        }
       }
-    });
-  }
+
+      this.showToast(errorMsg, 'error');
+    }
+  });
+}
 
   private showToast(message: string, type: 'error' | 'success') {
     this.toast.set({ message, type });

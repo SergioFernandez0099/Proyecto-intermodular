@@ -2,6 +2,22 @@
     <app-menu></app-menu>
 
     <main class="configuracion-content">
+        @if (toastState(); as toast) {
+        <div class="toast-container toast-{{ toast.type }}">
+            <div class="toast-icon">
+                @if (toast.type === 'success') { ✅ }
+                @else if (toast.type === 'error') { ❌ }
+                @else { ⚠️ }
+            </div>
+
+            <div class="toast-content">
+                <h4>{{ toast.title }}</h4>
+                <p>{{ toast.message }}</p>
+            </div>
+
+            <div class="toast-close" (click)="closeToast()">×</div>
+        </div>
+        }
         <header class="content-header">
             <h2>{{ 'Configuracion.titulo' | translate }}</h2>
         </header>
@@ -11,6 +27,7 @@
                 <h3>{{ 'Configuracion.perfil' | translate }}</h3>
 
                 <form (ngSubmit)="saveProfile()" class="profile-form">
+
                     <div class="form-group">
                         <label for="name">{{ 'Register.nombre' | translate }}</label>
                         <input type="text" id="name" [(ngModel)]="name" name="name" class="form-input"
@@ -23,9 +40,24 @@
                             [disabled]="loading" />
                     </div>
 
+                    <!-- ✔️ CONTRASEÑA NUEVA -->
+                    <div class="form-group">
+                        <label>Nueva contraseña</label>
+                        <input type="password" [(ngModel)]="newPassword" name="newPassword" class="form-input"
+                            [disabled]="loading" />
+                    </div>
+
+                    <!-- ✔️ CONFIRMAR CONTRASEÑA -->
+                    <div class="form-group">
+                        <label>Confirmar contraseña</label>
+                        <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" class="form-input"
+                            [disabled]="loading" />
+                    </div>
+
                     <button type="submit" class="btn-save" [disabled]="loading">
                         {{ loading ? ('Configuracion.guardando' | translate) : ('Configuracion.guardar' | translate) }}
                     </button>
+
                 </form>
 
                 <div *ngIf="message" [class]="'message message-' + messageType">
@@ -115,7 +147,6 @@
             </div>
             }
 
-            <!-- Confirmation Modal -->
             @if (showConfirmModal() && selectedUserToPromote()) {
             <div class="modal-overlay" (click)="closeConfirmModal()">
                 <div class="modal-content" (click)="$event.stopPropagation()">

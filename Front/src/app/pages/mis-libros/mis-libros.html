@@ -114,7 +114,6 @@
                 <td [attr.data-label]="'MisLibros.tabla.libro' | translate">
                   <div class="title-cell">
                     <strong>{{ book.book?.title }}</strong>
-                    <span class="meta">{{ book.code }}</span>
                   </div>
                 </td>
                 }
@@ -124,11 +123,13 @@
                 @if (isColumnVisible('actions')) {
                 <td [attr.data-label]="'MisLibros.tabla.acciones' | translate">
                   <div class="actions-cell">
-                    <!-- <button class="btn-action btn-edit" (click)="openEditModal(book)"
-                      [title]="'MisLibros.acciones.editar' | translate">
-                      <img src="assets/img/editar.png" [alt]="'MisLibros.acciones.editar' | translate"
-                        class="action-icon">
-                    </button> -->
+                    @if (book.book) {
+                      <button class="btn-action btn-edit" (click)="openEditModal(book.book)"
+                        [title]="'MisLibros.acciones.editar' | translate">
+                        <img src="assets/img/editar.png" [alt]="'MisLibros.acciones.editar' | translate"
+                          class="action-icon">
+                      </button>
+                    }
                     <button class="btn-action btn-delete" (click)="deleteBook(book)"
                       [title]="'MisLibros.acciones.eliminar' | translate">
                       <img src="assets/img/borrar.png" [alt]="'MisLibros.acciones.eliminar' | translate"

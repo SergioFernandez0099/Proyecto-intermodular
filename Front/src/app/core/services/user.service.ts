@@ -10,14 +10,18 @@ export class UserService {
   private http = inject(HttpClient);
   private translate = inject(TranslateService);
 
-  updateProfile(name: string, lastname: string) {
-    return this.http.put<{ data: IUser }>(`${API_BASE}/auth/me`, {
-      name,
-      lastname
-    }).pipe(
-      tap(res => {
+  updateProfile(name: string, lastname: string, password?: string, password_confirmation?: string) {
+    const body: any = { name, lastname };
+
+    if (password) {
+      body.password = password;
+      body.password_confirmation = password_confirmation;
+    }
+
+    return this.http.put<{ data: IUser }>(`${API_BASE}/auth/me`, body).pipe(
+      tap((res) => {
         localStorage.setItem('user_session', this.encrypt(res.data));
-      })
+      }),
     );
   }
 

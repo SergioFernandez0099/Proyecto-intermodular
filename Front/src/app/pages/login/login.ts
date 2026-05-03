@@ -1,9 +1,9 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 import { Footer } from '../../components/footer/footer';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Header } from '../../components/header/header';
 import { AuthService } from '../../core/services/auth.service';
 import { finalize } from 'rxjs';
@@ -15,7 +15,7 @@ import { finalize } from 'rxjs';
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
 })
-export class Login {
+export class Login implements OnInit{
   loginData = { email: '', password: '' }; 
   modalConfig = {
     show: false,
@@ -29,38 +29,53 @@ export class Login {
   toast = signal<{ message: string; type: 'error' | 'success' | 'warning'} | null>(null);
 
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router,private translate: TranslateService,private route: ActivatedRoute) {}
   
-
-  onLogin() { 
-    const { email, password } = this.loginData;
-
-    if (!email || !password) {
-      this.showToast('Rellena todos los campos', 'warning');  
-      return;
-    }
-
-    this.isLoading = true;
-
-    this.authService.login(email, password).subscribe({
-      next: (res: any) => {
-        this.isLoading = false;
-        this.router.navigate(['/dashboard']);
+  ngOnInit() {
+    if (!this.authService.currentUser()) {
+    this.authService.me().subscribe({
+      next: (res) => {
+        console.log('Usuario recuperado tras login de Google', res.data);
       },
-      error: (err) => {
-      this.isLoading = false;
-
-      console.log('LOGIN ERROR:', err); // debug útil
-
-      const errorMsg =
-        err?.error?.errors?.['email or password']?.[0] ||
-        err?.error?.message ||
-        'Credenciales incorrectas';
-
-      this.showToast(errorMsg, 'error');
+      error: () => {
+        this.router.navigate(['/login']);
       }
     });
   }
+  }
+  loginWithGoogle() {
+  const backendUrl = 'http://localhost:8000'; 
+  window.location.href = `${backendUrl}/auth/google/redirect`;
+}
+
+  onLogin() {
+  const { email, password } = this.loginData;
+
+  if (!email || !password) {
+    this.showToast(
+      this.translate.instant('error.error_login'),
+      'warning'
+    );
+    return;
+  }
+
+  this.isLoading = true;
+
+  this.authService.login(email, password).subscribe({
+    next: () => {
+      this.isLoading = false;
+      this.router.navigate(['/dashboard']);
+    },
+
+    error: (err) => {
+      this.isLoading = false;
+      this.showToast(
+        this.translate.instant('error.error_login'),
+        'error'
+      );
+    }
+  });
+}
   private showToast(message: string, type: 'error' | 'success' | 'warning') {
     this.toast.set({ message, type });
     setTimeout(() => this.toast.set(null), 3000); 

@@ -6,6 +6,6 @@ export interface ICopy {
     id: number,
     code: string,
     state: EState,
-    book?: Partial<IBook>,
+    book?: IBook,
     owner?: Partial<IUser>
 }

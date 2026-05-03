@@ -58,6 +58,7 @@
 		"buscar": "Pesquisar",
 		"agotado": "Esgotado",
 		"stock_disponible": "{{count}} disp.",
+		"valoraciones": "Ver avaliações",
 		"cargando": "A carregar...",
 		"cargando_biblioteca": "A carregar biblioteca...",
 		"prestamo_exito": "Livro reservado com sucesso!",
@@ -270,5 +271,19 @@
 			"eliminada_ok": "Avaliação eliminada com sucesso.",
 			"error_eliminar": "Erro ao eliminar a avaliação."
 		}
+	},
+	"error": {
+		"title": "Erro",
+		"warning_title": "Campos",
+		"success_title": "Sucesso",
+		"password_mismatch": "As palavras-passe não coincidem.",
+		"password_min": "A palavra-passe deve ter pelo menos 8 caracteres.",
+		"fill_fields": "Por favor preencha todos os campos corretamente.",
+		"success_msg": "Operação realizada com sucesso.",
+		"generic": "O email já existe ou o servidor falhou.",
+		"error_login":"Email ou palavra-passe incorretos",
+		"copia_prestada": "Não é possível eliminar uma cópia que está emprestada",
+    	"error_generico": "Ocorreu um erro ao tentar eliminar."
+
 	}
 }

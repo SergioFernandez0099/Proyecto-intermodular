@@ -56,8 +56,11 @@ export class AuthService {
 
   me() {
     return this.http.get<{ data: IUser }>(`${API_BASE}/auth/me`).pipe(
-      tap(res => this.currentUser.set(res.data))
-    );
+    tap(res => {
+      this.currentUser.set(res.data);
+      localStorage.setItem('user_session', this.encrypt(res.data));
+    })
+  );
   }
 
   private encrypt(data: any): string {
