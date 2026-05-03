@@ -7,6 +7,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Header } from '../../components/header/header';
 import { AuthService } from '../../core/services/auth.service';
 import { finalize } from 'rxjs';
+import { SERVER_BASE } from '../../core/constants/api';
 
 @Component({
   selector: 'app-login',
@@ -44,9 +45,9 @@ export class Login implements OnInit{
   }
   }
   loginWithGoogle() {
-  const backendUrl = 'http://localhost:8000'; 
-  window.location.href = `${backendUrl}/auth/google/redirect`;
-}
+    const backendUrl = SERVER_BASE; 
+    window.location.href = `${backendUrl}/auth/google/redirect`;
+  }
 
   onLogin() {
   const { email, password } = this.loginData;
