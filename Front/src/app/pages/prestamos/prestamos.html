@@ -68,7 +68,8 @@
               <tr>
                 @if (isColumnVisible('cover')) {
                 <td [attr.data-label]="'Prestamos.tabla.portada' | translate">
-                  <img class="cover-thumb" [src]="getCoverUrl(loan.copy?.book?.cover_image)"
+                  <img class="cover-thumb" 
+                    [src]="getImageUrl(loan.copy?.book?.cover_image)"
                     [alt]="loan.copy?.book?.title || ('Prestamos.tabla.portada' | translate)"
                     onerror="this.src='assets/img/bookSwap.png'">
                 </td>

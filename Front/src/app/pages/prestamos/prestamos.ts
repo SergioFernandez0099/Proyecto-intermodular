@@ -72,6 +72,14 @@ export class Prestamos {
 
     return 'es';
   }
+
+  getImageUrl(path: string | null | undefined): string {
+    if (!path) {
+      return 'https://placehold.co/80x120?text=Sin+portada';
+    }
+    const cleanPath = path.startsWith('/') ? path.substring(1) : path;
+    return `${SERVER_BASE}/storage/${cleanPath}`;
+  }
   
   async loadData() {
     this.isLoading.set(true);

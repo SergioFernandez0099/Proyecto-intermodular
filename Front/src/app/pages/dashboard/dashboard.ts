@@ -10,6 +10,7 @@ import { IUser } from '../../models/user';
 import { AuthService } from '../../core/services/auth.service';
 import { TranslatePipe } from '@ngx-translate/core';
 import { CopyService, CopyStatus } from '../../services/copy';
+import { SERVER_BASE } from '../../core/constants/api';
 
 @Component({
   selector: 'app-dashboard',
@@ -74,6 +75,13 @@ export class Dashboard {
     });
   }
 
+  getImageUrl(path: string | null | undefined): string {
+    if (!path) {
+      return 'https://placehold.co/80x120?text=Sin+portada';
+    }
+    const cleanPath = path.startsWith('/') ? path.substring(1) : path;
+    return `${SERVER_BASE}/storage/${cleanPath}`;
+  }
   countCurrentlyLoaned(): number {
     return this.myBooksStatus().filter(copy => copy.state === "borrowed").length;
   }
