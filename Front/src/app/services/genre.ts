@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { IGenre } from '../models/genre';
+import { API_BASE } from '../core/constants/api';
 
 
 export interface GenresResponse {
@@ -17,7 +18,7 @@ export interface SingleGenreResponse {
   providedIn: 'root'
 })
 export class GenreService {
-  private apiUrl = 'http://localhost:8000/api/genres';  
+  private apiUrl = `${API_BASE}/genres`;  
   constructor(private http: HttpClient) {}
 
   getGenres(): Observable<IGenre[]> {

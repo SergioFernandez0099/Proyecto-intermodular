@@ -22,8 +22,6 @@ class BookController extends Controller
         'ratings' => fn($q) => $q->whereHas('user', fn($q) => $q->where('active', true))
             ->with('user'),
     ])
-        ->where('owner_id', '!=', $request->user()->id)
-        ->whereHas('owner', fn($q) => $q->where('active', true))
         ->when($request->genre_id, fn($q) => $q->where('genre_id', $request->genre_id))
         ->when($request->search, fn($q) => $q->where('title', 'like', "%{$request->search}%"))
         ->withCount(['copies as available_copies_count' => function ($query) {
@@ -35,21 +33,6 @@ class BookController extends Controller
 
     return BookResource::collection($books);
 }
-
-    // Solo los libros del usuario autenticado
-    public function mine(Request $request)
-    {
-        $books = Book::with(['genre', 'authors', 'copies'])
-            ->where('owner_id', $request->user()->id)
-            ->when($request->search, fn($q) => $q->where('title', 'like', "%{$request->search}%"))
-            ->withCount([
-                'copies as copies_count',
-                'copies as available_copies_count' => fn($q) => $q->where('state', 'available'),
-            ])
-            ->get();
-
-        return BookResource::collection($books);
-    }
 
     // Route Model Binding: Laravel busca el libro y devuelve 404 automáticamente
     public function show(Book $book)

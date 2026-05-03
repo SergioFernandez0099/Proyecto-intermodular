@@ -65,7 +65,7 @@
             </thead>
             <tbody>
               @for (loan of paginatedLoans(); track loan.id) {
-              <tr>
+              <tr [class.mine]="loan.user?.id !== user().id">
                 @if (isColumnVisible('cover')) {
                 <td [attr.data-label]="'Prestamos.tabla.portada' | translate">
                   <img class="cover-thumb" [src]="getCoverUrl(loan.copy?.book?.cover_image)"
@@ -97,7 +97,14 @@
                 }
                 @if (isColumnVisible('actions')) {
                 <td [attr.data-label]="'Prestamos.tabla.acciones' | translate">
-                  @if (!loan.return_date) {
+                  @if (loan.user?.id !== user().id && !loan.return_date) {
+                    <span class="returned-no-ok">{{ "Prestamos.prestado_usuario" | translate }}</span>
+                  } @else if (loan.user?.id !== user().id) {
+                    <span class="returned-ok">{{ "Prestamos.prestado_usuario" | translate }}</span>
+                  } @else if (!loan.return_date) {
+                    {{ "Prestamos.loaned_x_ago_1" | translate }}
+                    {{ diasDesde(loan.loan_date) }}
+                    {{ "Prestamos.loaned_x_ago_2" | translate }}
                   <button class="btn-return" (click)="returnBook(loan)">{{ 'Prestamos.devolver' | translate }}</button>
                   } @else {
                   <span class="returned-ok">{{ 'Prestamos.devuelto_en' | translate }}</span>

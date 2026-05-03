@@ -103,6 +103,14 @@
   vertical-align: middle;
 }
 
+tr.mine td {
+  background: linear-gradient(135deg, #effff4 0%, #d6f6dd 100%);
+}
+
+tr.not-mine td {
+  background: linear-gradient(135deg, #fff9eb 0%, #fff2d8 100%);
+}
+
 .cover-thumb {
   width: 80px;
   height: 120px;

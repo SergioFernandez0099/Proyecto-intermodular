@@ -17,6 +17,11 @@ return new class extends Migration {
                 ->constrained()
                 ->cascadeOnDelete();
 
+            $table->foreignId('owner_id')
+                ->constrained('users')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+
             $table->string('code')->unique();
             $table->enum('state', ['available', 'borrowed'])
                 ->default('available');

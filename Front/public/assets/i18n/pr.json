@@ -131,9 +131,8 @@
 		},
 		"tabla": {
 			"portada": "Capa",
-			"titulo": "Título",
-			"autor": "Autor",
-			"copias": "Cópias",
+			"libro": "Livro",
+			"estado": "Estado",
 			"acciones": "Ações"
 		},
 		"acciones": {
@@ -220,7 +219,10 @@
 		"devuelto_en": "Devolvido:",
 		"total": "Total de empréstimos:",
 		"devolver": "Devolver",
-		"no_disponible": "N/A",
+		"no_disponible": "-",
+    	"prestado_usuario": "Emprestado a outro utilizador",
+		"loaned_x_ago_1": "Encomendei há",
+		"loaned_x_ago_2": "dias",
 		"tabla": {
 			"portada": "Capa",
 			"libro": "Livro",

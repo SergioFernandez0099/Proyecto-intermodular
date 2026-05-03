@@ -91,7 +91,7 @@ export class AnyadirLibro implements OnInit {
       const [genres, authors, books] = await Promise.all([
         firstValueFrom(this._genreService.getGenres()),
         firstValueFrom(this._authorService.getAuthors()),
-        firstValueFrom(this._bookService.getMyBooks())
+        firstValueFrom(this._bookService.getBooks())
       ]);
       this.genres.set(genres);
       this.authors.set(authors);

@@ -11,7 +11,7 @@
       <div class="stat-grid">
         <div class="stat-card stat-primary">
           <p class="stat-title">{{ "Dashboard.misLibros" | translate }}</p>
-          <span class="number">{{ myBooksStatus().length }}</span>
+          <span class="number">{{ myCopies().length }}</span>
         </div>
 
         <div class="stat-card stat-success">
@@ -21,7 +21,7 @@
 
         <div class="stat-card stat-warning">
           <p class="stat-title">{{ "Dashboard.librosEnPrestamo" | translate }}</p>
-          <span class="number">{{ countCurrentlyLoaned() }}</span>
+          <span class="number">{{ loanedBooks().length }}</span>
         </div>
 
       </div>
@@ -38,7 +38,7 @@
           </thead>
           <tbody>
             @for (loan of paginatedLoans(); track loan.id) {
-            <tr>
+            <tr [class.mine]="loan.user?.id === user().id" [class.not-mine]="loan.user?.id !== user().id">
               <td>
                 <img class="cover-thumb"
                   [src]="loan.copy?.book?.cover_image || 'https://placehold.co/80x120?text=Sin+portada'"
@@ -51,7 +51,11 @@
                 </div>
               </td>
               <td>
-                <span>{{ loan.updated_at | date: 'MMMM d, y, h:mm a' }}</span>
+                <span>
+                  {{ "Prestamos.loaned_x_ago_1" | translate }}
+                  {{ diasDesde(loan.loan_date) }}
+                  {{ "Prestamos.loaned_x_ago_2" | translate }}
+                </span>
               </td>
             </tr>
             }

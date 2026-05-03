@@ -19,11 +19,6 @@ return new class extends Migration {
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
 
-            $table->foreignId('owner_id')
-                ->constrained('users')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-
             $table->string('cover_image')->nullable();
             $table->smallInteger('publication_year')->nullable();
             $table->timestamps();

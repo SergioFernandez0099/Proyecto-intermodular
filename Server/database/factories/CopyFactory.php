@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Book;
+use App\Models\User;
 use Illuminate\Support\Str;
 
 /**
@@ -22,6 +23,7 @@ class CopyFactory extends Factory
 
         return [
             'book_id' => Book::inRandomOrder()->first()->id,
+            'owner_id' => User::inRandomOrder()->first()->id,
             'code'    => sprintf('COPY-%d-%d-%s', $bookId, now()->timestamp, strtoupper(Str::random(4))),
             'state'   => 'available',
         ];

@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Genre;
 
@@ -21,7 +20,6 @@ class BookFactory extends Factory
         return [
             'title'            => fake()->sentence(3),
             'genre_id'         => Genre::inRandomOrder()->first()->id,
-            'owner_id'         => User::inRandomOrder()->first()->id,
             'publication_year' => fake()->year(),
             'cover_image'      => null,
         ];

@@ -131,9 +131,8 @@
 		},
 		"tabla": {
 			"portada": "Couverture",
-			"titulo": "Titre",
-			"autor": "Auteur",
-			"copias": "Exemplaires",
+			"libro": "Livre",
+			"estado": "État",
 			"acciones": "Actions"
 		},
 		"acciones": {
@@ -220,7 +219,10 @@
 		"devuelto_en": "Retourné :",
 		"total": "Total des prêts :",
 		"devolver": "Retourner",
-		"no_disponible": "N/A",
+		"no_disponible": "-",
+    	"prestado_usuario": "Prêté à un autre utilisateur",
+		"loaned_x_ago_1": "Commandé il y a",
+		"loaned_x_ago_2": "jours",
 		"tabla": {
 			"portada": "Couverture",
 			"libro": "Livre",

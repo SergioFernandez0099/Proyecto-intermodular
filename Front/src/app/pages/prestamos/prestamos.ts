@@ -152,4 +152,16 @@ export class Prestamos {
     loan.return_date = new Date() + ""
   }
 
+  diasDesde(loanDate: string): number {
+    const date = new Date(loanDate);
+    const now = new Date();
+
+    const diffInMs = Math.abs(now.getTime() - date.getTime());
+
+    const oneDayInMs = 24 * 60 * 60 * 1000;
+    const days = Math.floor(diffInMs / oneDayInMs);
+
+    return days;
+  }
+
 }
