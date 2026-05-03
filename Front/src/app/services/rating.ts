@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { API_BASE } from '../core/constants/api';
 
 interface Rating {
   rating: number;
@@ -13,7 +14,7 @@ interface Rating {
   providedIn: 'root'
 })
 export class RatingService {
-  private apiUrl = 'http://localhost:8000/api/books';
+  private apiUrl = `${API_BASE}/books`;
   constructor(private http: HttpClient) {}
 
   createRating(bookId: number, rating: Rating): Observable<any> {

@@ -18,7 +18,6 @@ class Book extends Model
     protected $fillable = [
         'title',
         'genre_id',
-        'owner_id',
         'cover_image',
         'publication_year'
     ];
@@ -50,10 +49,5 @@ class Book extends Model
     public function ratings()
     {
         return $this->hasMany(Rating::class);
-    }
-
-    public function owner()
-    {
-        return $this->belongsTo(User::class, 'owner_id');
     }
 }

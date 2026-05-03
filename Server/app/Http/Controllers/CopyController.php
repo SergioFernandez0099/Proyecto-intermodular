@@ -20,6 +20,13 @@ class CopyController extends Controller
         return CopyResource::collection($book->copies);
     }
 
+    public function mine(Request $request)
+    {
+        $copies = Copy::with(['book', 'owner'])
+           ->where('owner_id', $request->user()->id)->get();
+        return CopyResource::collection($copies);
+    }
+
     public function storeByBook(Request $request, Book $book)
     {
         $this->authorize('storeCopy', $book);
@@ -31,13 +38,14 @@ class CopyController extends Controller
 
         $quantity = $request->input('quantity', 1);
 
-        $copies = DB::transaction(function () use ($book, $quantity) {
+        $copies = DB::transaction(function () use ($book, $quantity, $request) {
             $copies = [];
             for ($i = 0; $i < $quantity; $i++) {
                 $copy = Copy::create([
                     'book_id' => $book->id,
                     'code' => self::generateCode($book->id),
                     'state' => 'available',
+                    'owner_id' => $request->user()->id,
                 ]);
                 $copies[] = $copy->load('book');
             }

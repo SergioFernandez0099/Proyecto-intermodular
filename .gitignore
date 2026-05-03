@@ -1,3 +1,4 @@
 Server/vendor
 /.idea/
 /Server/.idea/
+.~lock.*

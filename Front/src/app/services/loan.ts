@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ILoan } from '../models/loan';
+import { API_BASE } from '../core/constants/api';
 
 export interface LoansResponse {
   data: ILoan[];
@@ -17,7 +18,7 @@ export interface SingleLoanResponse {
 })
 
 export class LoanService {
-  private apiUrl = 'http://localhost:8000/api/loans'; 
+  private apiUrl = `${API_BASE}/loans`; 
 
   constructor(private http: HttpClient) {}
 

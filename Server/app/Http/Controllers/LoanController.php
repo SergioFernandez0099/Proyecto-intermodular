@@ -12,7 +12,7 @@ use Illuminate\Validation\ValidationException;
 
 class LoanController extends Controller
 {
-    // Admin ve todos | User solo los suyos
+    // Admin ve todos | User solo los suyos (como prestatario o como dueño de la copia)
     public function index()
     {
         $user = Auth::user();
@@ -22,7 +22,12 @@ class LoanController extends Controller
             : ['copy.book.genre', 'copy.book.authors'];
 
         $loans = Loan::with($relations)
-            ->when(!$user->isAdmin(), fn($q) => $q->where('user_id', $user->id))
+            ->when(!$user->isAdmin(), function($query) use ($user) {
+                $query->where(function($q) use ($user) {
+                    $q->where('user_id', $user->id) // Préstamos donde el usuario es prestatario
+                      ->orWhereHas('copy', fn($copyQ) => $copyQ->where('owner_id', $user->id)); // Préstamos de copias que el usuario posee
+                });
+            })
             ->latest()
             ->get();
 
@@ -31,6 +36,7 @@ class LoanController extends Controller
 
     public function show(Loan $loan)
     {
+        $loan->load('copy'); // Cargar relación antes de authorize
         $this->authorize('view', $loan);
 
         $relations = auth()->user()->isAdmin()
@@ -80,6 +86,7 @@ class LoanController extends Controller
 
     public function return(Loan $loan)
     {
+        $loan->load('copy'); // Cargar relación antes de authorize
         $this->authorize('return', $loan);
 
         return DB::transaction(function () use ($loan) {

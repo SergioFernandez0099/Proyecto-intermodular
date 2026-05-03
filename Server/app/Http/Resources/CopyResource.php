@@ -18,6 +18,7 @@ class CopyResource extends JsonResource
             'id' => $this->id,
             'code' => $this->code,
             'state' => $this->state,
+            'owner_id' => $this->owner_id,
             'book' => $this->whenLoaded('book', fn() => [
                 'id' => $this->book->id,
                 'title' => $this->book->title,

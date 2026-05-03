@@ -48,16 +48,16 @@ Route::middleware(['auth:sanctum', 'active'])->group(function () {
     | AUTORES
     */
     Route::apiResource('authors', AuthorController::class)
-        ->only(['index', 'show']);
+        ->only(['index', 'show', 'store']);
 
     Route::apiResource('authors', AuthorController::class)
-        ->only(['store', 'update', 'destroy'])
+        ->only(['update', 'destroy'])
         ->middleware('role:admin');
 
     /*
     | LIBROS
     */
-    Route::get('books/mine', [BookController::class, 'mine']);
+    Route::get('books/mine', [CopyController::class, 'mine']);
     Route::post('books/import', [BookController::class, 'import']);
 
     Route::apiResource('books', BookController::class)

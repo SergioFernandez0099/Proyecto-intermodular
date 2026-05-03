@@ -32,6 +32,6 @@ class Loan extends Model
 
     public function copy()
     {
-        return $this->belongsTo(Copy::class);
+        return $this->belongsTo(Copy::class); 
     }
 }

@@ -13,6 +13,8 @@ import { IGenre } from '../../models/genre';
 import { IAuthor } from '../../models/author';
 import { firstValueFrom } from 'rxjs';
 import { SERVER_BASE } from '../../core/constants/api';
+import { CopyService } from '../../services/copy';
+import { ICopy } from '../../models/copy';
 
 @Component({
   selector: 'app-mis-libros',
@@ -22,7 +24,7 @@ import { SERVER_BASE } from '../../core/constants/api';
   styleUrl: './mis-libros.css',
 })
 export class MisLibros implements OnInit {
-  books = signal<IBook[]>([]);
+  copies = signal<ICopy[]>([]);
   isLoading = signal(true);
   errorMessage = signal<string | null>(null);
   activeTab = signal<'all' | 'available' | 'borrowed'>('all');
@@ -34,17 +36,15 @@ export class MisLibros implements OnInit {
 
   readonly columns = [
     { key: 'cover', labelKey: 'MisLibros.tabla.portada' },
-    { key: 'title', labelKey: 'MisLibros.tabla.titulo' },
-    { key: 'author', labelKey: 'MisLibros.tabla.autor' },
-    { key: 'copies', labelKey: 'MisLibros.tabla.copias' },
+    { key: 'book', labelKey: 'MisLibros.tabla.libro' },
+    { key: 'state', labelKey: 'MisLibros.tabla.estado' },
     { key: 'actions', labelKey: 'MisLibros.tabla.acciones' }
   ] as const;
 
   visibleColumns = signal<Record<string, boolean>>({
     cover: true,
-    title: true,
-    author: true,
-    copies: true,
+    book: true,
+    state: true,
     actions: true
   });
 
@@ -70,31 +70,27 @@ export class MisLibros implements OnInit {
   filteredBooks = computed(() => {
     const search = this.filterText().toLowerCase().trim();
     const selectedGenre = this.selectedGenreId();
-    return this.books()
+    return this.copies()
       .filter(book => {
-        if (selectedGenre !== 'all' && book.genre_id !== selectedGenre) {
+        if (selectedGenre !== 'all' && book.book?.genre_id !== selectedGenre) {
           return false;
         }
 
-        const availableCopies = book.available_copies_count ?? 0;
-        const totalCopies = book.copies_count ?? availableCopies;
-        const borrowedCopies = Math.max(0, totalCopies - availableCopies);
-
         if (this.activeTab() === 'available') {
-          return availableCopies > 0;
+          return book.state === "available";
         }
 
         if (this.activeTab() === 'borrowed') {
-          return borrowedCopies > 0;
+          return book.state === "borrowed";
         }
 
         return true;
       })
       .filter(book => {
         if (!search) return true;
-        const title = book.title.toLowerCase();
-        const authors = book.authors?.map(author => author.name?.toLowerCase() ?? '').join(' ') ?? '';
-        return title.includes(search) || authors.includes(search);
+        const title = book.book?.title?.toLowerCase();
+        const authors = book.book?.authors?.map(author => author.name?.toLowerCase() ?? '').join(' ') ?? '';
+        return title?.includes(search) || authors.includes(search);
       });
   });
 
@@ -108,19 +104,14 @@ export class MisLibros implements OnInit {
     return this.filteredBooks().slice(start, start + this.itemsPerPage);
   });
 
-  totalCount = computed(() => this.books().length);
-  availableCount = computed(() => this.books().filter(book => (book.available_copies_count ?? 0) > 0).length);
-  borrowedCount = computed(() =>
-    this.books().filter(book => {
-      const availableCopies = book.available_copies_count ?? 0;
-      const totalCopies = book.copies_count ?? availableCopies;
-      return totalCopies - availableCopies > 0;
-    }).length
-  );
+  totalCount = computed(() => this.copies().length);
+  availableCount = computed(() => this.copies().filter(book => book.state === "available").length);
+  borrowedCount = computed(() => this.copies().filter(book => book.state === "borrowed").length);
 
   constructor(
     private router: Router,
     private bookService: BookService,
+    private copyService: CopyService,
     private genreService: GenreService,
     private authorService: AuthorService,
     private fb: FormBuilder,
@@ -145,9 +136,9 @@ export class MisLibros implements OnInit {
     this.isLoading.set(true);
     this.errorMessage.set(null);
 
-    this.bookService.getMyBooks().subscribe({
-      next: books => {
-        this.books.set(books);
+    this.copyService.getMyCopies().subscribe({
+      next: copies => {
+        this.copies.set(copies);
         this.isLoading.set(false);
         this.loadGenresAndAuthors();
       },
@@ -236,8 +227,8 @@ export class MisLibros implements OnInit {
     this.router.navigate(['/añadirLibro'], { queryParams: { tab: 'copy', bookId: book.id } });
   }
 
-  getBookAuthors(book: IBook): string {
-    return book.authors?.map(author => author.name).filter(Boolean).join(', ') || this.translate.instant('MisLibros.no_disponible');
+  getBookAuthors(book: ICopy): string {
+    return book.book?.authors?.map(author => author.name).filter(Boolean).join(', ') || this.translate.instant('MisLibros.no_disponible');
   }
 
   getBookStatus(book: IBook): string {
@@ -246,9 +237,9 @@ export class MisLibros implements OnInit {
       : this.translate.instant('MisLibros.estado.prestado');
   }
 
-  getStatusText(book: IBook): string {
-    const available = book.available_copies_count ?? 0;
-    const total = book.copies_count ?? available;
+  getStatusText(book: ICopy): string {
+    const available = book.book?.available_copies_count ?? 0;
+    const total = book.book?.copies_count ?? available;
     const borrowed = Math.max(0, total - available);
 
     if (this.activeTab() === 'all') {
@@ -412,13 +403,13 @@ export class MisLibros implements OnInit {
     });
   }
 
-  deleteBook(book: IBook): void {
-    if (!confirm(this.translate.instant('MisLibros.confirmar_eliminar', { title: book.title }))) {
+  deleteBook(copy: ICopy): void {
+    if (!confirm(this.translate.instant('MisLibros.confirmar_eliminar', { title: copy.book?.title }))) {
       return;
     }
 
     this.isSubmitting.set(true);
-    this.bookService.deleteBook(book.id).subscribe({
+    this.copyService.deleteCopy(copy).subscribe({
       next: () => {
         this.loadMyBooks();
         this.closeEditModal();

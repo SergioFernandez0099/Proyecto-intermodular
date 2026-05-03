@@ -57,9 +57,9 @@ class User extends Authenticatable
         'active' => true,
     ];
 
-    public function books()
+    public function copies()
     {
-        return $this->hasMany(Book::class, 'owner_id');
+        return $this->hasMany(Copy::class, 'owner_id');
     }
 
     public function loans()
@@ -77,10 +77,11 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
-    // Métodos de autorización
-    public function ownsBook(Book $book): bool
+    public function isInvolvedInLoan(Loan $loan): bool
     {
-        return $this->id === $book->owner_id;
+        if ($loan->copy && $this->id === $loan->copy->owner_id) return true;
+
+        return $this->id === $loan->user_id;
     }
 
     public function ownsLoan(Loan $loan): bool
@@ -95,7 +96,8 @@ class User extends Authenticatable
 
     public function ownsCopy(Copy $copy): bool
     {
-        return $this->ownsBook($copy->book);
+        return $this->id === $copy->owner_id;
+
     }
 
     public function setRememberToken($value): void
