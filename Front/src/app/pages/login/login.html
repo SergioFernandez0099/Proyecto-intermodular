@@ -1,5 +1,30 @@
 <div class="page-layout">
     <app-header></app-header>
+    @if (toast(); as t) {
+        <div class="toast-container"
+            [ngClass]="{
+                'toast-success': t.type === 'success',
+                'toast-error': t.type === 'error',
+                'toast-warning': t.type === 'warning'
+            }">
+
+            <div class="toast-icon">
+            @if (t.type === 'success') { ✔ }
+            @if (t.type === 'error') { ✖ }
+            @if (t.type === 'warning') { ⚠ }
+            </div>
+
+            <div class="toast-content">
+            <h4>
+                @if (t.type === 'success') { Éxito }
+                @if (t.type === 'error') { Error }
+                @if (t.type === 'warning') { Atención }
+            </h4>
+            <p>{{ t.message }}</p>
+            </div>
+
+        </div>
+        }
     <div class="login">
         <div class="login--container">
             <div class="login--container--header">

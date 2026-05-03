@@ -2,6 +2,29 @@
   <app-menu></app-menu>
 
   <main class="libro-content">
+
+    
+    @if (toast()) {
+      <div class="toast-container"
+          [ngClass]="{
+            'toast-success': toast()?.type === 'success',
+            'toast-error': toast()?.type === 'error'
+          }">
+
+        
+
+        <div class="toast-content">
+          <h4>
+            {{ toast()?.type === 'success' ? 'Éxito' : 'Error' }}
+          </h4>
+          <p>{{ toast()?.message }}</p>
+        </div>
+
+        <div class="toast-close" (click)="toast.set(null)">
+          ✕
+        </div>
+      </div>
+    }
     @if (!isLoading()) {
     <div class="header-titles">
       <div class="header-row">
@@ -83,7 +106,7 @@
               <tr>
                 @if (isColumnVisible('cover')) {
                 <td [attr.data-label]="'MisLibros.tabla.portada' | translate">
-                  <img class="cover-thumb" [src]="getCoverUrl(book.book?.cover_image)" [alt]="book.book?.title"
+                  <img class="cover-thumb" [src]="getImageUrl(book.book?.cover_image)" [alt]="book.book?.title"
                     onerror="this.src='assets/img/bookSwap.png'">
                 </td>
                 }

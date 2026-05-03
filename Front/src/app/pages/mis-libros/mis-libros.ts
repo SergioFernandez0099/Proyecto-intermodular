@@ -33,6 +33,7 @@ export class MisLibros implements OnInit {
   currentPage = signal(0);
   itemsPerPage = 3;
   showColumnModal = signal(false);
+  toast = signal<{ message: string; type: 'error' | 'success' } | null>(null);
 
   readonly columns = [
     { key: 'cover', labelKey: 'MisLibros.tabla.portada' },
@@ -148,6 +149,13 @@ export class MisLibros implements OnInit {
         this.isLoading.set(false);
       }
     });
+  }
+   getImageUrl(path: string | null | undefined): string {
+    if (!path) {
+      return 'https://placehold.co/80x120?text=Sin+portada';
+    }
+    const cleanPath = path.startsWith('/') ? path.substring(1) : path;
+    return `${SERVER_BASE}/storage/${cleanPath}`;
   }
 
   private async loadGenresAndAuthors(): Promise<void> {
@@ -409,16 +417,29 @@ export class MisLibros implements OnInit {
     }
 
     this.isSubmitting.set(true);
+    
     this.copyService.deleteCopy(copy).subscribe({
       next: () => {
+        this.showToast('Copia eliminada con éxito', 'success');
         this.loadMyBooks();
-        this.closeEditModal();
-      },
-      error: (error) => {
-        console.error('Error al eliminar libro:', error);
-        this.editError.set('MisLibros.error_eliminar');
         this.isSubmitting.set(false);
+      },
+      error: (err) => {
+        this.isSubmitting.set(false);
+        let errorMsg = this.translate.instant('MisLibros.error_eliminar');
+
+        if (err.error?.errors) {
+          const firstKey = Object.keys(err.error.errors)[0];
+          errorMsg = err.error.errors[firstKey][0]; 
+        }
+
+        this.showToast(errorMsg, 'error');
       }
     });
+  }
+
+  private showToast(message: string, type: 'error' | 'success') {
+    this.toast.set({ message, type });
+    setTimeout(() => this.toast.set(null), 3000); 
   }
 }

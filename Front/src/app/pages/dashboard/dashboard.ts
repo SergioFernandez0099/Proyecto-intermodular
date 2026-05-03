@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, OnInit } from '@angular/core';
 import { Menu } from '../../components/menu/menu';
 import { BookService } from '../../services/book';
 import { IBook } from '../../models/book';
@@ -11,41 +11,48 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { CopyService, CopyStatus } from '../../services/copy';
 import { SERVER_BASE } from '../../core/constants/api';
 import { ICopy } from '../../models/copy';
+import { DatePipe } from '@angular/common'; // Asegúrate de tenerlo si usas fechas
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [Menu, TranslatePipe],
+  imports: [Menu, TranslatePipe, DatePipe],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
-export class Dashboard {
+export class Dashboard implements OnInit {
   private loanService = inject(LoanService);
   private authService = inject(AuthService);
   private copyService = inject(CopyService);
+  
   public user = signal<IUser>({} as IUser);
   public myCopies = signal<ICopy[]>([]);
   public loansInvolvingMe = signal<ILoan[]>([]);
   public myLoans = signal<ILoan[]>([]);
   public loanedBooks = signal<ILoan[]>([]);
+  
+  // ERROR SOLUCIONADO: Faltaba declarar este signal
+  public myBooksStatus = signal<CopyStatus[]>([]);
+
   isLoading = signal<boolean>(true);
   errorMessage = signal<string | null>(null);
   currentPage = signal(0);
   itemsPerPage = 3;
+
   totalPages = computed(() => {
     const length = this.loansInvolvingMe().length;
     return Math.max(1, Math.ceil(length / this.itemsPerPage));
   });
+
   paginatedLoans = computed(() => {
     const start = this.currentPage() * this.itemsPerPage;
     return this.loansInvolvingMe().slice(start, start + this.itemsPerPage);
   });
 
-
   ngOnInit(): void {
     this.loadData();
   }
-  
+
   async loadData() {
     this.isLoading.set(true);
     try {
@@ -54,19 +61,25 @@ export class Dashboard {
         firstValueFrom(this.loanService.getLoans()),
         firstValueFrom(this.authService.me()),
       ]);
+
       this.user.set(user.data);
       const myId = user.data.id;
-      
-      this.myCopies.set(myCopies);
-      this.loansInvolvingMe.set(loansInvolvingMe.filter(loan => !loan.return_date));
 
-      const myLoans = this.loansInvolvingMe().filter(loan => loan.user?.id === myId);
+      this.myCopies.set(myCopies);
+      
+      // Filtramos préstamos activos
+      const activeLoans = loansInvolvingMe.filter(loan => !loan.return_date);
+      
+      const myLoans = activeLoans.filter(loan => loan.user?.id === myId);
       this.myLoans.set(myLoans);
 
-      const loanedBooks = this.loansInvolvingMe().filter(loan => loan.copy?.owner === myId);
+      const loanedBooks = activeLoans.filter(loan => loan.copy?.owner === myId);
       this.loanedBooks.set(loanedBooks);
 
-      const sortedLoans = [...myLoans, ...loanedBooks].sort((a, b) => this.diasDesde(b.loan_date) - this.diasDesde(a.loan_date))
+      const sortedLoans = [...myLoans, ...loanedBooks].sort((a, b) => 
+        this.diasDesde(b.loan_date) - this.diasDesde(a.loan_date)
+      );
+      
       this.loansInvolvingMe.set(sortedLoans);
 
     } catch (err) {
@@ -76,12 +89,13 @@ export class Dashboard {
     }
   }
 
+  // ERROR SOLUCIONADO: Tipado de 'current' para evitar el error de Any
   getMyBooksStatus(myBooks: IBook[]) {
     myBooks.map(book => {
       firstValueFrom(this.copyService.getCopiesStatus(book.id))
         .then((copies: CopyStatus[]) => {
-          this.myBooksStatus.update(current => ([...current, ...copies]));
-        })
+          this.myBooksStatus.update((current: CopyStatus[]) => [...current, ...copies]);
+        });
     });
   }
 
@@ -92,8 +106,10 @@ export class Dashboard {
     const cleanPath = path.startsWith('/') ? path.substring(1) : path;
     return `${SERVER_BASE}/storage/${cleanPath}`;
   }
+
+  // ERROR SOLUCIONADO: Tipado de 'copy'
   countCurrentlyLoaned(): number {
-    return this.myBooksStatus().filter(copy => copy.state === "borrowed").length;
+    return this.myBooksStatus().filter((copy: CopyStatus) => copy.state === "borrowed").length;
   }
 
   prevPage(): void {
@@ -115,13 +131,7 @@ export class Dashboard {
   diasDesde(loanDate: string): number {
     const date = new Date(loanDate);
     const now = new Date();
-
     const diffInMs = Math.abs(now.getTime() - date.getTime());
-
-    const oneDayInMs = 24 * 60 * 60 * 1000;
-    const days = Math.floor(diffInMs / oneDayInMs);
-
-    return days;
+    return Math.floor(diffInMs / (24 * 60 * 60 * 1000));
   }
-
 }
