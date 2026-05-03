@@ -189,6 +189,8 @@
 		"idioma-en": "English",
 		"idioma-fr": "Français",
 		"idioma-pr": "Português",
+		"nueva_password":"Nouveau mot de passe",
+		"confirmar_password":"Confirmer le mot de passe",
 		"admin": {
 			"titulo": "Gestion des utilisateurs",
 			"buscar_placeholder": "Rechercher par nom, prénom ou e-mail...",
@@ -282,6 +284,6 @@
 		"success_msg": "Opération réussie.",
 		"generic": "L'email existe déjà ou le serveur a échoué.",
 		"error_login":"Email ou mot de passe incorrect",
-"copia_prestada": "Impossible de supprimer un exemplaire qui est prêté",
-    "error_generico": "Une erreur est survenue lors de la suppression."	}
+		"copia_prestada": "Impossible de supprimer un exemplaire qui est prêté",
+    	"error_generico": "Une erreur est survenue lors de la suppression."	}
 }

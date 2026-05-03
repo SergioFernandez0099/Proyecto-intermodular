@@ -189,6 +189,8 @@
 		"idioma-en": "English",
 		"idioma-fr": "Français",
 		"idioma-pr": "Português",
+		"nueva_password":"Nova senha",
+		"confirmar_password":"Confirmar senha",
 		"admin": {
 			"titulo": "Gestão de utilizadores",
 			"buscar_placeholder": "Pesquisar por nome, apelido ou e-mail...",

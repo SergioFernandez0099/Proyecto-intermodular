@@ -192,6 +192,8 @@
     "idioma-en": "English",
     "idioma-fr": "Français",
     "idioma-pr": "Português",
+    "nueva_password":"Nueva Contraseña",
+    "confirmar_password":"Confirmar Contraseña",
     "admin": {
       "titulo": "Gestión de Usuarios",
       "buscar_placeholder": "Buscar por nombre, apellido o correo...",

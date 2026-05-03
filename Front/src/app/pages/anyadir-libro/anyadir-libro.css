@@ -1,5 +1,6 @@
 .anyadir-libro-container {
   display: flex;
+  flex-direction: row;
   min-height: 100vh;
   background-color: var(--color-bg);
 }
@@ -241,4 +242,74 @@
 .tabs-header button:hover {
   color: #2563eb;
   background: rgba(37, 99, 235, 0.05);
+}
+
+@media (max-width: 1024px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: span 1;
+  }
+}
+
+
+
+@media (max-width: 768px) {
+  .upload-container {
+    padding: 2rem 1rem;
+  }
+
+  .img-preview {
+    max-height: 180px;
+  }
+}
+
+@media (max-width: 600px) {
+  .form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .tabs-header {
+    flex-direction: column;
+  }
+
+  .tabs-header button {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .csv-import-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .csv-btn {
+    width: 100%;
+  }
+}
+@media (max-width: 768px) {
+  .anyadir-libro-container {
+    flex-direction: column; 
+  }
+}
+@media (max-width: 768px) {
+  .anyadir-libro-container {
+    flex-direction: column; /* Apila uno arriba y otro abajo */
+  }
+
+  .libro-content {
+    margin-left: 80px;
+    padding: 1rem;
+  }
 }

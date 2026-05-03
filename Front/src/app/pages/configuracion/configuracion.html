@@ -40,16 +40,14 @@
                             [disabled]="loading" />
                     </div>
 
-                    <!-- ✔️ CONTRASEÑA NUEVA -->
                     <div class="form-group">
-                        <label>Nueva contraseña</label>
+                        <label>{{ 'Configuracion.nueva_password' | translate }}</label>
                         <input type="password" [(ngModel)]="newPassword" name="newPassword" class="form-input"
                             [disabled]="loading" />
                     </div>
 
-                    <!-- ✔️ CONFIRMAR CONTRASEÑA -->
                     <div class="form-group">
-                        <label>Confirmar contraseña</label>
+                        <label>{{ 'Configuracion.confirmar_password' | translate }}</label>
                         <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" class="form-input"
                             [disabled]="loading" />
                     </div>
@@ -59,10 +57,11 @@
                     </button>
 
                 </form>
-
-                <div *ngIf="message" [class]="'message message-' + messageType">
+                @if(message){
+                <div [class]="'message message-' + messageType">
                     {{ message }}
                 </div>
+                }
             </div>
 
             <div class="configuracion-card">
@@ -71,48 +70,41 @@
                 <div class="language-options">
                     <button (click)="changeLanguage('es')" [class.active]="currentLanguage === 'es'"
                         class="language-btn">
-                        <span class="flag">🇪🇸</span>
-                        <span>{{ 'Configuracion.idioma-es' | translate }}</span>
+                        <img src="assets/img/espana.png" alt="Dash" class="nav-icon-img">                        <span>{{ 'Configuracion.idioma-es' | translate }}</span>
                     </button>
 
                     <button (click)="changeLanguage('en')" [class.active]="currentLanguage === 'en'"
                         class="language-btn">
-                        <span class="flag">🇬🇧</span>
+                        <img src="assets/img/reino-unido.png" alt="Dash" class="nav-icon-img">
                         <span>{{ 'Configuracion.idioma-en' | translate }}</span>
                     </button>
 
                     <button (click)="changeLanguage('fr')" [class.active]="currentLanguage === 'fr'"
                         class="language-btn">
-                        <span class="flag">🇫🇷</span>
-                        <span>{{ 'Configuracion.idioma-fr' | translate }}</span>
+                        <img src="assets/img/francia.png" alt="Dash" class="nav-icon-img">                        <span>{{ 'Configuracion.idioma-fr' | translate }}</span>
                     </button>
 
                     <button (click)="changeLanguage('pr')" [class.active]="currentLanguage === 'pr'"
                         class="language-btn">
-                        <span class="flag">🇵🇹</span>
-                        <span>{{ 'Configuracion.idioma-pr' | translate }}</span>
+                        <img src="assets/img/portugal.png" alt="Dash" class="nav-icon-img">                        <span>{{ 'Configuracion.idioma-pr' | translate }}</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Admin Section - Solo visible para admin -->
             @if (isAdmin) {
             <div class="configuracion-card admin-card">
                 <h3>{{ 'Configuracion.admin.titulo' | translate }}</h3>
 
-                <!-- Search bar -->
                 <div class="admin-search-box">
                     <input type="text" class="search-input"
                         [placeholder]="'Configuracion.admin.buscar_placeholder' | translate" [value]="searchQuery()"
                         (input)="searchQuery.set($event.target.value)" />
                 </div>
 
-                <!-- Admin Message -->
                 @if (adminMessage()) {
                 <div class="admin-message">{{ adminMessage() }}</div>
                 }
 
-                <!-- Users Table -->
                 <div class="admin-table-container">
                     @if (computed_filteredUsers().length > 0) {
                     <table class="users-table">

@@ -189,6 +189,8 @@
     "idioma-en": "English",
     "idioma-fr": "Français",
     "idioma-pr": "Português",
+    "nueva_password":"New Password",
+    "confirmar_password":"Confirm Password",
     "admin": {
       "titulo": "User Management",
       "buscar_placeholder": "Search by name, surname or email...",
