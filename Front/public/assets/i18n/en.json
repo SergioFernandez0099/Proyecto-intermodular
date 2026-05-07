@@ -177,7 +177,8 @@
     "error_guardar": "Error saving the changes. Try again.",
     "error_eliminar": "Error deleting the book. Try again.",
     "error_portada": "Error updating the cover",
-    "confirmar_eliminar": "Are you sure you want to delete \"{{title}}\"?"
+    "confirmar_eliminar": "Are you sure you want to delete \"{{title}}\"?",
+    "exito_eliminar": "Copy deleted successfully"
   },
   "Configuracion": {
     "titulo": "Settings",

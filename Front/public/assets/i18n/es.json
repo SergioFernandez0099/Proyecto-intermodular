@@ -180,7 +180,8 @@
     "error_guardar": "Error al guardar los cambios. Intenta de nuevo.",
     "error_eliminar": "Error al eliminar el libro. Intenta de nuevo.",
     "error_portada": "Error al actualizar la portada",
-    "confirmar_eliminar": "¿Estás seguro de que deseas eliminar \"{{title}}\"?"
+    "confirmar_eliminar": "¿Estás seguro de que deseas eliminar \"{{title}}\"?",
+    "exito_eliminar":"Copia eliminada correctamente"
   },
   "Configuracion": {
     "titulo": "Configuración",

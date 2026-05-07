@@ -57,9 +57,9 @@ export class CopyService {
   }
 
   deleteCopy(copy: ICopy): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/${copy.book?.id}/copies/${copy.id}`).pipe(
-      map(response => response.data)
-    );
+    return this.http.delete(`${this.apiUrl}/${copy.book?.id}/copies/${copy.id}`, { 
+      responseType: 'text' 
+    });
   }
 
 
