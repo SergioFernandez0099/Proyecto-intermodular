@@ -264,6 +264,19 @@
   .img-preview {
     max-height: 180px;
   }
+
+  .anyadir-libro-container {
+    flex-direction: column;
+  }
+
+   .anyadir-libro-container {
+    flex-direction: column;
+  }
+
+  .libro-content {
+    margin-left: 50px;
+    padding: 1rem;
+  }
 }
 
 @media (max-width: 600px) {
@@ -275,9 +288,7 @@
   .btn {
     width: 100%;
   }
-}
 
-@media (max-width: 600px) {
   .tabs-header {
     flex-direction: column;
   }
@@ -286,30 +297,13 @@
     width: 100%;
     text-align: center;
   }
-}
 
-@media (max-width: 600px) {
-  .csv-import-actions {
+   .csv-import-actions {
     flex-direction: column;
     align-items: flex-start;
   }
 
   .csv-btn {
     width: 100%;
-  }
-}
-@media (max-width: 768px) {
-  .anyadir-libro-container {
-    flex-direction: column;
-  }
-}
-@media (max-width: 768px) {
-  .anyadir-libro-container {
-    flex-direction: column;
-  }
-
-  .libro-content {
-    margin-left: 50px;
-    padding: 1rem;
   }
 }
