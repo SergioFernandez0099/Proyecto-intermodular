@@ -94,7 +94,7 @@
   justify-content: center;
   margin-bottom: 1rem;
   color: #64748b;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .highlight {
@@ -255,7 +255,6 @@
 }
 
 
-
 @media (max-width: 768px) {
   .upload-container {
     padding: 2rem 1rem;
@@ -269,7 +268,7 @@
     flex-direction: column;
   }
 
-   .anyadir-libro-container {
+  .anyadir-libro-container {
     flex-direction: column;
   }
 
@@ -296,7 +295,7 @@
     text-align: center;
   }
 
-   .csv-import-actions {
+  .csv-import-actions {
     flex-direction: column;
     align-items: flex-start;
   }
@@ -305,18 +304,4 @@
     width: 100%;
   }
 }
-@media (max-width: 768px) {
-  .anyadir-libro-container {
-    flex-direction: column;
-  }
-}
-@media (max-width: 768px) {
-  .anyadir-libro-container {
-    flex-direction: column;
-  }
 
-  .libro-content {
-    margin-left: 50px;
-    padding: 1rem;
-  }
-}
