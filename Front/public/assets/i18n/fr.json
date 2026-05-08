@@ -32,6 +32,7 @@
 		"libros": "Mes livres",
 		"prestamo": "Prêts",
 		"anyadir-libro": "Ajouter un livre",
+		"panel-admin": "Panneau Admin",
 		"configuracion": "Paramètres",
 		"logout": "Se déconnecter"
 	},
@@ -212,6 +213,53 @@
 			"pregunta": "Êtes-vous sûr de vouloir faire de cet utilisateur un administrateur ?",
 			"cancelar": "Annuler",
 			"confirmar": "Confirmer",
+			"procesando": "Traitement..."
+		}
+	},
+	"PanelAdmin": {
+		"titulo": "Panneau d'administration",
+		"subtitulo": "Gestion des utilisateurs",
+		"buscar_placeholder": "Rechercher par nom, prénom ou e-mail...",
+		"no_usuarios": "Aucun utilisateur disponible.",
+		"error_cargar": "Erreur lors du chargement des utilisateurs.",
+		"exito_promover": "Utilisateur promu administrateur avec succès.",
+		"error_promover": "Erreur lors de la promotion de l'utilisateur.",
+		"exito_baja": "Utilisateur désactivé avec succès.",
+		"exito_alta": "Utilisateur activé avec succès.",
+		"error_toggle": "Erreur lors du changement de statut de l'utilisateur.",
+		"tabla": {
+			"nombre": "Prénom",
+			"apellidos": "Nom",
+			"correo": "E-mail",
+			"estado": "État",
+			"acciones": "Actions",
+			"hacer_admin": "Rendre admin",
+			"dar_baja": "Désactiver",
+			"dar_alta": "Activer"
+		},
+		"estado": {
+			"activo": "Actif",
+			"inactivo": "Inactif"
+		},
+		"modalPromover": {
+			"titulo": "Confirmer la promotion en administrateur",
+			"pregunta": "\u00cates-vous s\u00fbr de vouloir faire de cet utilisateur un administrateur ?",
+			"cancelar": "Annuler",
+			"confirmar": "Confirmer",
+			"procesando": "Traitement..."
+		},
+		"modalBaja": {
+			"titulo": "Confirmer la désactivation",
+			"pregunta": "\u00cates-vous s\u00fbr de vouloir désactiver cet utilisateur ?",
+			"cancelar": "Annuler",
+			"confirmar": "Désactiver",
+			"procesando": "Traitement..."
+		},
+		"modalAlta": {
+			"titulo": "Confirmer l'activation",
+			"pregunta": "\u00cates-vous s\u00fbr de vouloir réactiver cet utilisateur ?",
+			"cancelar": "Annuler",
+			"confirmar": "Activer",
 			"procesando": "Traitement..."
 		}
 	},

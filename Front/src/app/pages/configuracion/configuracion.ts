@@ -1,14 +1,10 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { firstValueFrom } from 'rxjs';
 import { Menu } from '../../components/menu/menu';
 import { AuthService } from '../../core/services/auth.service';
-import { UserService as AdminUserService } from '../../services/user';
 import { UserService as ProfileUserService } from '../../core/services/user.service';
-import { IUser } from '../../models/user';
-import { ERole } from '../../models/role';
 import { Router } from '@angular/router';
 
 @Component({
@@ -20,7 +16,6 @@ import { Router } from '@angular/router';
 })
 export class Configuracion implements OnInit {
   private authService = inject(AuthService);
-  private adminUserService = inject(AdminUserService);
   private profileUserService = inject(ProfileUserService);
   private translate = inject(TranslateService);
 
@@ -30,14 +25,7 @@ export class Configuracion implements OnInit {
   loading: boolean = false;
   message: string = '';
   messageType: 'success' | 'error' = 'success';
-  isAdmin: boolean = false;
 
-  allUsers = signal<IUser[]>([]);
-  searchQuery = signal<string>('');
-  showConfirmModal = signal<boolean>(false);
-  selectedUserToPromote = signal<IUser | null>(null);
-  adminLoading = signal<boolean>(false);
-  adminMessage = signal<string>('');
   public toastState = signal<{
     title: string;
     message: string;
@@ -46,28 +34,11 @@ export class Configuracion implements OnInit {
   newPassword: string = '';
   confirmPassword: string = '';
 
-  computed_filteredUsers = computed(() => {
-    const query = this.searchQuery().toLowerCase();
-    if (!query) {
-      return this.allUsers();
-    }
-    return this.allUsers().filter(
-      (user: IUser) =>
-        user.name.toLowerCase().includes(query) ||
-        user.lastname.toLowerCase().includes(query) ||
-        user.email.toLowerCase().includes(query),
-    );
-  });
   constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.loadUserData();
     this.currentLanguage = this.profileUserService.getLanguage();
-
-    this.isAdmin = this.getIsAdminFromStorage();
-    if (this.isAdmin) {
-      this.loadAllUsers();
-    }
   }
 
   private loadUserData(): void {
@@ -93,17 +64,6 @@ export class Configuracion implements OnInit {
     } catch {
       return null;
     }
-  }
-
-  private getIsAdminFromStorage(): boolean {
-    const encrypted = localStorage.getItem('user_session');
-    if (encrypted) {
-      const user = this.decrypt(encrypted) as IUser | null;
-      return user?.role === ERole.admin;
-    }
-
-    const currentUser = this.authService.currentUser();
-    return currentUser?.role === ERole.admin;
   }
 
  saveProfile(): void {
@@ -184,50 +144,5 @@ export class Configuracion implements OnInit {
   changeLanguage(language: string): void {
     this.profileUserService.setLanguage(language);
     this.currentLanguage = language;
-  }
-
-  private loadAllUsers(): void {
-    this.adminUserService.getUsers().subscribe({
-      next: (users: IUser[]) => {
-        this.allUsers.set(users.filter((u: IUser) => u.role !== ERole.admin));
-      },
-      error: () => {
-        this.adminMessage.set(this.translate.instant('Configuracion.admin.error'));
-      },
-    });
-  }
-
-  openPromoteConfirm(user: IUser): void {
-    this.selectedUserToPromote.set(user);
-    this.showConfirmModal.set(true);
-    this.adminMessage.set('');
-  }
-
-  closeConfirmModal(): void {
-    this.showConfirmModal.set(false);
-    this.selectedUserToPromote.set(null);
-  }
-
-  async promoteToAdmin(): Promise<void> {
-    const user = this.selectedUserToPromote();
-    if (!user) return;
-
-    this.adminLoading.set(true);
-    try {
-      const updatedUser: IUser = {
-        ...user,
-        role: ERole.admin,
-      };
-      await firstValueFrom(this.adminUserService.updateUser(updatedUser, user.id));
-
-      this.adminMessage.set(this.translate.instant('Configuracion.admin.exito'));
-      this.closeConfirmModal();
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      this.loadAllUsers();
-    } catch (error) {
-      this.adminMessage.set(this.translate.instant('Configuracion.admin.error_promover'));
-    } finally {
-      this.adminLoading.set(false);
-    }
   }
 }

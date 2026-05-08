@@ -18,6 +18,7 @@ export class Menu implements OnInit {
   userEmail: string = '';
   userRole: string = 'Lector';
   userInitial: string = 'U';
+  isAdmin: boolean = false;
 
   // Control de colapso
   isCollapsed = false;
@@ -53,6 +54,7 @@ export class Menu implements OnInit {
       this.userEmail = user.email;
       this.userRole = user.role === 'admin' ? 'Administrador' : 'Lector';
       this.userInitial = user.name.charAt(0).toUpperCase();
+      this.isAdmin = user.role === 'admin';
     } else {
       const encrypted = localStorage.getItem('user_session');
       if (encrypted) {
@@ -62,6 +64,7 @@ export class Menu implements OnInit {
           this.userEmail = user.email;
           this.userRole = user.role === 'admin' ? 'Administrador' : 'Lector';
           this.userInitial = user.name.charAt(0).toUpperCase();
+          this.isAdmin = user.role === 'admin';
         }
       }
     }
@@ -85,6 +88,7 @@ export class Menu implements OnInit {
   public goPrestamos() { this.router.navigate(['/prestamos']); }
   public goAnyadirLibro() { this.router.navigate(['/añadirLibro']); }
   public goConfiguracion() { this.router.navigate(['/configuracion']); }
+  public goPanelAdmin() { this.router.navigate(['/panelAdmin']); }
 
   public logout() {
     this.authService.logout().subscribe(() => {

@@ -70,7 +70,8 @@
                 <div class="language-options">
                     <button (click)="changeLanguage('es')" [class.active]="currentLanguage === 'es'"
                         class="language-btn">
-                        <img src="assets/img/espana.png" alt="Dash" class="nav-icon-img">                        <span>{{ 'Configuracion.idioma-es' | translate }}</span>
+                        <img src="assets/img/espana.png" alt="Dash" class="nav-icon-img"> <span>{{
+                            'Configuracion.idioma-es' | translate }}</span>
                     </button>
 
                     <button (click)="changeLanguage('en')" [class.active]="currentLanguage === 'en'"
@@ -81,95 +82,18 @@
 
                     <button (click)="changeLanguage('fr')" [class.active]="currentLanguage === 'fr'"
                         class="language-btn">
-                        <img src="assets/img/francia.png" alt="Dash" class="nav-icon-img">                        <span>{{ 'Configuracion.idioma-fr' | translate }}</span>
+                        <img src="assets/img/francia.png" alt="Dash" class="nav-icon-img"> <span>{{
+                            'Configuracion.idioma-fr' | translate }}</span>
                     </button>
 
                     <button (click)="changeLanguage('pr')" [class.active]="currentLanguage === 'pr'"
                         class="language-btn">
-                        <img src="assets/img/portugal.png" alt="Dash" class="nav-icon-img">                        <span>{{ 'Configuracion.idioma-pr' | translate }}</span>
+                        <img src="assets/img/portugal.png" alt="Dash" class="nav-icon-img"> <span>{{
+                            'Configuracion.idioma-pr' | translate }}</span>
                     </button>
                 </div>
             </div>
 
-            @if (isAdmin) {
-            <div class="configuracion-card admin-card">
-                <h3>{{ 'Configuracion.admin.titulo' | translate }}</h3>
-
-                <div class="admin-search-box">
-                    <input type="text" class="search-input"
-                        [placeholder]="'Configuracion.admin.buscar_placeholder' | translate" [value]="searchQuery()"
-                        (input)="searchQuery.set($event.target.value)" />
-                </div>
-
-                @if (adminMessage()) {
-                <div class="admin-message">{{ adminMessage() }}</div>
-                }
-
-                <div class="admin-table-container">
-                    @if (computed_filteredUsers().length > 0) {
-                    <table class="users-table">
-                        <thead>
-                            <tr>
-                                <th>{{ 'Configuracion.admin.tabla.nombre' | translate }}</th>
-                                <th>{{ 'Configuracion.admin.tabla.apellidos' | translate }}</th>
-                                <th>{{ 'Configuracion.admin.tabla.correo' | translate }}</th>
-                                <th>{{ 'Configuracion.admin.tabla.acciones' | translate }}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (user of computed_filteredUsers(); track user.id) {
-                            <tr>
-                                <td>{{ user.name }}</td>
-                                <td>{{ user.lastname }}</td>
-                                <td>{{ user.email }}</td>
-                                <td>
-                                    <button class="btn-make-admin" (click)="openPromoteConfirm(user)"
-                                        [disabled]="adminLoading()">
-                                        {{ 'Configuracion.admin.tabla.hacer_admin' | translate }}
-                                    </button>
-                                </td>
-                            </tr>
-                            }
-                        </tbody>
-                    </table>
-                    } @else {
-                    <p class="no-users-message">{{ 'Configuracion.admin.no_usuarios' | translate }}</p>
-                    }
-                </div>
-            </div>
-            }
-
-            @if (showConfirmModal() && selectedUserToPromote()) {
-            <div class="modal-overlay" (click)="closeConfirmModal()">
-                <div class="modal-content" (click)="$event.stopPropagation()">
-                    <div class="modal-header">
-                        <h4>{{ 'Configuracion.adminModal.titulo' | translate }}</h4>
-                        <button class="modal-close" (click)="closeConfirmModal()">×</button>
-                    </div>
-
-                    <div class="modal-body">
-                        <p class="modal-question">
-                            {{ 'Configuracion.adminModal.pregunta' | translate }}
-                        </p>
-                        <div class="user-details">
-                            <p><strong>{{ selectedUserToPromote()?.name }} {{ selectedUserToPromote()?.lastname
-                                    }}</strong></p>
-                            <p class="user-email">{{ selectedUserToPromote()?.email }}</p>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button class="btn-cancel" (click)="closeConfirmModal()" [disabled]="adminLoading()">
-                            {{ 'Configuracion.adminModal.cancelar' | translate }}
-                        </button>
-                        <button class="btn-confirm" (click)="promoteToAdmin()" [disabled]="adminLoading()">
-                            {{ adminLoading() ? ('Configuracion.adminModal.procesando' | translate) :
-                            ('Configuracion.adminModal.confirmar' | translate) }}
-                        </button>
-                    </div>
-                </div>
-            </div>
-            }
         </section>
     </main>
 </div>

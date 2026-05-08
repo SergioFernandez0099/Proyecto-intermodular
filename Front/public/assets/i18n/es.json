@@ -33,6 +33,7 @@
     "libros": "Mis libros",
     "prestamo": "Préstamos",
     "anyadir-libro": "Añadir libro",
+    "panel-admin": "Panel Admin",
     "configuracion": "Configuración",
     "logout": "Cerrar Sesión"
 
@@ -215,6 +216,53 @@
       "pregunta": "¿Estás seguro de que deseas hacer administrador a este usuario?",
       "cancelar": "Cancelar",
       "confirmar": "Confirmar",
+      "procesando": "Procesando..."
+    }
+  },
+  "PanelAdmin": {
+    "titulo": "Panel de Administración",
+    "subtitulo": "Gestión de Usuarios",
+    "buscar_placeholder": "Buscar por nombre, apellido o correo...",
+    "no_usuarios": "No hay usuarios disponibles.",
+    "error_cargar": "Error al cargar los usuarios.",
+    "exito_promover": "Usuario promovido a administrador correctamente.",
+    "error_promover": "Error al promover el usuario a administrador.",
+    "exito_baja": "Usuario dado de baja correctamente.",
+    "exito_alta": "Usuario dado de alta correctamente.",
+    "error_toggle": "Error al cambiar el estado del usuario.",
+    "tabla": {
+      "nombre": "Nombre",
+      "apellidos": "Apellidos",
+      "correo": "Correo",
+      "estado": "Estado",
+      "acciones": "Acciones",
+      "hacer_admin": "Hacer Admin",
+      "dar_baja": "Dar de baja",
+      "dar_alta": "Dar de alta"
+    },
+    "estado": {
+      "activo": "Activo",
+      "inactivo": "Inactivo"
+    },
+    "modalPromover": {
+      "titulo": "Confirmar Promoción a Administrador",
+      "pregunta": "¿Estás seguro de que deseas hacer administrador a este usuario?",
+      "cancelar": "Cancelar",
+      "confirmar": "Confirmar",
+      "procesando": "Procesando..."
+    },
+    "modalBaja": {
+      "titulo": "Confirmar Baja de Usuario",
+      "pregunta": "¿Estás seguro de que deseas dar de baja a este usuario? No podrá iniciar sesión.",
+      "cancelar": "Cancelar",
+      "confirmar": "Dar de baja",
+      "procesando": "Procesando..."
+    },
+    "modalAlta": {
+      "titulo": "Confirmar Alta de Usuario",
+      "pregunta": "¿Estás seguro de que deseas reactivar a este usuario?",
+      "cancelar": "Cancelar",
+      "confirmar": "Dar de alta",
       "procesando": "Procesando..."
     }
   },

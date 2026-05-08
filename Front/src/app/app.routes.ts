@@ -5,11 +5,13 @@ import { Dashboard } from './pages/dashboard/dashboard';
 import { Explorar } from './pages/explorar/explorar';
 import { Configuracion } from './pages/configuracion/configuracion';
 import { AuthGuard } from './core/guards/auth.guard';
+import { AdminGuard } from './core/guards/admin.guard';
 import { NoAuthGuard } from './core/guards/no-auth.guard';
 import { AnyadirLibro } from './pages/anyadir-libro/anyadir-libro';
 import { MisLibros } from './pages/mis-libros/mis-libros';
 import { Prestamos } from './pages/prestamos/prestamos';
 import { Valoraciones } from './pages/valoraciones/valoraciones';
+import { PanelAdmin } from './pages/panel-admin/panel-admin';
 
 export const routes: Routes = [
 
@@ -22,5 +24,6 @@ export const routes: Routes = [
     { path: 'misLibros', component: MisLibros, canActivate: [AuthGuard] },
     { path: 'valoraciones/:bookId', component: Valoraciones, canActivate: [AuthGuard] },
     { path: 'prestamos', component: Prestamos, canActivate: [AuthGuard] },
+    { path: 'panelAdmin', component: PanelAdmin, canActivate: [AuthGuard, AdminGuard] },
     { path: '**', redirectTo: '' }
 ];

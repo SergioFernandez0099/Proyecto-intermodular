@@ -1,0 +1,133 @@
+<div class="panel-admin-container">
+    <app-menu></app-menu>
+
+    <main class="panel-admin-content">
+        <header class="content-header">
+            <h2>{{ 'PanelAdmin.titulo' | translate }}</h2>
+        </header>
+
+        @if (pageMessage()) {
+        <div class="page-message page-message-{{ pageMessageType() }}">
+            {{ pageMessage() }}
+        </div>
+        }
+
+        <section class="admin-card">
+            <h3>{{ 'PanelAdmin.subtitulo' | translate }}</h3>
+
+            <div class="admin-search-box">
+                <input type="text" class="search-input" [placeholder]="'PanelAdmin.buscar_placeholder' | translate"
+                    [value]="searchQuery()" (input)="searchQuery.set($any($event.target).value)" />
+            </div>
+
+            <div class="admin-table-container">
+                @if (computed_filteredUsers().length > 0) {
+                <table class="users-table">
+                    <thead>
+                        <tr>
+                            <th>{{ 'PanelAdmin.tabla.nombre' | translate }}</th>
+                            <th>{{ 'PanelAdmin.tabla.apellidos' | translate }}</th>
+                            <th>{{ 'PanelAdmin.tabla.correo' | translate }}</th>
+                            <th>{{ 'PanelAdmin.tabla.estado' | translate }}</th>
+                            <th>{{ 'PanelAdmin.tabla.acciones' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (user of computed_filteredUsers(); track user.id) {
+                        <tr [class.inactive-row]="!user.active">
+                            <td>{{ user.name }}</td>
+                            <td>{{ user.lastname }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                <span class="status-badge" [class.active-badge]="user.active"
+                                    [class.inactive-badge]="!user.active">
+                                    {{ user.active ? ('PanelAdmin.estado.activo' | translate) :
+                                    ('PanelAdmin.estado.inactivo' | translate) }}
+                                </span>
+                            </td>
+                            <td class="actions-cell">
+                                <button class="btn-make-admin" (click)="openPromoteModal(user)" [disabled]="loading()">
+                                    {{ 'PanelAdmin.tabla.hacer_admin' | translate }}
+                                </button>
+                                <button class="btn-toggle-active" [class.btn-deactivate]="user.active"
+                                    [class.btn-activate]="!user.active" (click)="openToggleModal(user)"
+                                    [disabled]="loading()">
+                                    {{ user.active ? ('PanelAdmin.tabla.dar_baja' | translate) :
+                                    ('PanelAdmin.tabla.dar_alta' | translate) }}
+                                </button>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+                } @else {
+                <p class="no-users-message">{{ 'PanelAdmin.no_usuarios' | translate }}</p>
+                }
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- Modal: Promover a admin -->
+@if (showPromoteModal() && selectedUserToPromote()) {
+<div class="modal-overlay" (click)="closePromoteModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h4>{{ 'PanelAdmin.modalPromover.titulo' | translate }}</h4>
+            <button class="modal-close" (click)="closePromoteModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <p class="modal-question">{{ 'PanelAdmin.modalPromover.pregunta' | translate }}</p>
+            <div class="user-details">
+                <p><strong>{{ selectedUserToPromote()?.name }} {{ selectedUserToPromote()?.lastname }}</strong></p>
+                <p class="user-email">{{ selectedUserToPromote()?.email }}</p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel" (click)="closePromoteModal()" [disabled]="loading()">
+                {{ 'PanelAdmin.modalPromover.cancelar' | translate }}
+            </button>
+            <button class="btn-confirm" (click)="promoteToAdmin()" [disabled]="loading()">
+                {{ loading() ? ('PanelAdmin.modalPromover.procesando' | translate) :
+                ('PanelAdmin.modalPromover.confirmar' | translate) }}
+            </button>
+        </div>
+    </div>
+</div>
+}
+
+<!-- Modal: Dar de baja / alta -->
+@if (showToggleModal() && selectedUserToToggle()) {
+<div class="modal-overlay" (click)="closeToggleModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h4>
+                {{ selectedUserToToggle()?.active ? ('PanelAdmin.modalBaja.titulo' | translate) :
+                ('PanelAdmin.modalAlta.titulo' | translate) }}
+            </h4>
+            <button class="modal-close" (click)="closeToggleModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <p class="modal-question">
+                {{ selectedUserToToggle()?.active ? ('PanelAdmin.modalBaja.pregunta' | translate) :
+                ('PanelAdmin.modalAlta.pregunta' | translate) }}
+            </p>
+            <div class="user-details">
+                <p><strong>{{ selectedUserToToggle()?.name }} {{ selectedUserToToggle()?.lastname }}</strong></p>
+                <p class="user-email">{{ selectedUserToToggle()?.email }}</p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel" (click)="closeToggleModal()" [disabled]="loading()">
+                {{ 'PanelAdmin.modalBaja.cancelar' | translate }}
+            </button>
+            <button class="btn-confirm" [class.btn-confirm-danger]="selectedUserToToggle()?.active"
+                (click)="toggleUserActive()" [disabled]="loading()">
+                {{ loading() ? ('PanelAdmin.modalBaja.procesando' | translate) :
+                (selectedUserToToggle()?.active ? ('PanelAdmin.modalBaja.confirmar' | translate) :
+                ('PanelAdmin.modalAlta.confirmar' | translate)) }}
+            </button>
+        </div>
+    </div>
+</div>
+}

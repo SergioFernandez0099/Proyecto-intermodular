@@ -33,6 +33,7 @@
     "libros": "My Books",
     "prestamo": "Loans",
     "anyadir-libro": "Add Book",
+    "panel-admin": "Admin Panel",
     "configuracion": "Settings",
     "logout": "Logout"
   },
@@ -212,6 +213,53 @@
       "pregunta": "Are you sure you want to make this user an administrator?",
       "cancelar": "Cancel",
       "confirmar": "Confirm",
+      "procesando": "Processing..."
+    }
+  },
+  "PanelAdmin": {
+    "titulo": "Administration Panel",
+    "subtitulo": "User Management",
+    "buscar_placeholder": "Search by name, last name or email...",
+    "no_usuarios": "No users available.",
+    "error_cargar": "Error loading users.",
+    "exito_promover": "User successfully promoted to administrator.",
+    "error_promover": "Error promoting user to administrator.",
+    "exito_baja": "User successfully deactivated.",
+    "exito_alta": "User successfully activated.",
+    "error_toggle": "Error changing user status.",
+    "tabla": {
+      "nombre": "First Name",
+      "apellidos": "Last Name",
+      "correo": "Email",
+      "estado": "Status",
+      "acciones": "Actions",
+      "hacer_admin": "Make Admin",
+      "dar_baja": "Deactivate",
+      "dar_alta": "Activate"
+    },
+    "estado": {
+      "activo": "Active",
+      "inactivo": "Inactive"
+    },
+    "modalPromover": {
+      "titulo": "Confirm Promotion to Administrator",
+      "pregunta": "Are you sure you want to make this user an administrator?",
+      "cancelar": "Cancel",
+      "confirmar": "Confirm",
+      "procesando": "Processing..."
+    },
+    "modalBaja": {
+      "titulo": "Confirm User Deactivation",
+      "pregunta": "Are you sure you want to deactivate this user? They will not be able to log in.",
+      "cancelar": "Cancel",
+      "confirmar": "Deactivate",
+      "procesando": "Processing..."
+    },
+    "modalAlta": {
+      "titulo": "Confirm User Activation",
+      "pregunta": "Are you sure you want to reactivate this user?",
+      "cancelar": "Cancel",
+      "confirmar": "Activate",
       "procesando": "Processing..."
     }
   },

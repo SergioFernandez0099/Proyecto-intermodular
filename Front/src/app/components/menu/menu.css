@@ -233,6 +233,12 @@
   box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.2);
 }
 
+.nav-item-admin {
+  border-top: 1px solid rgba(79, 70, 229, 0.15);
+  margin-top: 0.25rem;
+  padding-top: 0.5rem;
+}
+
 /* Icono fijo */
 .nav-icon-img {
   width: 22px;

@@ -8,11 +8,7 @@
       <h1 class="app-name">LibreShare</h1>
       <p class="app-subtitle">{{ 'Menu.biblioteca' | translate }}</p>
     </div>
-    <button
-      class="menu-toggle"
-      (click)="toggleMenu()"
-      [class.open]="!isCollapsed"
-      aria-label="Toggle menu">
+    <button class="menu-toggle" (click)="toggleMenu()" [class.open]="!isCollapsed" aria-label="Toggle menu">
       <span></span>
       <span></span>
       <span></span>
@@ -56,6 +52,15 @@
         </span>
         <span class="text">{{ 'Menu.anyadir-libro' | translate }}</span>
       </button>
+
+      @if (isAdmin) {
+      <button (click)="goPanelAdmin()" [class.active]="isActive('/panelAdmin')" class="nav-item nav-item-admin">
+        <span class="icon">
+          <img src="assets/img/configuraciones.png" alt="Admin" class="nav-icon-img">
+        </span>
+        <span class="text">{{ 'Menu.panel-admin' | translate }}</span>
+      </button>
+      }
     </nav>
 
     <div class="aside-footer">
