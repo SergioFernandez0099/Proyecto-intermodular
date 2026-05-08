@@ -54,6 +54,14 @@
   transition: all 0.2s;
 }
 
+.form-input,
+.btn,
+.csv-btn {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+}
+
 .form-input:focus {
   outline: none;
   border-color: #3b82f6;
@@ -274,7 +282,7 @@
 
   .libro-content {
     margin-left: 50px;
-    padding: 1rem;
+    padding: 0.75rem 0.5rem;
   }
 
   .form-actions {
@@ -303,5 +311,11 @@
   .csv-btn {
     width: 100%;
   }
+
+  .content-wrapper {
+    padding: 1.25rem;
+    border-radius: 10px;
+  }
+
 }
 
