@@ -575,7 +575,7 @@
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
     .configuracion-content {
         margin-left: 50px;
         padding: 1rem;
