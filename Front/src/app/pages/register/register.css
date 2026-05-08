@@ -165,7 +165,7 @@ input:focus {
     text-decoration: underline;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
     .form-row-flex {
         flex-direction: column;
     }

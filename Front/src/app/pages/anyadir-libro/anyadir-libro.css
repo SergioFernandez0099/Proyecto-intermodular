@@ -264,9 +264,20 @@
   .img-preview {
     max-height: 180px;
   }
-}
 
-@media (max-width: 600px) {
+  .anyadir-libro-container {
+    flex-direction: column;
+  }
+
+   .anyadir-libro-container {
+    flex-direction: column;
+  }
+
+  .libro-content {
+    margin-left: 50px;
+    padding: 1rem;
+  }
+
   .form-actions {
     flex-direction: column;
     align-items: stretch;
@@ -275,9 +286,7 @@
   .btn {
     width: 100%;
   }
-}
 
-@media (max-width: 600px) {
   .tabs-header {
     flex-direction: column;
   }
@@ -286,10 +295,8 @@
     width: 100%;
     text-align: center;
   }
-}
 
-@media (max-width: 600px) {
-  .csv-import-actions {
+   .csv-import-actions {
     flex-direction: column;
     align-items: flex-start;
   }
@@ -309,7 +316,7 @@
   }
 
   .libro-content {
-    margin-left: 80px;
+    margin-left: 50px;
     padding: 1rem;
   }
 }
