@@ -9,7 +9,7 @@
   margin-left: var(--sidebar-expanded-width, 260px);
     padding: 2rem;
     box-sizing: border-box;
-    transition: margin-left 0.3s ease; 
+    transition: margin-left 0.3s ease;
 }
 
 .content-header {
@@ -68,7 +68,7 @@
 }
 
 .loans-table tbody tr {
- 
+
   background: white;
   border-radius: 24px;
   box-shadow: 0 10px 30px rgba(94, 106, 255, 0.08);
@@ -76,7 +76,7 @@
 }
 
 .loans-table tbody tr:hover {
- 
+
  transform: translateY(2px);
 }
 
@@ -180,7 +180,7 @@
 
 .btn-return {
     padding: 0.4rem;
-    background-color: #5191e4; 
+    background-color: #5191e4;
     color: white;
     border: none;
     border-radius: 8px;
@@ -275,7 +275,7 @@ tr.mine td {
 
 @media (max-width: 768px) {
     .dashboard-content {
-        margin-left: 80px; 
+        margin-left: 50px;
         padding: 1.5rem;
     }
 

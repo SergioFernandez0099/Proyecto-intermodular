@@ -3,7 +3,7 @@
 
   <main class="libro-content">
 
-    
+
     @if (toast()) {
       <div class="toast-container"
           [ngClass]="{
@@ -11,7 +11,7 @@
             'toast-error': toast()?.type === 'error'
           }">
 
-        
+
 
         <div class="toast-content">
           <h4>
@@ -40,7 +40,7 @@
       <div class="toolbar-row">
         <div class="search-bar">
           <input type="text" [placeholder]="'MisLibros.buscar_placeholder' | translate" (input)="onSearch($event)">
-        </div>    
+        </div>
 
         <div class="tabs-row">
           <button class="tab" [class.active]="activeTab() === 'all'" (click)="setTab('all')">{{ 'MisLibros.tabs.todos' |
@@ -53,7 +53,7 @@
           {{ 'MisLibros.columnas.boton' | translate }}
         </button>
         </div>
-        
+
       </div>
 
       @if (errorMessage()) {
@@ -118,7 +118,7 @@
                 </td>
                 }
                 @if (isColumnVisible('state')) {
-                <td [attr.data-label]="'MisLibros.tabla.state' | translate">{{ (book.state === "borrowed") ? "Prestado" : "Disponible" }}</td>
+                <td [attr.data-label]="'MisLibros.tabla.estado' | translate">{{ (book.state === "borrowed") ? "Prestado" : "Disponible" }}</td>
                 }
                 @if (isColumnVisible('actions')) {
                 <td [attr.data-label]="'MisLibros.tabla.acciones' | translate">

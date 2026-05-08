@@ -300,16 +300,16 @@
 }
 @media (max-width: 768px) {
   .anyadir-libro-container {
-    flex-direction: column; 
+    flex-direction: column;
   }
 }
 @media (max-width: 768px) {
   .anyadir-libro-container {
-    flex-direction: column; 
+    flex-direction: column;
   }
 
   .libro-content {
-    margin-left: 80px;
+    margin-left: 50px;
     padding: 1rem;
   }
 }

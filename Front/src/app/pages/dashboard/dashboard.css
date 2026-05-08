@@ -9,7 +9,7 @@
   margin-left: var(--sidebar-expanded-width, 260px);
     padding: 2rem;
     box-sizing: border-box;
-    transition: margin-left 0.3s ease; 
+    transition: margin-left 0.3s ease;
 }
 
 .content-header {
@@ -200,7 +200,7 @@ tr.not-mine td {
 
 @media (max-width: 768px) {
     .dashboard-content {
-        margin-left: 80px; 
+        margin-left: 50px;
         padding: 1.5rem;
     }
 
