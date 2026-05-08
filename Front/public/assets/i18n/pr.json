@@ -177,7 +177,8 @@
 		"error_guardar": "Erro ao guardar as alterações. Tente novamente.",
 		"error_eliminar": "Erro ao eliminar o livro. Tente novamente.",
 		"error_portada": "Erro ao atualizar a capa",
-		"confirmar_eliminar": "Tem a certeza de que quer eliminar \"{{title}}\"?"
+		"confirmar_eliminar": "Tem a certeza de que quer eliminar \"{{title}}\"?",
+		"exito_eliminar": "Cópia eliminada com sucesso"
 	},
 	"Configuracion": {
 		"titulo": "Configurações",

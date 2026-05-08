@@ -177,7 +177,8 @@
 		"error_guardar": "Erreur lors de l'enregistrement des modifications. Réessayez.",
 		"error_eliminar": "Erreur lors de la suppression du livre. Réessayez.",
 		"error_portada": "Erreur lors de la mise à jour de la couverture",
-		"confirmar_eliminar": "Voulez-vous vraiment supprimer \"{{title}}\" ?"
+		"confirmar_eliminar": "Voulez-vous vraiment supprimer \"{{title}}\" ?",
+		"exito_eliminar": "Exemplaire supprimé avec succès"
 	},
 	"Configuracion": {
 		"titulo": "Paramètres",

@@ -577,7 +577,8 @@
 
 @media (max-width: 480px) {
     .configuracion-content {
-        margin-left: 0;
+        margin-left: 80px;
+        padding: 1rem;
     }
     .language-options {
         gap: 0.5rem;

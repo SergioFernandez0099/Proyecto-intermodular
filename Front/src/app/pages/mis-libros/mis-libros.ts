@@ -413,7 +413,7 @@ export class MisLibros implements OnInit {
     });
   }
 
- deleteBook(copy: ICopy): void {
+deleteBook(copy: ICopy): void {
   if (!confirm(this.translate.instant('MisLibros.confirmar_eliminar', { title: copy.book?.title }))) {
     return;
   }
@@ -422,28 +422,25 @@ export class MisLibros implements OnInit {
   
   this.copyService.deleteCopy(copy).subscribe({
     next: () => {
-      // 1. Éxito: Traducimos también el mensaje de éxito
+  
       this.showToast(this.translate.instant('MisLibros.exito_eliminar'), 'success');
       this.loadMyBooks();
       this.isSubmitting.set(false);
     },
     error: (err) => {
       this.isSubmitting.set(false);
-      
+      console.error('Error capturado:', err);
+
       let errorMsg = this.translate.instant('error.error_generico');
 
-      if (err.error?.errors) {
+      if (err.error && typeof err.error === 'string' && err.error.includes('prestada')) {
+          errorMsg = this.translate.instant('error.copia_prestada');
+      } else if (err.error?.errors) {
         const firstKey = Object.keys(err.error.errors)[0];
         const backendMessage = err.error.errors[firstKey][0]; 
-
-        let errorKey = '';
         
         if (backendMessage.toLowerCase().match(/prestada|loan|prêté|emprestada/)) {
-          errorKey = 'error.copia_prestada';
-        }
-
-        if (errorKey) {
-          errorMsg = this.translate.instant(errorKey);
+          errorMsg = this.translate.instant('error.copia_prestada');
         } else {
           errorMsg = backendMessage;
         }
