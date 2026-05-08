@@ -10,7 +10,7 @@ export interface BooksResponse {
   data: IBook[];
 }
 
-// Para un solo libro 
+// Para un solo libro
 export interface SingleBookResponse {
   data: IBook;
 }
@@ -23,11 +23,11 @@ export class BookService {
 
   constructor(private http: HttpClient) {}
 
-  // MÉTODOS QUE DEVUELVEN ARRAYS (IBook[]) 
+  // MÉTODOS QUE DEVUELVEN ARRAYS (IBook[])
 
   getBooks(): Observable<IBook[]> {
     return this.http.get<BooksResponse>(this.apiUrl).pipe(
-      map(response => response.data) 
+      map(response => response.data)
     );
   }
 
@@ -60,7 +60,7 @@ export class BookService {
   updateCover(file: File, id: number): Observable<IBook> {
     const formData = new FormData();
     formData.append('cover_image', file);
-    
+
     return this.http.post<SingleBookResponse>(`${this.apiUrl}/${id}/cover`, formData).pipe(
       map(response => response.data)
     );
@@ -68,7 +68,7 @@ export class BookService {
 
   deleteCover(id: number): Observable<IBook> {
     return this.http.delete<SingleBookResponse>(`${this.apiUrl}/${id}/cover`).pipe(
-      map(response => response.data)
+      map(response => response?.data)
     );
   }
 }

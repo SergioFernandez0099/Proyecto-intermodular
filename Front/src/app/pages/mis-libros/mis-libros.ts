@@ -31,6 +31,7 @@ export class MisLibros implements OnInit {
   filterText = signal('');
   selectedGenreId = signal<'all' | number>('all');
   currentPage = signal(0);
+  coverRemoved = signal(false);
   itemsPerPage = 3;
   showColumnModal = signal(false);
   toast = signal<{ message: string; type: 'error' | 'success' } | null>(null);
@@ -313,14 +314,16 @@ export class MisLibros implements OnInit {
     this.selectedFile.set(null);
     this.editError.set(null);
     this.isSubmitting.set(false);
-    
+    this.coverRemoved.set(false); // 👈 añadir esto
+    this.showEditModal.set(true);
+
     this.editForm.patchValue({
       title: book.title,
       genre_id: book.genre?.id,
       publication_year: book.publication_year || new Date().getFullYear(),
       language: 'Español'
     });
-    
+
     this.showEditModal.set(true);
   }
 
@@ -330,6 +333,8 @@ export class MisLibros implements OnInit {
     this.previewImage.set(null);
     this.selectedFile.set(null);
     this.editError.set(null);
+    this.coverRemoved.set(false);
+
     this.editForm.reset();
   }
 
@@ -368,6 +373,7 @@ export class MisLibros implements OnInit {
   removeCover(): void {
     this.previewImage.set(null);
     this.selectedFile.set(null);
+    this.coverRemoved.set(true);
   }
 
   saveChanges(): void {
@@ -390,15 +396,16 @@ export class MisLibros implements OnInit {
     this.bookService.updateBook(updatedBook as IBook, book.id).subscribe({
       next: () => {
         if (this.selectedFile()) {
+          // Caso 1: hay nueva portada → subir
           this.bookService.updateCover(this.selectedFile()!, book.id).subscribe({
-            next: () => {
-              this.loadMyBooks();
-              this.closeEditModal();
-            },
-            error: () => {
-              this.editError.set('MisLibros.error_portada');
-              this.isSubmitting.set(false);
-            }
+            next: () => { this.loadMyBooks(); this.closeEditModal(); },
+            error: () => { this.editError.set('MisLibros.error_portada'); this.isSubmitting.set(false); }
+          });
+        } else if (this.coverRemoved()) {
+          // Caso 2: se borró la portada → llamar a deleteCover
+          this.bookService.deleteCover(book.id).subscribe({
+            next: () => { this.loadMyBooks(); this.closeEditModal(); },
+            error: () => { this.editError.set('MisLibros.error_portada'); this.isSubmitting.set(false); }
           });
         } else {
           this.loadMyBooks();
@@ -419,10 +426,10 @@ deleteBook(copy: ICopy): void {
   }
 
   this.isSubmitting.set(true);
-  
+
   this.copyService.deleteCopy(copy).subscribe({
     next: () => {
-  
+
       this.showToast(this.translate.instant('MisLibros.exito_eliminar'), 'success');
       this.loadMyBooks();
       this.isSubmitting.set(false);
@@ -437,8 +444,8 @@ deleteBook(copy: ICopy): void {
           errorMsg = this.translate.instant('error.copia_prestada');
       } else if (err.error?.errors) {
         const firstKey = Object.keys(err.error.errors)[0];
-        const backendMessage = err.error.errors[firstKey][0]; 
-        
+        const backendMessage = err.error.errors[firstKey][0];
+
         if (backendMessage.toLowerCase().match(/prestada|loan|prêté|emprestada/)) {
           errorMsg = this.translate.instant('error.copia_prestada');
         } else {
@@ -453,6 +460,6 @@ deleteBook(copy: ICopy): void {
 
   private showToast(message: string, type: 'error' | 'success') {
     this.toast.set({ message, type });
-    setTimeout(() => this.toast.set(null), 3000); 
+    setTimeout(() => this.toast.set(null), 3000);
   }
 }
