@@ -16,7 +16,7 @@ import { DatePipe } from '@angular/common'; // Asegúrate de tenerlo si usas fec
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [Menu, TranslatePipe, DatePipe],
+  imports: [Menu, TranslatePipe],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -24,13 +24,13 @@ export class Dashboard implements OnInit {
   private loanService = inject(LoanService);
   private authService = inject(AuthService);
   private copyService = inject(CopyService);
-  
+
   public user = signal<IUser>({} as IUser);
   public myCopies = signal<ICopy[]>([]);
   public loansInvolvingMe = signal<ILoan[]>([]);
   public myLoans = signal<ILoan[]>([]);
   public loanedBooks = signal<ILoan[]>([]);
-  
+
   // ERROR SOLUCIONADO: Faltaba declarar este signal
   public myBooksStatus = signal<CopyStatus[]>([]);
 
@@ -66,20 +66,20 @@ export class Dashboard implements OnInit {
       const myId = user.data.id;
 
       this.myCopies.set(myCopies);
-      
+
       // Filtramos préstamos activos
       const activeLoans = loansInvolvingMe.filter(loan => !loan.return_date);
-      
+
       const myLoans = activeLoans.filter(loan => loan.user?.id === myId);
       this.myLoans.set(myLoans);
 
       const loanedBooks = activeLoans.filter(loan => loan.copy?.owner === myId);
       this.loanedBooks.set(loanedBooks);
 
-      const sortedLoans = [...myLoans, ...loanedBooks].sort((a, b) => 
+      const sortedLoans = [...myLoans, ...loanedBooks].sort((a, b) =>
         this.diasDesde(b.loan_date) - this.diasDesde(a.loan_date)
       );
-      
+
       this.loansInvolvingMe.set(sortedLoans);
 
     } catch (err) {

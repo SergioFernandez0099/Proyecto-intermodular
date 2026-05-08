@@ -20,6 +20,7 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => ['http://localhost:5173', 'http://localhost:3000', 'http://localhost:4200'],
+    //'allowed_origins' => ['https://tfg.sergiof.es'],
 
     'allowed_origins_patterns' => [],
 
@@ -32,3 +33,4 @@ return [
     'supports_credentials' => true,
 
 ];
+
