@@ -22,7 +22,7 @@ import { IBook } from '../../models/book';
 })
 export class AnyadirLibro implements OnInit {
   form!: FormGroup;
-  
+
   // Estados reactivos con Signals
   genres = signal<IGenre[]>([]);
   authors = signal<IAuthor[]>([]);
@@ -79,7 +79,7 @@ export class AnyadirLibro implements OnInit {
   private initializeForm(): void {
     this.form = this._fb.group({
       title: ['', [Validators.required, Validators.minLength(3)]],
-      author_name: ['', [Validators.required]], 
+      author_name: ['', [Validators.required]],
       genre_id: ['', [Validators.required]],
       publication_year: [new Date().getFullYear(), [Validators.required, Validators.min(1000), Validators.max(2099)]],
       language: ['Español', [Validators.required]]
@@ -150,7 +150,7 @@ export class AnyadirLibro implements OnInit {
     const text = reader.result as string;
     try {
       const lines = text.replace(/^\uFEFF/, '').split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
-      
+
       if (lines.length < 2) throw new Error('AnyadirLibro.error_csv_sin_filas');
 
       const delimiter = lines[0].includes(';') ? ';' : ',';
@@ -160,22 +160,17 @@ export class AnyadirLibro implements OnInit {
 
       const row = headers.reduce((acc, header, i) => ({ ...acc, [header]: values[i] }), {} as any);
 
-      const normalize = (str: string) => 
+      const normalize = (str: string) =>
         str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
-      const genreMatch = this.genres().find(g => 
-        normalize(g.name) === normalize(row['genre'] || '')
-      );
-      
-      const languageMatch = this.languages.find(l => 
-        normalize(l.value) === normalize(row['language'] || '')
+      const genreMatch = this.genres().find(g =>
+        normalize(g.name) === normalize(row['genre_name'] || '')
       );
 
       this.form.patchValue({
         title: row['title'] || '',
         author_name: row['author_name'] || '',
         publication_year: row['publication'] ? Number(row['publication']) : new Date().getFullYear(),
-        language: languageMatch ? languageMatch.value : 'Español',
       });
 
       if (genreMatch) {
@@ -184,7 +179,7 @@ export class AnyadirLibro implements OnInit {
         this.csvImportError.set(null);
       } else {
         this.form.get('genre_id')?.setValue('');
-        this.csvImportError.set(this.translate.instant('AnyadirLibro.error_csv_genero_detalle', { genre: row['genre'] || '' }));
+        this.csvImportError.set(this.translate.instant('AnyadirLibro.error_csv_genero_detalle', { genre: row['genre_name'] || '' }));
       }
 
     } catch (error: any) {

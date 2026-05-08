@@ -111,7 +111,7 @@
 		"new_copy": "Nouvel exemplaire",
 		"existente_titulo": "Ajouter un nouvel exemplaire",
 		"csv_title": "Importer depuis CSV",
-		"csv_instructions": "Téléchargez un fichier CSV avec les colonnes : title, author_name, genre, publication_year, language.",
+		"csv_instructions": "Téléchargez un fichier CSV avec les colonnes : title, author_name, genre, publication_year.",
 		"csv_select": "Sélectionner un CSV",
 		"csv_cargado": "Données chargées depuis le CSV.",
 		"error_csv_tipo": "Le fichier doit être un CSV.",

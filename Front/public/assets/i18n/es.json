@@ -24,7 +24,7 @@
     "boton-crear-cuenta":"Crear Cuenta",
     "login":"Crear Cuenta",
     "tienes-cuenta":"¿Ya tienes una cuenta?"
-    
+
   },
   "Menu": {
     "biblioteca":"Mi biblioteca",
@@ -49,7 +49,7 @@
     "no_disponible": "No Disponible",
     "disponible": "DISPONIBLE",
     "en_prestamo": "EN PRÉSTAMO",
-    
+
     "categorias": {
       "todos": "Todos",
       "ficcion": "Ficción",
@@ -113,7 +113,7 @@
     "new_copy": "Nueva copia",
     "existente_titulo": "Añadir Nueva Copia",
     "csv_title": "Importar desde CSV",
-    "csv_instructions": "Carga un archivo CSV con columnas: title, author_name, genre, publication_year, language.",
+    "csv_instructions": "Carga un archivo CSV con columnas: title, author_name, genre, publication_year.",
     "csv_select": "Seleccionar CSV",
     "csv_cargado": "Datos cargados desde CSV.",
     "error_csv_tipo": "El archivo debe ser un CSV.",

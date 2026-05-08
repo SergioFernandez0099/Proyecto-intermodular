@@ -1,4 +1,4 @@
-import { Component, OnInit, computed, signal } from '@angular/core';
+import {Component, OnInit, computed, signal, inject} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { Router } from '@angular/router';
@@ -15,6 +15,9 @@ import { firstValueFrom } from 'rxjs';
 import { SERVER_BASE } from '../../core/constants/api';
 import { CopyService } from '../../services/copy';
 import { ICopy } from '../../models/copy';
+import {AuthService} from '../../core/services/auth.service';
+import { map } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-mis-libros',
@@ -35,6 +38,8 @@ export class MisLibros implements OnInit {
   itemsPerPage = 3;
   showColumnModal = signal(false);
   toast = signal<{ message: string; type: 'error' | 'success' } | null>(null);
+
+  private authService = inject(AuthService);
 
   readonly columns = [
     { key: 'cover', labelKey: 'MisLibros.tabla.portada' },
@@ -138,18 +143,35 @@ export class MisLibros implements OnInit {
     this.isLoading.set(true);
     this.errorMessage.set(null);
 
-    this.copyService.getMyCopies().subscribe({
+    const user = this.authService.currentUser();
+    const isAdmin = user?.role === 'admin';
+
+    const source$ = isAdmin
+      ? this.bookService.getBooks().pipe(
+        map(books => this.mapBooksToFakeCopies(books))
+      )
+      : this.copyService.getMyCopies();
+
+    source$.subscribe({
       next: copies => {
         this.copies.set(copies);
         this.isLoading.set(false);
         this.loadGenresAndAuthors();
       },
       error: error => {
-        console.error('Error al cargar Mis Libros:', error);
+        console.error('Error al cargar libros:', error);
         this.errorMessage.set('MisLibros.error_carga');
         this.isLoading.set(false);
       }
     });
+  }
+
+  private mapBooksToFakeCopies(books: IBook[]): ICopy[] {
+    return books.map(book => ({
+      id: book.id,
+      state: (book.available_copies_count ?? 0) > 0 ? 'available' : 'borrowed',
+      book: book,
+    } as ICopy));
   }
 
   getImageUrl(path: string | null | undefined): string {

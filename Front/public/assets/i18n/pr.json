@@ -111,7 +111,7 @@
 		"new_copy": "Nova cópia",
 		"existente_titulo": "Adicionar nova cópia",
 		"csv_title": "Importar de CSV",
-		"csv_instructions": "Carregue um ficheiro CSV com as colunas: title, author_name, genre, publication_year, language.",
+		"csv_instructions": "Carregue um ficheiro CSV com as colunas: title, author_name, genre, publication_year.",
 		"csv_select": "Selecionar CSV",
 		"csv_cargado": "Dados carregados a partir do CSV.",
 		"error_csv_tipo": "O ficheiro deve ser um CSV.",

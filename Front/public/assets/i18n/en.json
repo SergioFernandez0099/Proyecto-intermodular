@@ -111,7 +111,7 @@
     "new_copy": "New copy",
     "existente_titulo": "Add New Copy",
     "csv_title": "Import from CSV",
-    "csv_instructions": "Upload a CSV file with columns: title, author_name, genre, publication_year, language.",
+    "csv_instructions": "Upload a CSV file with columns: title, author_name, genre, publication_year.",
     "csv_select": "Select CSV",
     "csv_cargado": "Data loaded from CSV.",
     "error_csv_tipo": "The file must be a CSV.",

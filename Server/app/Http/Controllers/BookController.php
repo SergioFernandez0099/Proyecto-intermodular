@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\BookResource;
+use App\Models\Author;
 use App\Models\Book;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -230,7 +231,7 @@ class BookController extends Controller
 
             $data = array_combine($header, $line);
 
-            // Resolver genre_name → genre_id
+            // 1. Resolver género (debe existir, igual que antes)
             $genreName = trim($data['genre_name'] ?? '');
             $genre = \App\Models\Genre::where('name', $genreName)->first();
 
@@ -243,35 +244,24 @@ class BookController extends Controller
                 continue;
             }
 
-            // Resolver author_name(s) separados por | → author_ids
+            // 2. Procesar autores: crear los que no existan
             $authorNames = collect(explode('|', $data['author_name'] ?? ''))
                 ->map(fn($name) => trim($name))
                 ->filter()
                 ->values();
 
             $authorIds = [];
-            $authorErrors = [];
 
             foreach ($authorNames as $name) {
-                $author = \App\Models\Author::where('name', $name)->first();
-
-                if ($author) {
-                    $authorIds[] = $author->id;
-                } else {
-                    $authorErrors[] = "El autor '{$name}' no existe.";
-                }
+                // Buscar o crear el autor automáticamente
+                $author = \App\Models\Author::firstOrCreate(
+                    ['name' => $name],  // condición para buscar
+                    []                  // no hay datos extra, solo el nombre
+                );
+                $authorIds[] = $author->id;
             }
 
-            if (! empty($authorErrors)) {
-                $failed[] = [
-                    'row'    => $row,
-                    'data'   => $data,
-                    'errors' => ['author_name' => $authorErrors],
-                ];
-                continue;
-            }
-
-            // Validar el resto de los campos
+            // 3. Validar el resto de campos (la existencia de los autores ya está garantizada)
             $validator = validator([
                 'title'            => $data['title'] ?? null,
                 'genre_id'         => $genre->id,
@@ -282,7 +272,7 @@ class BookController extends Controller
                 'genre_id'         => 'required|exists:genres,id',
                 'publication_year' => 'nullable|integer|min:1000|max:2099',
                 'author_ids'       => 'required|array|min:1',
-                'author_ids.*'     => 'exists:authors,id',
+                'author_ids.*'     => 'exists:authors,id', // todos los IDs existen ahora
             ]);
 
             if ($validator->fails()) {
@@ -296,6 +286,7 @@ class BookController extends Controller
 
             $validated = $validator->validated();
 
+            // 4. Crear el libro dentro de una transacción
             try {
                 $bookId = DB::transaction(function () use ($validated, $request) {
                     $existe = Book::where('title', $validated['title'])
